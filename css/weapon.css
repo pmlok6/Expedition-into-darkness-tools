@@ -1,0 +1,228 @@
+/* =====================================
+   Weapon Calculator
+   ===================================== */
+
+
+#weapon-calculator {
+
+    width:100%;
+
+    max-width:1200px;
+
+    margin:30px auto;
+
+    padding:20px;
+
+    border:1px solid #444;
+
+    border-radius:12px;
+
+    background:#111;
+
+    color:#eee;
+
+    box-sizing:border-box;
+
+}
+
+
+
+/* Header */
+
+.weapon-header {
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+}
+
+
+
+/* Deux armes */
+
+.weapon-container {
+
+    display:flex;
+
+    gap:20px;
+
+    justify-content:center;
+
+}
+
+
+
+.weapon-column {
+
+    flex:1;
+
+    min-width:300px;
+
+}
+
+
+
+/* Cadres */
+
+.weapon-box {
+
+    border:1px solid #555;
+
+    border-radius:10px;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    background:#1b1b1b;
+
+}
+
+
+
+.weapon-box h3 {
+
+    margin-top:0;
+
+    text-align:center;
+
+}
+
+
+
+/* Sélections */
+
+.weapon-selection-box select {
+
+    width:100%;
+
+    margin-bottom:10px;
+
+    padding:8px;
+
+    background:#111;
+
+    color:#eee;
+
+    border:1px solid #555;
+
+    border-radius:6px;
+
+}
+
+
+
+.weapon-selector {
+
+    margin-bottom:10px;
+
+}
+
+
+
+.weapon-selector label {
+
+    display:block;
+
+    font-weight:bold;
+
+    margin-bottom:4px;
+
+}
+
+
+
+/* Résultats */
+
+.weapon-result-box {
+
+    background:#161616;
+
+}
+
+
+
+.weapon-stat {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:6px;
+
+    border-bottom:1px solid #333;
+
+}
+
+
+
+/* Comparaison */
+
+.weapon-comparison-box {
+
+    border:1px solid #777;
+
+    border-radius:10px;
+
+    padding:15px;
+
+    margin-top:20px;
+
+}
+
+
+
+.compare-row {
+
+    display:grid;
+
+    grid-template-columns:1fr 120px 120px;
+
+    padding:6px;
+
+    border-bottom:1px solid #333;
+
+}
+
+
+
+.compare-better {
+
+    color:#45d65c;
+
+    font-weight:bold;
+
+}
+
+
+
+.compare-equal {
+
+    color:#e5a832;
+
+    font-weight:bold;
+
+}
+
+
+
+.compare-worse {
+
+    color:#e05252;
+
+    font-weight:bold;
+
+}
+
+
+
+@media(max-width:800px){
+
+    .weapon-container {
+
+        flex-direction:column;
+
+    }
+
+}
