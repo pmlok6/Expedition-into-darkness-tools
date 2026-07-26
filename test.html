@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<h1>Test Armor API</h1>
+
+<pre id="output">
+Loading...
+</pre>
+
+
+<script type="module">
+
+import {invoke}
+from "./js/wiki-api.js";
+
+
+async function test()
+{
+
+    const data =
+        await invoke(
+            "ArmorCalculatorData",
+            "items"
+        );
+
+
+    document
+    .getElementById("output")
+    .textContent =
+    JSON.stringify(
+        data,
+        null,
+        2
+    );
+
+}
+
+
+test();
+
+</script>
+
+
+</body>
+
+</html>
