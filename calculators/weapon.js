@@ -151,35 +151,24 @@ state.right
 
 }
 
-
-
-
-
 function createWeaponPanel(panel,title,state)
 {
-
 
 panel.innerHTML = `
 
 <div class="weapon-box">
 
-<h3>
+<h2 class="weapon-title">
 ${title}
-</h3>
+</h2>
 
 
-<div class="weapon-selection-box">
+<div class="weapon-type">
+
+</div>
 
 
 <div class="weapon-components">
-
-</div>
-
-
-<div class="weapon-materials">
-
-</div>
-
 
 </div>
 
@@ -190,9 +179,8 @@ ${title}
 
 <div class="weapon-box weapon-result-box">
 
-
 <h3>
-Result
+Stats
 </h3>
 
 
@@ -206,10 +194,6 @@ Result
 `;
 
 }
-
-
-
-
 
 function createWeaponType(box,state)
 {
@@ -529,10 +513,13 @@ selector.wrapper.classList.add(
 
 
 
+let container =
 box.querySelector(
 ".weapon-components"
-)
-.appendChild(
+);
+
+
+container.appendChild(
 selector.wrapper
 );
 
