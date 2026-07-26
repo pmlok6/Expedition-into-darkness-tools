@@ -1,5 +1,5 @@
-(function()
-{
+import { invoke } from "../js/wiki-api.js";
+
 
 "use strict";
 
@@ -15,10 +15,12 @@ document.addEventListener(
 function()
 {
 
+
 const root =
 document.getElementById(
 "weapon-calculator"
 );
+
 
 
 if(!root)
@@ -27,24 +29,18 @@ if(!root)
 }
 
 
-if(root.dataset.loaded)
-{
-    return;
-}
-
-
-root.dataset.loaded = "true";
-
-
 
 Promise.all(
 [
 
-WikiAPI.get(
+invoke(
+"WeaponDataExport",
 "items"
 ),
 
-WikiAPI.get(
+
+invoke(
+"WeaponDataExport",
 "recipes"
 )
 
@@ -74,7 +70,7 @@ WEAPON_RECIPES
 {
 
 console.error(
-"Weapon Calculator error",
+"Weapon Calculator loading error",
 error
 );
 
@@ -89,12 +85,6 @@ error
 
 function buildCalculator(root,ITEMS,RECIPES)
 {
-
-
-WEAPON_ITEMS = ITEMS;
-
-WEAPON_RECIPES = RECIPES;
-
 
 
 const state =
@@ -158,6 +148,7 @@ state.right
 );
 
 
+
 }
 
 
@@ -171,7 +162,6 @@ function createWeaponPanel(panel,title,state)
 panel.innerHTML = `
 
 <div class="weapon-box">
-
 
 <h3>
 ${title}
@@ -221,23 +211,26 @@ Result
 
 
 
-function createWeaponType(box,weaponState)
+function createWeaponType(box,state)
 {
 
 
-let selector =
+const selector =
 createSelect(
 "Weapon Type",
 [
+
 {
 id:"blade",
 name:"Blade Weapon"
 },
 
+
 {
 id:"shaft",
 name:"Shaft Weapon"
 }
+
 ]
 );
 
@@ -254,14 +247,16 @@ function()
 {
 
 
-weaponState.type =
+state.type =
 selector.select.value;
 
 
 
-weaponState.components = {};
+state.components = {};
 
-weaponState.materials = {};
+state.materials = {};
+
+state.stats = {};
 
 
 
@@ -270,13 +265,13 @@ clearDynamic(box);
 
 
 if(
-weaponState.type === "blade"
+state.type === "blade"
 )
 {
 
 buildBladeWeapon(
 box,
-weaponState
+state
 );
 
 }
@@ -284,20 +279,21 @@ weaponState
 
 
 if(
-weaponState.type === "shaft"
+state.type === "shaft"
 )
 {
 
 buildShaftWeapon(
 box,
-weaponState
+state
 );
 
 }
 
 
-
 };
+
+
 
 }
 
@@ -360,7 +356,7 @@ function(slot)
 {
 
 
-let tag =
+const tag =
 slot
 .toLowerCase()
 .replaceAll(" ","_");
@@ -462,7 +458,7 @@ function(slot)
 {
 
 
-let tag =
+const tag =
 slot
 .toLowerCase()
 .replaceAll(" ","_");
@@ -504,19 +500,24 @@ state
 
 
 }
-  function createComponent(box,label,items,callback)
+function createComponent(box,label,items,callback)
 {
 
 
-let selector =
+const selector =
 createSelect(
 label,
-items.map(function(i)
+items.map(function(item)
 {
+
 return {
-id:i.guid,
-name:i.name
+
+id:item.guid,
+
+name:item.name
+
 };
+
 })
 );
 
@@ -542,7 +543,7 @@ function()
 {
 
 
-let item =
+const item =
 findItem(
 selector.select.value
 );
@@ -568,7 +569,7 @@ function createSelect(label,options)
 {
 
 
-let wrapper =
+const wrapper =
 document.createElement(
 "div"
 );
@@ -579,7 +580,7 @@ wrapper.className =
 
 
 
-let labelNode =
+const labelNode =
 document.createElement(
 "label"
 );
@@ -590,7 +591,7 @@ label;
 
 
 
-let select =
+const select =
 document.createElement(
 "select"
 );
@@ -598,7 +599,11 @@ document.createElement(
 
 
 select.innerHTML =
-"<option value=''>-- Select --</option>";
+`
+<option value="">
+-- Select --
+</option>
+`;
 
 
 
@@ -606,7 +611,7 @@ options.forEach(function(option)
 {
 
 
-let opt =
+const opt =
 document.createElement(
 "option"
 );
@@ -620,7 +625,10 @@ opt.textContent =
 option.name;
 
 
-select.appendChild(opt);
+
+select.appendChild(
+opt
+);
 
 
 });
@@ -657,7 +665,7 @@ function createMaterial(box,item,state)
 {
 
 
-let recipe =
+const recipe =
 findRecipe(
 item.name
 );
@@ -674,16 +682,16 @@ return;
 
 
 
-let materials =
+const materials =
 recipe.allowed_materials.map(
-function(mat)
+function(material)
 {
 
 return {
 
-id:mat,
+id:material,
 
-name:formatMaterialName(mat)
+name:formatMaterialName(material)
 
 };
 
@@ -691,7 +699,7 @@ name:formatMaterialName(mat)
 
 
 
-let selector =
+const selector =
 createSelect(
 "Material",
 materials
@@ -742,16 +750,16 @@ function calculateWeapon(state)
 {
 
 
-let stats =
+const stats =
 {
 
 damage:0,
 
+base_damage:0,
+
 swinging_damage:0,
 
 thrusting_damage:0,
-
-base_damage:0,
 
 cleave:0,
 
@@ -776,21 +784,24 @@ state.components
 {
 
 
-let item =
+const item =
 findItem(id);
 
 
 
-if(item)
+if(!item)
 {
+return;
+}
 
 
-let materialTag =
+
+const materialTag =
 state.materials[item.guid];
 
 
 
-let material =
+const material =
 materialTag
 ?
 findMaterial(materialTag)
@@ -804,9 +815,6 @@ stats,
 item,
 material
 );
-
-
-}
 
 
 });
@@ -844,7 +852,7 @@ item.weight || 0
 
 
 
-let base =
+const base =
 parseNumber(
 item.base_damage
 );
@@ -863,12 +871,12 @@ base;
 
 if(
 material &&
-base > 0
+base
 )
 {
 
 
-let hardness =
+const hardness =
 parsePercent(
 material.hardness
 );
@@ -882,7 +890,6 @@ damage *=
 hardness / 100;
 
 }
-
 
 }
 
@@ -911,7 +918,7 @@ if(material)
 {
 
 
-let hardness =
+const hardness =
 parsePercent(
 material.hardness
 );
@@ -1047,7 +1054,10 @@ item.tags.includes(tag);
 
 return a.name.localeCompare(
 b.name,
-"en"
+"en",
+{
+sensitivity:"base"
+}
 );
 
 
@@ -1075,50 +1085,47 @@ function clearDynamic(box)
 {
 
 
-let c =
+const components =
 box.querySelector(
 ".weapon-components"
 );
 
 
-let m =
+
+const materials =
 box.querySelector(
 ".weapon-materials"
 );
 
 
 
-if(c)
+if(components)
 {
-c.innerHTML="";
+components.innerHTML = "";
 }
 
 
 
-if(m)
+if(materials)
 {
-m.innerHTML="";
+materials.innerHTML = "";
 }
 
 
 }
-
-
-
-
 
 function renderResult(state)
 {
 
 
-let panels =
+const panels =
 document.querySelectorAll(
 ".weapon-result-box"
 );
 
 
 
-let target;
+let target = null;
 
 
 
@@ -1128,7 +1135,8 @@ state === getState("left")
 {
 
 target =
-panels[0].querySelector(
+panels[0]
+?.querySelector(
 ".weapon-results"
 );
 
@@ -1137,7 +1145,8 @@ else
 {
 
 target =
-panels[1].querySelector(
+panels[1]
+?.querySelector(
 ".weapon-results"
 );
 
@@ -1152,70 +1161,144 @@ return;
 
 
 
-let s =
+const s =
 state.stats;
 
 
 
 target.innerHTML = `
 
-
-<div class="weapon-stat">
-<span>Damage</span>
-<b>${s.damage.toFixed(1)}</b>
-</div>
+<div class="weapon-card">
 
 
 <div class="weapon-stat">
-<span>Base Damage</span>
-<b>${s.base_damage}</b>
+
+<span>
+Damage
+</span>
+
+<b>
+${s.damage.toFixed(1)}
+</b>
+
 </div>
+
 
 
 <div class="weapon-stat">
-<span>Swinging Damage</span>
-<b>${formatPercent(s.swinging_damage)}</b>
+
+<span>
+Base Damage
+</span>
+
+<b>
+${s.base_damage.toFixed(1)}
+</b>
+
 </div>
+
 
 
 <div class="weapon-stat">
-<span>Thrusting Damage</span>
-<b>${formatPercent(s.thrusting_damage)}</b>
+
+<span>
+Swinging Damage
+</span>
+
+<b>
+${formatPercent(s.swinging_damage)}
+</b>
+
 </div>
+
 
 
 <div class="weapon-stat">
-<span>Cleave</span>
-<b>${formatPercent(s.cleave)}</b>
+
+<span>
+Thrusting Damage
+</span>
+
+<b>
+${formatPercent(s.thrusting_damage)}
+</b>
+
 </div>
+
 
 
 <div class="weapon-stat">
-<span>Attack Speed</span>
-<b>${formatPercent(s.attack_speed)}</b>
+
+<span>
+Cleave
+</span>
+
+<b>
+${formatPercent(s.cleave)}
+</b>
+
 </div>
+
 
 
 <div class="weapon-stat">
-<span>Stamina Cost</span>
-<b>${s.attack_stamina_cost}</b>
+
+<span>
+Attack Speed
+</span>
+
+<b>
+${formatPercent(s.attack_speed)}
+</b>
+
 </div>
+
 
 
 <div class="weapon-stat">
-<span>Weight</span>
-<b>${s.weight.toFixed(2)}</b>
+
+<span>
+Stamina Cost
+</span>
+
+<b>
+${s.attack_stamina_cost.toFixed(1)}
+</b>
+
 </div>
+
 
 
 <div class="weapon-stat">
-<span>Inertia</span>
-<b>${s.inertia}</b>
+
+<span>
+Weight
+</span>
+
+<b>
+${s.weight.toFixed(2)}
+</b>
+
 </div>
 
+
+
+<div class="weapon-stat">
+
+<span>
+Inertia
+</span>
+
+<b>
+${s.inertia.toFixed(2)}
+</b>
+
+</div>
+
+
+</div>
 
 `;
-
 
 }
 
@@ -1227,7 +1310,7 @@ function updateComparison()
 {
 
 
-let box =
+const box =
 document.getElementById(
 "weapon-comparison"
 );
@@ -1241,11 +1324,12 @@ return;
 
 
 
-let left =
+const left =
 getState("left");
 
 
-let right =
+
+const right =
 getState("right");
 
 
@@ -1253,8 +1337,8 @@ getState("right");
 if(
 !left ||
 !right ||
-!left.stats ||
-!right.stats
+Object.keys(left.stats).length === 0 ||
+Object.keys(right.stats).length === 0
 )
 {
 
@@ -1267,26 +1351,53 @@ return;
 
 
 
-let stats =
+const stats =
 [
 
-["damage","Damage"],
+[
+"damage",
+"Damage"
+],
 
-["base_damage","Base Damage"],
+[
+"base_damage",
+"Base Damage"
+],
 
-["swinging_damage","Swinging Damage"],
+[
+"swinging_damage",
+"Swinging Damage"
+],
 
-["thrusting_damage","Thrusting Damage"],
+[
+"thrusting_damage",
+"Thrusting Damage"
+],
 
-["cleave","Cleave"],
+[
+"cleave",
+"Cleave"
+],
 
-["attack_speed","Attack Speed"],
+[
+"attack_speed",
+"Attack Speed"
+],
 
-["attack_stamina_cost","Stamina Cost"],
+[
+"attack_stamina_cost",
+"Stamina Cost"
+],
 
-["weight","Weight"],
+[
+"weight",
+"Weight"
+],
 
-["inertia","Inertia"]
+[
+"inertia",
+"Inertia"
+]
 
 ];
 
@@ -1301,12 +1412,22 @@ stats.forEach(function(stat)
 {
 
 
-let a =
-left.stats[stat[0]] || 0;
+const key =
+stat[0];
 
 
-let b =
-right.stats[stat[0]] || 0;
+const name =
+stat[1];
+
+
+
+const a =
+left.stats[key] || 0;
+
+
+
+const b =
+right.stats[key] || 0;
 
 
 
@@ -1314,24 +1435,33 @@ html += `
 
 <div class="compare-row">
 
+
 <span>
-${stat[1]}
+${name}
 </span>
 
 
-<span class="${compareClass(a,b,stat[0])}">
+
+<span class="${compareClass(a,b,key)}">
+
 ${formatValue(a)}
+
 </span>
 
 
-<span class="${compareClass(b,a,stat[0])}">
+
+<span class="${compareClass(b,a,key)}">
+
 ${formatValue(b)}
+
 </span>
+
 
 
 </div>
 
 `;
+
 
 
 });
@@ -1352,24 +1482,28 @@ function compareClass(a,b,stat)
 {
 
 
-if(a===b)
+if(a === b)
 {
 return "compare-equal";
 }
 
 
 
-let lower =
+const lowerBetter =
 [
+
 "attack_stamina_cost",
+
 "weight",
+
 "inertia"
+
 ];
 
 
 
 if(
-lower.includes(stat)
+lowerBetter.includes(stat)
 )
 {
 
@@ -1383,7 +1517,7 @@ return a < b
 
 
 
-return a>b
+return a > b
 ?
 "compare-better"
 :
@@ -1404,6 +1538,7 @@ if(!value)
 {
 return 0;
 }
+
 
 
 return parseFloat(
@@ -1448,33 +1583,29 @@ String(value)
 
 
 
-function formatPercent(v)
+function formatPercent(value)
 {
 
+
+if(!value)
+{
+return "0%";
+}
+
+
+
 return (
-v>0 ? "+" : ""
+value > 0
+?
+"+"
+:
+""
 )
 +
-v.toFixed(1)
+value.toFixed(1)
 +
 "%";
 
-}
-
-
-
-
-
-function formatValue(v)
-{
-
-
-return typeof v === "number"
-?
-v.toFixed(2)
-:
-v;
-
 
 }
 
@@ -1482,15 +1613,39 @@ v;
 
 
 
-function formatMaterialName(v)
+function formatValue(value)
 {
 
 
-return v
+if(typeof value === "number")
+{
+
+return value.toFixed(2);
+
+}
+
+
+
+return value;
+
+
+}
+
+
+
+
+
+function formatMaterialName(value)
+{
+
+
+return value
 .replaceAll("_"," ")
-.replace(/\b\w/g,function(c)
+.replace(/\b\w/g,function(char)
 {
-return c.toUpperCase();
+
+return char.toUpperCase();
+
 });
 
 
@@ -1512,7 +1667,3 @@ null;
 
 
 }
-
-
-
-})();
