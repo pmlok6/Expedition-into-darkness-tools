@@ -6,6 +6,8 @@
 
     width:100%;
 
+    box-sizing:border-box;
+
     background:#1b1b1b;
 
     border-bottom:1px solid #444;
@@ -18,9 +20,9 @@
 
     justify-content:space-between;
 
+    gap:20px;
+
 }
-
-
 
 .nav-links{
 
@@ -31,8 +33,6 @@
     align-items:center;
 
 }
-
-
 
 .nav-links a{
 
@@ -48,8 +48,6 @@
 
 }
 
-
-
 .nav-links a:hover{
 
     background:#333;
@@ -57,8 +55,6 @@
     color:white;
 
 }
-
-
 
 .nav-logo img{
 
