@@ -132,19 +132,14 @@ state.right
 
 
 createWeaponType(
-document.querySelector(
-"#weapon-left .weapon-selection-box"
-),
-state.left
+    document.querySelector("#weapon-left .weapon-type"),
+    state.left
 );
 
 
-
 createWeaponType(
-document.querySelector(
-"#weapon-right .weapon-selection-box"
-),
-state.right
+    document.querySelector("#weapon-right .weapon-type"),
+    state.right
 );
 
 
