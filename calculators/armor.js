@@ -1,5 +1,5 @@
 import { invoke }
-from "../../js/wiki-api.js";
+from "../js/wiki-api.js";
 
 
 document.addEventListener(
