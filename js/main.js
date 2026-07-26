@@ -19,6 +19,7 @@ function()
 
     nav.innerHTML = `
 
+<div class="nav-links">
     <a href="../index.html">
         Home
     </a>
@@ -38,10 +39,19 @@ function()
     <a href="../leveling.html">
         Leveling
     </a>
-
+    
     <a href="../maps.html">
         Maps
     </a>
+</div>
+
+    <div class="nav-logo">
+
+        <img 
+        src="../assets/logo.png"
+        alt="Expedition into Darkness">
+
+    </div>
 
     `;
 
