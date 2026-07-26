@@ -34,13 +34,13 @@ Promise.all(
 [
 
 invoke(
-"WeaponDataExport",
+"WeaponCalculatorData",
 "items"
 ),
 
 
 invoke(
-"WeaponDataExport",
+"WeaponCalculatorData",
 "recipes"
 )
 
