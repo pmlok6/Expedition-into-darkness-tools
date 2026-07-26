@@ -1,1 +1,322 @@
+/* ==========================================================
+   Armor Calculator
+   ========================================================== */
 
+#armor-calculator{
+
+    max-width:1200px;
+
+    margin:30px auto;
+
+    background:#1b1b1b;
+
+    border:1px solid #454545;
+
+    border-radius:12px;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.45);
+
+    overflow:hidden;
+
+}
+
+
+
+/* ==========================================================
+   Title
+   ========================================================== */
+
+#armor-calculator h2{
+
+    margin:0;
+
+    padding:20px 25px;
+
+    background:#222;
+
+    border-bottom:1px solid #3c3c3c;
+
+    color:#fff;
+
+    font-size:28px;
+
+}
+
+
+
+/* ==========================================================
+   Selector section
+   ========================================================== */
+
+#armor-selectors{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:25px;
+
+    padding:25px;
+
+    border-bottom:1px solid #3c3c3c;
+
+}
+
+
+
+.armor-selector-row{
+
+    background:#252525;
+
+    border:1px solid #4d4d4d;
+
+    border-radius:10px;
+
+    padding:18px;
+
+}
+
+
+
+.armor-selector-row label{
+
+    color:#ddd;
+
+    font-weight:600;
+
+}
+
+
+
+.armor-selector-row select{
+
+    width:100%;
+
+    margin-top:8px;
+
+    padding:10px;
+
+    background:#111;
+
+    color:white;
+
+    border:1px solid #666;
+
+    border-radius:6px;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+}
+
+
+
+.armor-selector-row select:hover{
+
+    border-color:#aaa;
+
+}
+
+
+
+/* ==========================================================
+   Results
+   ========================================================== */
+
+#compare-result{
+
+    padding:25px;
+
+}
+
+
+
+.item-compare-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:25px;
+
+}
+
+
+
+/* ==========================================================
+   Cards
+   ========================================================== */
+
+.item-card{
+
+    background:
+
+    linear-gradient(
+
+        to bottom,
+
+        #2a2a2a,
+
+        #202020
+
+    );
+
+
+    border:1px solid #555;
+
+    border-radius:10px;
+
+    padding:20px;
+
+    transition:.2s;
+
+}
+
+
+
+.item-card:hover{
+
+    border-color:#888;
+
+    transform:translateY(-2px);
+
+}
+
+
+
+/* Header card */
+
+.item-card h3{
+
+    margin:0 0 18px 0;
+
+    padding-bottom:12px;
+
+    border-bottom:1px solid #555;
+
+    color:white;
+
+    font-size:24px;
+
+}
+
+
+
+/* Stats */
+
+.item-card p{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin:10px 0;
+
+    padding-bottom:8px;
+
+    border-bottom:
+
+    1px solid rgba(255,255,255,.05);
+
+}
+
+
+
+.item-card p:last-child{
+
+    border:none;
+
+}
+
+
+
+/* Valeurs */
+
+.item-card span{
+
+    font-weight:bold;
+
+}
+
+
+
+/* ==========================================================
+   Comparison colors
+   ========================================================== */
+
+.stat-better{
+
+    color:#46d846;
+
+}
+
+
+
+.stat-equal{
+
+    color:#ffb84d;
+
+}
+
+
+
+.stat-worse{
+
+    color:#ff5555;
+
+}
+
+
+
+/* ==========================================================
+   Loading / Errors
+   ========================================================== */
+
+.loading{
+
+    padding:20px;
+
+    text-align:center;
+
+    color:#aaa;
+
+}
+
+
+
+.error{
+
+    padding:20px;
+
+    color:#ff5555;
+
+}
+
+
+
+/* ==========================================================
+   Responsive
+   ========================================================== */
+
+@media(max-width:900px){
+
+
+    #armor-selectors{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .item-compare-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+}
