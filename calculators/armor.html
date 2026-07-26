@@ -1,45 +1,72 @@
 <!DOCTYPE html>
-<html lang="fr">
+
+<html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
 
-<title>Armor Calculator</title>
+<title>
+Weapon Calculator
+</title>
 
 <link rel="stylesheet" href="../css/style.css">
-<link rel="stylesheet" href="../css/armor.css">
+
 <link rel="stylesheet" href="../css/navigation.css">
-  
+
+<link rel="stylesheet" href="../css/weapon.css">
+
 </head>
 
-
 <body>
+
 <nav id="main-navigation"></nav>
 
-<div id="armor-calculator">
+<div id="weapon-calculator">
+
+<div class="weapon-header">
+
+<h2>
+Weapon Calculator
+</h2>
+
+<p>
+Build and compare weapons
+</p>
+
+</div>
+
+<div class="weapon-container">
 
 
-<h2>Armor Comparator</h2>
+<div class="weapon-column" id="weapon-left">
 
+</div>
 
-<div class="item-compare-container">
+<div class="weapon-column" id="weapon-right">
 
-
-<div id="armor-selectors"></div>
-
-
-<div id="compare-result"></div>
-
+</div>
 
 </div>
 
 
+<div id="weapon-comparison" class="weapon-comparison-box">
+
+<h3>
+Comparison
+</h3>
+
 </div>
 
-<script type="module" src="../js/main.js"></script>
-<script type="module" src="armor.js"></script>
+</div>
+  
+<script src="../js/wiki-api.js"></script>
+
+<script src="../js/main.js"></script>
+
+<script src="weapon.js"></script>
 
 </body>
+
 
 </html>
