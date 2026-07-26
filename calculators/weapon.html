@@ -1,69 +1,107 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
+
 
 <head>
 
+
 <meta charset="UTF-8">
 
+
 <title>
-Weapon Calculator - Expedition into Darkness
+Weapon Calculator
 </title>
 
 
+
 <link rel="stylesheet" href="../css/style.css">
+
 <link rel="stylesheet" href="../css/navigation.css">
+
 <link rel="stylesheet" href="../css/weapon.css">
 
 
 </head>
 
 
+
 <body>
+
 
 
 <nav id="main-navigation"></nav>
 
 
 
+
 <div id="weapon-calculator">
 
 
+<div class="weapon-header">
+
+
 <h2>
-Weapon Comparator
+Weapon Calculator
 </h2>
 
 
-
-<div id="weapon-selectors">
-
-
-</div>
-
-
-
-<div id="compare-result">
-
-
-</div>
+<p>
+Build and compare weapons
+</p>
 
 
 </div>
 
 
 
-<script 
-type="module"
-src="../js/main.js">
-</script>
+
+<div class="weapon-container">
 
 
-<script 
-type="module"
-src="weapon.js">
-</script>
+<div class="weapon-column" id="weapon-left">
+
+</div>
+
+
+
+<div class="weapon-column" id="weapon-right">
+
+</div>
+
+
+</div>
+
+
+
+
+<div id="weapon-comparison" class="weapon-comparison-box">
+
+
+<h3>
+Comparison
+</h3>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<script src="../js/wiki-api.js"></script>
+
+<script src="../js/main.js"></script>
+
+<script src="weapon.js"></script>
+
 
 
 </body>
+
 
 </html>
