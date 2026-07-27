@@ -68,6 +68,18 @@
     gap:15px;
 }
 
+.weapon-component-row
+{
+	display:flex;
+	align-items:center;
+	gap:10px;
+	margin-bottom:10px;
+}
+
+.weapon-component-row .weapon-selector
+{
+	flex:1;
+}
 /* Cadres */
 
 .weapon-box {
