@@ -161,7 +161,7 @@ function buildShaftSlots(box,shaft,state)
 			createMaterial(row,item,state);
 			calculateWeapon(state);
 		});
-	}
+	});
 	function createComponent(box,label,items,callback)
 	{
 		const row = document.createElement("div");
