@@ -111,8 +111,8 @@ function buildBladeWeapon(box,weaponState)
 		createComponent(box,part.charAt(0).toUpperCase() + part.slice(1),getItems(part),
 		function(item,row)
 		{
-			weaponState.components.[part] = item.guid;
-			createMaterial(row,item,state);
+			weaponState.components[part] = item.guid;
+			createMaterial(row,item,weaponState);
 		}
 		);
 	});
