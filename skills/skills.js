@@ -2,8 +2,7 @@
    Skill Tree
    Expedition into Darkness Tools
 ========================================== */
-
-"use strict";
+import SKILLS_DATA from "../data/skillsData.js";
 
 
 document.addEventListener(
@@ -11,52 +10,28 @@ document.addEventListener(
 function()
 {
 
-const tree =
-document.getElementById("skill-tree");
+    const tree =
+        document.getElementById(
+            "skill-tree"
+        );
 
 
-if(!tree || tree.dataset.loaded)
-{
-	return;
-}
+    if(!tree)
+    {
+        return;
+    }
 
 
-tree.dataset.loaded="true";
-
-
-
-fetch("../data/skills.json")
-
-.then(response=>response.json())
-
-.then(data=>{
-
-
-if(!data.skills)
-{
-	return;
-}
-
-
-Object.values(data.skills)
-.forEach(skill=>{
-
-	createSkillNode(tree,skill);
-
-});
-
-
-})
-
-
-.catch(error=>{
-
-console.error(
-"Skill loading error",
-error
-);
-
-});
+    Object.values(
+        SKILLS_DATA.skills
+    )
+    .forEach(function(skill)
+    {
+        createSkillNode(
+            tree,
+            skill
+        );
+    });
 
 
 });
@@ -66,58 +41,45 @@ error
 function createSkillNode(container,skill)
 {
 
-const node =
-document.createElement("div");
+    const node =
+        document.createElement("div");
 
 
-node.className="skill-node";
+    node.className =
+        "skill-node";
 
 
-node.dataset.skillId =
-skill.id;
+    node.style.left =
+        skill.x + "%";
 
 
-
-node.style.left =
-skill.x+"%";
-
-
-node.style.top =
-skill.y+"%";
+    node.style.top =
+        skill.y + "%";
 
 
-
-if(skill.locked)
-{
-	node.classList.add("locked");
-}
+    node.dataset.id =
+        skill.id;
 
 
-
-node.addEventListener(
-"mouseenter",
-event=>
-showPopup(event,skill)
-);
-
-
-
-node.addEventListener(
-"mouseleave",
-hidePopup
-);
+    node.addEventListener(
+        "mouseenter",
+        function(e)
+        {
+            showPopup(
+                e,
+                skill
+            );
+        }
+    );
 
 
-
-node.addEventListener(
-"click",
-()=>
-selectSkill(node)
-);
+    node.addEventListener(
+        "mouseleave",
+        hidePopup
+    );
 
 
-
-container.appendChild(node);
+    container.appendChild(node);
 
 }
 
@@ -126,62 +88,48 @@ container.appendChild(node);
 function showPopup(event,skill)
 {
 
-const popup =
-document.getElementById(
-"skill-popup"
-);
+    const popup =
+        document.getElementById(
+            "skill-popup"
+        );
 
 
-if(!popup)
-{
-	return;
-}
+    if(!popup)
+    {
+        return;
+    }
 
 
+    popup.innerHTML = `
 
-popup.innerHTML=`
+        <h3>${skill.name}</h3>
 
-<div class="skill-popup-label">
-Skill
-</div>
+        <strong>
+        ${skill.branch}
+        </strong>
 
-<div class="skill-popup-title">
-${skill.name}
-</div>
+        <p>
+        ${skill.description}
+        </p>
 
-<div class="skill-popup-branch">
-${skill.branch}
-</div>
+        <b>
+        ${skill.effect}
+        </b>
 
-<img 
-class="skill-popup-icon"
-src="${skill.icon}">
-
-
-<div class="skill-popup-description">
-${skill.description}
-</div>
+    `;
 
 
-<div class="skill-popup-effect">
-${skill.effect}
-</div>
-
-`;
+    popup.style.left =
+        event.pageX + 10 + "px";
 
 
-
-popup.style.left =
-event.pageX + 10 + "px";
-
-
-popup.style.top =
-event.pageY + 10 + "px";
+    popup.style.top =
+        event.pageY + 10 + "px";
 
 
-popup.classList.add(
-"is-visible"
-);
+    popup.classList.add(
+        "is-visible"
+    );
 
 }
 
@@ -190,31 +138,12 @@ popup.classList.add(
 function hidePopup()
 {
 
-document
-.getElementById("skill-popup")
-?.classList.remove(
-"is-visible"
-);
-
-}
-
-
-
-function selectSkill(node)
-{
-
-document
-.querySelector(
-".skill-node.selected"
-)
-?.classList.remove(
-"selected"
-);
-
-
-
-node.classList.add(
-"selected"
-);
+    document
+    .getElementById(
+        "skill-popup"
+    )
+    ?.classList.remove(
+        "is-visible"
+    );
 
 }
