@@ -248,16 +248,9 @@ state
 
 }
 
-
 };
 
-
-
 }
-
-
-
-
 
 function buildBladeWeapon(box,weaponState)
 {
@@ -278,71 +271,29 @@ function buildBladeWeapon(box,weaponState)
 	);
 }
 
-
-
-
-
 function buildBladeSlots(box,grip,state)
 {
-
-
-clearDynamic(box);
-
-
-
-if(!grip.slots)
-{
-return;
-}
-
-
-
-grip.slots.forEach(
-function(slot)
-{
-
-
-const tag =
-slot
-.toLowerCase()
-.replaceAll(" ","_");
-
-
-
-createComponent(
-box,
-slot,
-getItems(tag),
-function(item)
-{
-
-
-state.components[slot] =
-item.guid;
-
-
-
-createMaterial(
-box,
-item,
-state
-);
-
-
-
-calculateWeapon(
-state
-);
-
-
-}
-
-);
-
-
-});
-
-
+	clearDynamic(box);
+	if(!grip.slots)
+	{
+		return;
+	}
+	grip.slots.forEach(
+	function(slot)
+	{
+		const tag =
+		slot
+		.toLowerCase()
+		.replaceAll(" ","_");
+		createComponent(box,slot,
+		getItems(tag),
+		function(item)
+		{
+			state.components[slot] =item.guid;
+			createMaterial(box,item,state);
+			calculateWeapon(state);
+		});
+	});
 }
 
 function buildShaftWeapon(box,weaponState)
@@ -367,23 +318,16 @@ function buildShaftWeapon(box,weaponState)
 function buildShaftSlots(box,shaft,state)
 {
 
-
 clearDynamic(box);
-
-
 
 if(!shaft.slots)
 {
 return;
 }
 
-
-
 shaft.slots.forEach(
 function(slot)
 {
-
-
 const tag =
 slot
 .toLowerCase()
@@ -391,39 +335,17 @@ slot
 
 
 
-createComponent(
-box,
-slot,
+createComponent(box,slot,
 getItems(tag),
+				
 function(item)
 {
+state.components[slot] =item.guid;
 
-
-state.components[slot] =
-item.guid;
-
-
-
-createMaterial(
-box,
-item,
-state
-);
-
-
-
-calculateWeapon(
-state
-);
-
-
-}
-
-);
-
+createMaterial(box,item,state);
+calculateWeapon(state);
 
 });
-
 
 }
 function createComponent(box,label,items,callback)
