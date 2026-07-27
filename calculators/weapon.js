@@ -297,10 +297,14 @@ item.guid;
 
 
 
-buildBladeSlots(
-box,
-item,
-state
+createMaterial(
+    box,
+    item,
+    state
+);
+
+calculateWeapon(
+    state
 );
 
 
@@ -385,26 +389,30 @@ state
 function buildShaftWeapon(box,state)
 {
 
-
 createComponent(
-box,
-"Shaft",
-getItems("shaft"),
-function(item)
-{
+    box,
+    "Shaft",
+    getItems("shaft"),
+    function(item)
+    {
+
+        state.components.shaft =
+            item.guid;
 
 
-state.components.shaft =
-item.guid;
+        createMaterial(
+            box,
+            item,
+            state
+        );
 
 
+        calculateWeapon(
+            state
+        );
 
-buildShaftSlots(
-box,
-item,
-state
+    }
 );
-
 
 }
 
