@@ -298,9 +298,12 @@ function buildShaftSlots(box,shaft,state)
 			{
 				damage *=hardness / 100;
 			}
-			if(material.magical_properties)
+			if(item.tags && item.tags.includes("blade"))
 			{
-				stats.magical_properties = material.magical_properties;
+				if(material.magical_properties)
+				{
+					stats.magical_properties = material.magical_properties;
+				}
 			}
 		}
 		stats.damage +=damage;
