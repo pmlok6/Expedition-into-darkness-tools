@@ -23,8 +23,8 @@ const SKILLS_DATA = {
     name:"Tool Longevity",
     branch:"Industry",
     icon:"",
-    x:56.2,
-    y:37.8,
+    x:50,
+    y:50,
     requires:[],
     description:"",
     effect:""
