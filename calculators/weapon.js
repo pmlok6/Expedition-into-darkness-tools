@@ -154,12 +154,11 @@ function buildShaftSlots(box,shaft,state)
 	function(slot)
 	{
 		const tag = slot.toLowerCase().replaceAll(" ","_");
-		createComponent(box,slot,
-		getItems(tag),				
-		function(item)
+		createComponent(box,slot,getItems(tag),
+		function(item,row)
 		{
 			state.components[slot] =item.guid;
-			createMaterial(box,item,state);
+			createMaterial(row,item,state);
 			calculateWeapon(state);
 		});
 	}
