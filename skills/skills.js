@@ -61,10 +61,13 @@ function showPopup(event,skill)
     const popup = document.getElementById("skill-popup");
     if(!popup)
     {
-        console.error("Popup missing");
         return;
-    }   
-const tags = skill.tags || [];
+    }      
+const tags = 
+   [
+      "Skill",
+      skill.branch
+   ];
 
 popup.innerHTML = `
 
