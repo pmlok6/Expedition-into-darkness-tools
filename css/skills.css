@@ -342,6 +342,34 @@
 
 }
 
+.skill-popup-tags {
+    display:flex;
+    gap:6px;
+    margin-bottom:8px;
+}
+
+
+.skill-popup-tags span {
+
+    background:#382820;
+
+    color:#e5d6c4;
+
+    border:1px solid #7a6656;
+
+    border-radius:3px;
+
+    padding:3px 8px;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+}
 /* =========================================
    Responsive
 ========================================= */
