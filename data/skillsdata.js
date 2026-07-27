@@ -22,7 +22,7 @@ const SKILLS_DATA = {
     key:"tool_longevity",
     name:"Tool Longevity",
     branch:"Industry",
-    tag:[Industry,tool,test,yeeeeeeeeeeeah], 
+    tag:["skill",branch,"tool","test","yeeeeeeeeeeeah"], 
     icon:"",
     x:50,
     y:50,
