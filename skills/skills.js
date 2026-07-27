@@ -64,12 +64,16 @@ function showPopup(event,skill)
         console.error("Popup missing");
         return;
     }   
-    popup.innerHTML = `
-        <div class="skill-popup-title"> ${skill.name}</div>
-        <div> ${skill.branch}</div>
-        <div> ${skill.description}</div>
-        <div> ${skill.effect}</div>
-    `;
+const tags = skill.tags || [];
+
+popup.innerHTML = `
+
+<div class="skill-popup-tags">${tags.map(tag => `<span>${tag}</span>`).join("")}</div>
+<div class="skill-popup-title">${skill.name}</div>
+<img class="skill-popup-icon" src="${skill.icon}">
+<div class="skill-popup-description">${skill.description}</div>
+<div class="skill-popup-effect">${skill.effect}</div>
+`;
     popup.style.left =event.pageX + 10 + "px";
     popup.style.top =event.pageY + 10 + "px";
     popup.classList.add("is-visible");
