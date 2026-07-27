@@ -6,23 +6,17 @@ import SKILLS_DATA from "../data/skillsdata.js";
 
 "use strict";
 
-
-document.addEventListener("DOMContentLoaded", function(){
-
+document.addEventListener("DOMContentLoaded", function()
+{
     const tree = document.getElementById("skill-tree");
-
     if(!tree)
     {
         return;
     }
-
-
-    Object.values(SKILLS_DATA).forEach(function(skill){
-
-        createSkillNode(tree, skill);
-
-    });
-
+    Object.values(SKILLS_DATA).forEach(function(skill)
+   {
+      createSkillNode(tree, skill);
+   });
 });
 
 function createSkillNode(container, skill) 
@@ -31,10 +25,9 @@ function createSkillNode(container, skill)
 
     node.className = "skill-node";
     node.dataset.skillId = skill.id;
-
+   
     node.style.left = skill.x + "%";
     node.style.top = skill.y + "%";
-
 
     if(skill.icon)
     {
@@ -48,70 +41,41 @@ function createSkillNode(container, skill)
       node.appendChild(img);
     }
 
+   node.addEventListener("mouseenter",
+    function(e)
+    {
+        showPopup(e, skill);
+    });
+
+   node.addEventListener("mouseleave",
+    function()
+    {
+        hidePopup();
+    });
+   
     container.appendChild(node);
 }
 
-
-
 function showPopup(event,skill)
 {
-
-    const popup =
-        document.getElementById(
-            "skill-popup"
-        );
-
-
+    const popup = document.getElementById("skill-popup");
     if(!popup)
     {
+        console.error("Popup missing");
         return;
-    }
-
-
+    }   
     popup.innerHTML = `
-
-        <h3>${skill.name}</h3>
-
-        <strong>
-        ${skill.branch}
-        </strong>
-
-        <p>
-        ${skill.description}
-        </p>
-
-        <b>
-        ${skill.effect}
-        </b>
-
+        <div class="skill-popup-title"> ${skill.name}</div>
+        <div> ${skill.branch}</div>
+        <div> ${skill.description}</div>
+        <div> ${skill.effect}</div>
     `;
-
-
-    popup.style.left =
-        event.pageX + 10 + "px";
-
-
-    popup.style.top =
-        event.pageY + 10 + "px";
-
-
-    popup.classList.add(
-        "is-visible"
-    );
-
+    popup.style.left =event.pageX + 10 + "px";
+    popup.style.top =event.pageY + 10 + "px";
+    popup.classList.add("is-visible");
 }
-
-
 
 function hidePopup()
 {
-
-    document
-    .getElementById(
-        "skill-popup"
-    )
-    ?.classList.remove(
-        "is-visible"
-    );
-
+    document.getElementById("skill-popup")?.classList.remove("is-visible");
 }
