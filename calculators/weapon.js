@@ -216,8 +216,7 @@ function buildShaftSlots(box,shaft,state)
 		}
 		const materials =recipe.allowed_materials.map(function(material)
 		{
-			return 
-			{
+			return{
 				id:material,name:formatMaterialName(material)
 			};
 		});
