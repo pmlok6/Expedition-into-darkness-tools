@@ -1,0 +1,11 @@
+.xp-tooltip{
+	display:none;
+	position:absolute;
+	background:#222;
+	color:white;
+	padding:10px;
+	border:1px solid #d33;
+	border-radius:5px;
+	pointer-events:none;
+	z-index:10;
+}
