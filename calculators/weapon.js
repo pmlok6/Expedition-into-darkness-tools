@@ -203,8 +203,7 @@ function buildShaftSlots(box,shaft,state)
 		});
 		wrapper.appendChild(labelNode);
 		wrapper.appendChild(select);
-		return 
-		{
+		return{
 			wrapper:wrapper,select:select
 		};
 	}
