@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded",function()
 		console.error("Weapon Calculator loading error",error);
 	});
 });
+
 function buildCalculator(root,ITEMS,RECIPES)
 {
 	const state =
@@ -97,7 +98,7 @@ function createWeaponType(box,state)
 
 function buildBladeWeapon(box,weaponState)
 {
-	createComponent(box,"Blade",getItems("blade"),
+	createComponent(box,"Grip",getItems("grip"),
 		function(item)
 		{
 			weaponState.components.blade = item.guid;
@@ -130,7 +131,7 @@ function buildBladeSlots(box,grip,state)
 		});
 	});
 	createComponent(box,"Grip",
-	getItems("grip"),
+	getItems("grip"),					
 	function(item,row)
 	{
 		state.components.grip = item.guid;
@@ -170,6 +171,7 @@ function buildShaftSlots(box,shaft,state)
 		});
 	});
 }
+
 	function createComponent(box,label,items,callback)
 	{
 		const row = document.createElement("div");
@@ -194,6 +196,7 @@ function buildShaftSlots(box,shaft,state)
 			}
 		};
 	}	
+
 	function createSelect(label,options)
 	{
 		const wrapper =	document.createElement("div");
@@ -215,6 +218,7 @@ function buildShaftSlots(box,shaft,state)
 			wrapper:wrapper,select:select
 		};
 	}
+
 	function createMaterial(box,item,state)
 	{
 		const recipe =findRecipe(item.name);
@@ -238,6 +242,7 @@ function buildShaftSlots(box,shaft,state)
 			calculateWeapon(state);
 		};
 	}
+
 	function calculateWeapon(state)
 	{
 		const stats =
@@ -268,6 +273,7 @@ function buildShaftSlots(box,shaft,state)
 		renderResult(state);
 		updateComparison();
 	}
+
 	function addStats(stats,item,material)
 	{
 		stats.weight +=
@@ -302,6 +308,7 @@ function buildShaftSlots(box,shaft,state)
 		stats.attack_stamina_cost +=parseNumber(item.attack_stamina_cost);
 		stats.inertia +=parseNumber(item.inertia);
 	}
+
 	function findMaterial(tag)
 	{
 		return Object.values(WEAPON_ITEMS).find(function(item)
@@ -309,6 +316,7 @@ function buildShaftSlots(box,shaft,state)
 			return item.tags &&item.tags.includes(tag);
 		});
 	}
+
 	function findRecipe(name)
 	{
 		return Object.values(WEAPON_RECIPES).find(function(recipe)
@@ -316,6 +324,7 @@ function buildShaftSlots(box,shaft,state)
 			return recipe.name === name;
 		});
 	}
+
 	function getItems(tag)
 	{
 		return Object.values(WEAPON_ITEMS).filter(function(item)
@@ -330,10 +339,12 @@ function buildShaftSlots(box,shaft,state)
 			});
 		});
 	}
+
 	function findItem(id)
 	{
 		return WEAPON_ITEMS[id];
 	}
+
 	function clearDynamic(box)
 	{
 		const components =box.querySelector(".weapon-components");
@@ -347,6 +358,7 @@ function buildShaftSlots(box,shaft,state)
 			materials.innerHTML = "";
 		}
 	}
+
 	function renderResult(state)
 	{
 		const panels =document.querySelectorAll(".weapon-result-box");
@@ -403,6 +415,7 @@ function buildShaftSlots(box,shaft,state)
 			</div>
 		</div>`;
 	}
+
 function updateComparison()
 {
 	const box =document.getElementById("weapon-comparison");
@@ -487,6 +500,7 @@ function parseNumber(value)
 		.replace(",",".")
 		)||0;
 }
+
 function formatPercent(value)
 {
 	if(!value)
@@ -495,6 +509,7 @@ function formatPercent(value)
 	}
 	return (value > 0?"+":"")+value.toFixed(1)+"%";
 }
+
 function formatValue(value)
 {
 	if(typeof value === "number")
@@ -503,6 +518,7 @@ function formatValue(value)
 	}
 	return value;	
 }
+
 function formatMaterialName(value)
 {
 	return value
@@ -512,6 +528,7 @@ function formatMaterialName(value)
 		return char.toUpperCase();
 	});
 }
+
 function getState(side)
 {
 	return window.weaponStates?window.weaponStates[side]:null;
