@@ -397,362 +397,114 @@ function buildShaftSlots(box,shaft,state)
 	}
 function updateComparison()
 {
-
-
-const box =
-document.getElementById(
-"weapon-comparison"
-);
-
-
-
-if(!box)
-{
-return;
+	const box =document.getElementById("weapon-comparison");
+	if(!box)
+	{
+		return;
+	}
+	const left =getState("left");
+	const right =getState("right");
+	if(!left ||!right ||Object.keys(left.stats).length === 0 ||Object.keys(right.stats).length === 0)
+	{
+		box.innerHTML ="<h3>Comparison</h3>";
+		return;
+	}
+	const stats =
+	[
+		["damage","Damage"],
+		["base_damage","Base Damage"],
+		["swinging_damage","Swinging Damage"],
+		["thrusting_damage","Thrusting Damage"],
+		["cleave","Cleave"],
+		["attack_speed","Attack Speed"],
+		["attack_stamina_cost","Stamina Cost"],
+		["weight","Weight"],
+		["inertia","Inertia"]
+	];
+	let html ="<h3>Comparison</h3>";
+	stats.forEach(function(stat)
+	{
+		const key =stat[0];
+		const name =stat[1];
+		const a =left.stats[key] || 0;
+		const b =right.stats[key] || 0;
+		html += `<div class="compare-row">
+			<span>${name}</span>
+			<span class="${compareClass(a,b,key)}">${formatValue(a)}</span>
+			<span class="${compareClass(b,a,key)}">${formatValue(b)}</span>
+		</div>`;
+	});
+	box.innerHTML =html;
 }
-
-
-
-const left =
-getState("left");
-
-
-
-const right =
-getState("right");
-
-
-
-if(
-!left ||
-!right ||
-Object.keys(left.stats).length === 0 ||
-Object.keys(right.stats).length === 0
-)
-{
-
-box.innerHTML =
-"<h3>Comparison</h3>";
-
-return;
-
-}
-
-
-
-const stats =
-[
-
-[
-"damage",
-"Damage"
-],
-
-[
-"base_damage",
-"Base Damage"
-],
-
-[
-"swinging_damage",
-"Swinging Damage"
-],
-
-[
-"thrusting_damage",
-"Thrusting Damage"
-],
-
-[
-"cleave",
-"Cleave"
-],
-
-[
-"attack_speed",
-"Attack Speed"
-],
-
-[
-"attack_stamina_cost",
-"Stamina Cost"
-],
-
-[
-"weight",
-"Weight"
-],
-
-[
-"inertia",
-"Inertia"
-]
-
-];
-
-
-
-let html =
-"<h3>Comparison</h3>";
-
-
-
-stats.forEach(function(stat)
-{
-
-
-const key =
-stat[0];
-
-
-const name =
-stat[1];
-
-
-
-const a =
-left.stats[key] || 0;
-
-
-
-const b =
-right.stats[key] || 0;
-
-
-
-html += `
-
-<div class="compare-row">
-
-
-<span>
-${name}
-</span>
-
-
-
-<span class="${compareClass(a,b,key)}">
-
-${formatValue(a)}
-
-</span>
-
-
-
-<span class="${compareClass(b,a,key)}">
-
-${formatValue(b)}
-
-</span>
-
-
-
-</div>
-
-`;
-
-
-
-});
-
-
-
-box.innerHTML =
-html;
-
-
-}
-
-
-
-
 
 function compareClass(a,b,stat)
 {
-
-
-if(a === b)
-{
-return "compare-equal";
+	if(a === b)
+	{
+		return "compare-equal";
+	}	
+	const lowerBetter =["attack_stamina_cost","weight","inertia"];
+	if(lowerBetter.includes(stat))
+	{
+		return a < b?"compare-better":"compare-worse";
+	}
+	return a > b?"compare-better":"compare-worse";
 }
-
-
-
-const lowerBetter =
-[
-
-"attack_stamina_cost",
-
-"weight",
-
-"inertia"
-
-];
-
-
-
-if(
-lowerBetter.includes(stat)
-)
-{
-
-return a < b
-?
-"compare-better"
-:
-"compare-worse";
-
-}
-
-
-
-return a > b
-?
-"compare-better"
-:
-"compare-worse";
-
-
-}
-
-
-
-
-
+	
 function parsePercent(value)
 {
-
-
-if(!value)
-{
-return 0;
+	if(!value)
+	{
+		return 0;
+	}
+	return parseFloat(
+		String(value)
+		.replace("+","")
+		.replace("%","")
+		.replace(",",".")
+		)||0;
 }
-
-
-
-return parseFloat(
-String(value)
-.replace("+","")
-.replace("%","")
-.replace(",",".")
-)
-||0;
-
-
-}
-
-
-
-
 
 function parseNumber(value)
 {
-
-
-if(!value)
-{
-return 0;
+	if(!value)
+	{
+		return 0;
+	}
+	return parseFloat(
+		String(value)
+		.replace("+","")
+		.replace("%","")
+		.replace("s","")
+		.replace(",",".")
+		)||0;
 }
-
-
-
-return parseFloat(
-String(value)
-.replace("+","")
-.replace("%","")
-.replace("s","")
-.replace(",",".")
-)
-||0;
-
-
-}
-
-
-
-
-
 function formatPercent(value)
 {
-
-
-if(!value)
-{
-return "0%";
+	if(!value)
+	{
+		return "0%";
+	}
+	return (value > 0?"+":"")+value.toFixed(1)+"%";
 }
-
-
-
-return (
-value > 0
-?
-"+"
-:
-""
-)
-+
-value.toFixed(1)
-+
-"%";
-
-
-}
-
-
-
-
-
 function formatValue(value)
 {
-
-
-if(typeof value === "number")
-{
-
-return value.toFixed(2);
-
+	if(typeof value === "number")
+	{
+		return value.toFixed(2);
+	}
+	return value;	
 }
-
-
-
-return value;
-
-
-}
-
-
-
-
-
 function formatMaterialName(value)
 {
-
-
-return value
-.replaceAll("_"," ")
-.replace(/\b\w/g,function(char)
-{
-
-return char.toUpperCase();
-
-});
-
-
+	return value
+	.replaceAll("_"," ")
+	.replace(/\b\w/g,function(char)
+	{
+		return char.toUpperCase();
+	});
 }
-
-
-
-
-
 function getState(side)
 {
-
-
-return window.weaponStates
-?
-window.weaponStates[side]
-:
-null;
-
-
+	return window.weaponStates?window.weaponStates[side]:null;
 }
