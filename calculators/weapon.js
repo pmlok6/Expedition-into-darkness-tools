@@ -109,11 +109,7 @@ stats:{}
 
 };
 
-
-
 window.weaponStates = state;
-
-
 
 createWeaponPanel(
 document.getElementById("weapon-left"),
@@ -121,73 +117,56 @@ document.getElementById("weapon-left"),
 state.left
 );
 
-
-
 createWeaponPanel(
 document.getElementById("weapon-right"),
 "Weapon 2",
 state.right
 );
 
-
-
 createWeaponType(
-    document.querySelector("#weapon-left .weapon-type"),
-    state.left
+	document.querySelector("#weapon-left .weapon-selection-box"),
+	state.left
 );
 
-
 createWeaponType(
-    document.querySelector("#weapon-right .weapon-type"),
-    state.right
+	document.querySelector("#weapon-right .weapon-selection-box"),
+	state.right
 );
-
-
 
 }
 
 function createWeaponPanel(panel,title,state)
 {
-
-panel.innerHTML = `
+	panel.innerHTML = `
 
 <div class="weapon-box">
 
-<h2 class="weapon-title">
+<h3>
 ${title}
-</h2>
+</h3>
 
+<div class="weapon-selection-box">
 
-<div class="weapon-type">
+<div class="weapon-components"></div>
 
-</div>
-
-
-<div class="weapon-components">
+<div class="weapon-materials"></div>
 
 </div>
 
-
 </div>
-
 
 
 <div class="weapon-box weapon-result-box">
 
 <h3>
-Stats
+Result
 </h3>
 
-
-<div class="weapon-results">
-
-</div>
-
+<div class="weapon-results"></div>
 
 </div>
 
 `;
-
 }
 
 function createWeaponType(box,state)
@@ -280,39 +259,23 @@ state
 
 
 
-function buildBladeWeapon(box,state)
+function buildBladeWeapon(box,weaponState)
 {
+	createComponent(
+		box,
+		"Grip",
+		getItems("grip"),
+		function(item)
+		{
+			weaponState.components.grip = item.guid;
 
-
-createComponent(
-box,
-"Grip",
-getItems("grip"),
-function(item)
-{
-
-
-state.components.grip =
-item.guid;
-
-
-
-createMaterial(
-    box,
-    item,
-    state
-);
-
-calculateWeapon(
-    state
-);
-
-
-}
-
-);
-
-
+			buildBladeSlots(
+				box,
+				item,
+				weaponState
+			);
+		}
+	);
 }
 
 
@@ -382,48 +345,24 @@ state
 
 }
 
-
-
-
-
-function buildShaftWeapon(box,state)
+function buildShaftWeapon(box,weaponState)
 {
+	createComponent(
+		box,
+		"Shaft",
+		getItems("shaft"),
+		function(item)
+		{
+			weaponState.components.shaft = item.guid;
 
-createComponent(
-    box,
-    "Shaft",
-    getItems("shaft"),
-    function(item)
-    {
-
-        state.components.shaft =
-            item.guid;
-
-
-        createMaterial(
-            box,
-            item,
-            state
-        );
-
-
-        calculateWeapon(
-            state
-        );
-
-    }
-);
-
+			buildShaftSlots(
+				box,
+				item,
+				weaponState
+			);
+		}
+	);
 }
-
-);
-
-
-}
-
-
-
-
 
 function buildShaftSlots(box,shaft,state)
 {
