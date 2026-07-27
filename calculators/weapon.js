@@ -127,7 +127,6 @@ function buildBladeSlots(box,grip,state)
 			state.components[slot] =item.guid;
 			createMaterial(row,item,state);
 			calculateWeapon(state);
-			row.appendChild(materialSelector.wrapper);
 		});
 	});
 }
@@ -218,12 +217,12 @@ function buildShaftSlots(box,shaft,state)
 		const materials =recipe.allowed_materials.map(function(material)
 		{
 			return{
-				id:material,name:formatMaterialName(material)
+				id:material, name:formatMaterialName(material)
 			};
 		});
-		const selector =createSelect("Material",materials);
+		const selector = createSelect("Material",materials);
 		selector.wrapper.classList.add("dynamic");
-		box.querySelector(".weapon-materials").appendChild(selector.wrapper);
+		box.appendChild(selector.wrapper);
 		selector.select.onchange =
 		function()
 		{
