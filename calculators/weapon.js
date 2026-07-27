@@ -172,7 +172,6 @@ Result
 function createWeaponType(box,state)
 {
 
-
 const selector =
 createSelect(
 "Weapon Type",
@@ -261,12 +260,7 @@ function buildBladeWeapon(box,weaponState)
 		function(item)
 		{
 			weaponState.components.grip = item.guid;
-
-			buildBladeSlots(
-				box,
-				item,
-				weaponState
-			);
+			buildBladeSlots(box,item,weaponState);
 		}
 	);
 }
@@ -287,705 +281,246 @@ function buildBladeSlots(box,grip,state)
 		.replaceAll(" ","_");
 		createComponent(box,slot,
 		getItems(tag),
-		function(item)
+		function(item,row)
 		{
 			state.components[slot] =item.guid;
-			createMaterial(box,item,state);
+			createMaterial(row,item,state);
 			calculateWeapon(state);
+			row.appendChild(materialSelector.wrapper);
 		});
 	});
 }
 
 function buildShaftWeapon(box,weaponState)
 {
-	createComponent(
-		box,
-		"Shaft",
-		getItems("shaft"),
-		function(item)
-		{
+	createComponent(box,"Shaft",
+	getItems("shaft"),
+	function(item)
+	{
 			weaponState.components.shaft = item.guid;
-
-			buildShaftSlots(
-				box,
-				item,
-				weaponState
-			);
-		}
-	);
+			buildShaftSlots(box,item,weaponState);
+	});
 }
 
 function buildShaftSlots(box,shaft,state)
 {
-
-clearDynamic(box);
-
-if(!shaft.slots)
-{
-return;
-}
-
-shaft.slots.forEach(
-function(slot)
-{
-const tag =
-slot
-.toLowerCase()
-.replaceAll(" ","_");
-
-
-
-createComponent(box,slot,
-getItems(tag),
-				
-function(item)
-{
-	state.components[slot] =item.guid;
-	createMaterial(box,item,state);
-	calculateWeapon(state);
-
-});
-
-}
-function createComponent(box,label,items,callback)
-{
-
-const selector =createSelect(label,items.map(function(item)
-{
-	return 
+	clearDynamic(box);
+	if(!shaft.slots)
 	{
-		id:item.guid,
-		name:item.name
-	};
-})
-);
-selector.wrapper.classList.add("dynamic");
-
-let container = box.querySelector(".weapon-components");
-
-container.appendChild(selector.wrapper);
-	
-selector.select.onchange =function()
-{
-	const item =findItem(selector.select.value);
-	if(item)
+		return;
+	}
+	shaft.slots.forEach(
+	function(slot)
 	{
-		callback(item);
+		const tag = slot.toLowerCase().replaceAll(" ","_");
+		createComponent(box,slot,
+		getItems(tag),				
+		function(item)
+		{
+			state.components[slot] =item.guid;
+			createMaterial(box,item,state);
+			calculateWeapon(state);
+		});
+	}
+	function createComponent(box,label,items,callback)
+	{
+		const row = document.createElement("div");
+		row.className ="weapon-component-row";
+		const selector =createSelect(	label,	items.map(function(item)
+		{
+			return 
+			{
+				id:item.guid,
+				name:item.name
+			};
+		}));
+		selector.wrapper.classList.add(	"dynamic");
+		row.appendChild(selector.wrapper);
+		let container =box.querySelector(".weapon-components");
+		container.appendChild(row);
+		selector.select.onchange = function()
+		{
+			const item =findItem(selector.select.value);
+			if(item)
+			{
+				callback(item,row);
+			}
+		};
 	}	
-};
-	
-}
-	
-function createSelect(label,options)
-{
-const wrapper =
-document.createElement(
-"div"
-);
-
-
-wrapper.className =
-"weapon-selector";
-
-
-
-const labelNode =
-document.createElement(
-"label"
-);
-
-
-labelNode.textContent =
-label;
-
-
-
-const select =
-document.createElement(
-"select"
-);
-
-
-
-select.innerHTML =
-`
-<option value="">
--- Select --
-</option>
-`;
-
-
-
-options.forEach(function(option)
-{
-
-
-const opt =
-document.createElement(
-"option"
-);
-
-
-opt.value =
-option.id;
-
-
-opt.textContent =
-option.name;
-
-
-
-select.appendChild(
-opt
-);
-
-
-});
-
-
-
-wrapper.appendChild(
-labelNode
-);
-
-
-wrapper.appendChild(
-select
-);
-
-
-
-return {
-
-wrapper:wrapper,
-
-select:select
-
-};
-
-
-}
-
-
-
-
-
-function createMaterial(box,item,state)
-{
-
-
-const recipe =
-findRecipe(
-item.name
-);
-
-
-
-if(
-!recipe ||
-!recipe.allowed_materials
-)
-{
-return;
-}
-
-
-
-const materials =
-recipe.allowed_materials.map(
-function(material)
-{
-
-return {
-
-id:material,
-
-name:formatMaterialName(material)
-
-};
-
-});
-
-
-
-const selector =
-createSelect(
-"Material",
-materials
-);
-
-
-
-selector.wrapper.classList.add(
-"dynamic"
-);
-
-
-
-box.querySelector(
-".weapon-materials"
-)
-.appendChild(
-selector.wrapper
-);
-
-
-
-selector.select.onchange =
-function()
-{
-
-
-state.materials[item.guid] =
-selector.select.value;
-
-
-
-calculateWeapon(
-state
-);
-
-
-};
-
-
-}
-
-
-
-
-
-function calculateWeapon(state)
-{
-
-
-const stats =
-{
-
-damage:0,
-
-base_damage:0,
-
-swinging_damage:0,
-
-thrusting_damage:0,
-
-cleave:0,
-
-attack_speed:0,
-
-attack_stamina_cost:0,
-
-inertia:0,
-
-weight:0,
-
-magic:"none"
-
-};
-
-
-
-Object.values(
-state.components
-)
-.forEach(function(id)
-{
-
-
-const item =
-findItem(id);
-
-
-
-if(!item)
-{
-return;
-}
-
-
-
-const materialTag =
-state.materials[item.guid];
-
-
-
-const material =
-materialTag
-?
-findMaterial(materialTag)
-:
-null;
-
-
-
-addStats(
-stats,
-item,
-material
-);
-
-
-});
-
-
-
-state.stats =
-stats;
-
-
-
-renderResult(
-state
-);
-
-
-
-updateComparison();
-
-
-}
-
-
-
-
-
-function addStats(stats,item,material)
-{
-
-
-stats.weight +=
-Number(
-item.weight || 0
-);
-
-
-
-const base =
-parseNumber(
-item.base_damage
-);
-
-
-
-stats.base_damage +=
-base;
-
-
-
-let damage =
-base;
-
-
-
-if(
-material &&
-base
-)
-{
-
-
-const hardness =
-parsePercent(
-material.hardness
-);
-
-
-
-if(hardness)
-{
-
-damage *=
-hardness / 100;
-
-}
-
-}
-
-
-
-stats.damage +=
-damage;
-
-
-
-let swing =
-parsePercent(
-item.swinging_damage
-);
-
-
-
-let thrust =
-parsePercent(
-item.thrusting_damage
-);
-
-
-
-if(material)
-{
-
-
-const hardness =
-parsePercent(
-material.hardness
-);
-
-
-
-if(hardness)
-{
-
-swing *=
-hardness / 100;
-
-
-thrust *=
-hardness / 100;
-
-}
-
-
-}
-
-
-
-stats.swinging_damage +=
-swing;
-
-
-
-stats.thrusting_damage +=
-thrust;
-
-
-
-stats.cleave +=
-parsePercent(
-item.cleave
-);
-
-
-
-stats.attack_speed +=
-parsePercent(
-item.attack_speed
-);
-
-
-
-stats.attack_stamina_cost +=
-parseNumber(
-item.attack_stamina_cost
-);
-
-
-
-stats.inertia +=
-parseNumber(
-item.inertia
-);
-
-
-}
-
-
-
-
-
-function findMaterial(tag)
-{
-
-
-return Object.values(
-WEAPON_ITEMS
-)
-.find(function(item)
-{
-
-
-return item.tags &&
-item.tags.includes(tag);
-
-
-});
-
-
-}
-
-
-
-
-
-function findRecipe(name)
-{
-
-
-return Object.values(
-WEAPON_RECIPES
-)
-.find(function(recipe)
-{
-
-
-return recipe.name === name;
-
-
-});
-
-
-}
-
-
-
-
-
-function getItems(tag)
-{
-
-
-return Object.values(
-WEAPON_ITEMS
-)
-.filter(function(item)
-{
-
-
-return item.tags &&
-item.tags.includes(tag);
-
-
-})
-.sort(function(a,b)
-{
-
-
-return a.name.localeCompare(
-b.name,
-"en",
-{
-sensitivity:"base"
-}
-);
-
-
-});
-
-
-}
-
-
-
-
-
-function findItem(id)
-{
-
-return WEAPON_ITEMS[id];
-
-}
-
-
-
-
-
-function clearDynamic(box)
-{
-
-
-const components =
-box.querySelector(
-".weapon-components"
-);
-
-
-
-const materials =
-box.querySelector(
-".weapon-materials"
-);
-
-
-
-if(components)
-{
-components.innerHTML = "";
-}
-
-
-
-if(materials)
-{
-materials.innerHTML = "";
-}
-
-
-}
-
-function renderResult(state)
-{
-
-
-const panels =
-document.querySelectorAll(
-".weapon-result-box"
-);
-
-
-
-let target = null;
-
-
-
-if(
-state === getState("left")
-)
-{
-
-target =
-panels[0]
-?.querySelector(
-".weapon-results"
-);
-
-}
-else
-{
-
-target =
-panels[1]
-?.querySelector(
-".weapon-results"
-);
-
-}
-
-
-
-if(!target)
-{
-return;
-}
-
-
-
-const s =
-state.stats;
-
-
-
-target.innerHTML = `
-
-<div class="weapon-card">
-
-
-<div class="weapon-stat">
-
-<span>
-Damage
-</span>
-
+	function createSelect(label,options)
+	{
+		const wrapper =	document.createElement("div");
+		wrapper.className ="weapon-selector";
+		const labelNode =document.createElement("label");
+		labelNode.textContent =label;
+		const select =document.createElement("select");
+		select.innerHTML =`<option value="">-- Select --</option>`;
+		options.forEach(function(option)
+		{
+			const opt =document.createElement("option");
+			opt.value =option.id;
+			opt.textContent =option.name;
+			select.appendChild(opt);
+		});
+		wrapper.appendChild(labelNode);
+		wrapper.appendChild(select);
+		return 
+		{
+			wrapper:wrapper,select:select
+		};
+	}
+	function createMaterial(box,item,state)
+	{
+		const recipe =findRecipe(item.name);
+		if(!recipe ||!recipe.allowed_materials)
+		{
+			return;
+		}
+		const materials =recipe.allowed_materials.map(function(material)
+		{
+			return 
+			{
+				id:material,name:formatMaterialName(material)
+			};
+		});
+		const selector =createSelect("Material",materials);
+		selector.wrapper.classList.add("dynamic");
+		box.querySelector(".weapon-materials").appendChild(selector.wrapper);
+		selector.select.onchange =
+		function()
+		{
+			state.materials[item.guid] =selector.select.value;
+			calculateWeapon(state);
+		};
+	}
+	function calculateWeapon(state)
+	{
+		const stats =
+		{
+			damage:0,
+			base_damage:0,
+			swinging_damage:0,
+			thrusting_damage:0,
+			cleave:0,
+			attack_speed:0,
+			attack_stamina_cost:0,
+			inertia:0,
+			weight:0,
+			magic:"none"
+		};
+		Object.values(state.components).forEach(function(id)
+		{
+			const item =findItem(id);
+			if(!item)
+			{
+				return;
+			}
+			const materialTag =state.materials[item.guid];
+			const material =materialTag?findMaterial(materialTag):null;
+			addStats(stats,item,material);
+		});
+		state.stats =stats;
+		renderResult(state);
+		updateComparison();
+	}
+	function addStats(stats,item,material)
+	{
+		stats.weight +=
+		Number(item.weight || 0);
+		const base =parseNumber(item.base_damage);
+		stats.base_damage +=base;
+		let damage =base;
+		if(material &&base)
+		{
+			const hardness =parsePercent(material.hardness);
+			if(hardness)
+			{
+				damage *=hardness / 100;
+			}
+		}
+		stats.damage +=damage;
+		let swing =parsePercent(item.swinging_damage);
+		let thrust =parsePercent(item.thrusting_damage);
+		if(material)
+		{
+			const hardness =parsePercent(material.hardness);
+			if(hardness)
+			{
+				swing *=hardness / 100;
+				thrust *=hardness / 100;
+			}
+		}
+		stats.swinging_damage +=swing;
+		stats.thrusting_damage +=thrust;
+		stats.cleave +=parsePercent(item.cleave);
+		stats.attack_speed +=parsePercent(item.attack_speed);
+		stats.attack_stamina_cost +=parseNumber(item.attack_stamina_cost);
+		stats.inertia +=parseNumber(item.inertia);
+	}
+	function findMaterial(tag)
+	{
+		return Object.values(WEAPON_ITEMS).find(function(item)
+		{
+			return item.tags &&item.tags.includes(tag);
+		});
+	}
+	function findRecipe(name)
+	{
+		return Object.values(WEAPON_RECIPES).find(function(recipe)
+		{
+			return recipe.name === name;
+		});
+	}
+	function getItems(tag)
+	{
+		return Object.values(WEAPON_ITEMS).filter(function(item)
+		{
+			return item.tags &&item.tags.includes(tag);
+		})
+		.sort(function(a,b)
+		{
+			return a.name.localeCompare(b.name,"en",
+			{
+				sensitivity:"base"
+			});
+		});
+	}
+	function findItem(id)
+	{
+		return WEAPON_ITEMS[id];
+	}
+	function clearDynamic(box)
+	{
+		const components =box.querySelector(".weapon-components");
+		const materials =box.querySelector(".weapon-materials");
+		if(components)
+		{
+			components.innerHTML = "";
+		}
+		if(materials)
+		{
+			materials.innerHTML = "";
+		}
+	}
+	function renderResult(state)
+	{
+		const panels =document.querySelectorAll(".weapon-result-box");
+		let target = null;
+		if(state === getState("left"))
+		{
+			target =panels[0]?.querySelector(".weapon-results");
+		}
+		else
+		{
+			target =panels[1]?.querySelector(".weapon-results");
+		}
+		if(!target)
+		{
+			return;
+		}
+		const s =state.stats;
+		target.innerHTML = `<div class="weapon-card"><div class="weapon-stat">
+		<span>Damage</span>
 <b>
 ${s.damage.toFixed(1)}
 </b>
