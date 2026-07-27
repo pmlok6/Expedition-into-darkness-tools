@@ -4,20 +4,12 @@
 ========================================== */
 import SKILLS_DATA from "../data/skillsdata.js";
 
-Object.values(SKILLS_DATA).forEach(skill=>{
-    createSkillNode(tree,skill);
-});
+"use strict";
 
-document.addEventListener(
-"DOMContentLoaded",
-function()
-{
 
-    const tree =
-        document.getElementById(
-            "skill-tree"
-        );
+document.addEventListener("DOMContentLoaded", function(){
 
+    const tree = document.getElementById("skill-tree");
 
     if(!tree)
     {
@@ -25,21 +17,13 @@ function()
     }
 
 
-    Object.values(
-        SKILLS_DATA.skills
-    )
-    .forEach(function(skill)
-    {
-        createSkillNode(
-            tree,
-            skill
-        );
+    Object.values(SKILLS_DATA).forEach(function(skill){
+
+        createSkillNode(tree, skill);
+
     });
 
-
 });
-
-
 
 function createSkillNode(container, skill) 
 {
