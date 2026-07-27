@@ -108,11 +108,11 @@ function buildBladeWeapon(box,weaponState)
 
 function buildBladeSlots(box,grip,state)
 {
-	clearDynamic(box);
 	if(!grip.slots)
 	{
 		return;
 	}
+	box.querySelector(".weapon-materials").innerHTML = "";
 	grip.slots.forEach(
 	function(slot)
 	{
@@ -144,11 +144,11 @@ function buildShaftWeapon(box,weaponState)
 
 function buildShaftSlots(box,shaft,state)
 {
-	clearDynamic(box);
 	if(!shaft.slots)
 	{
 		return;
 	}
+	box.querySelector(".weapon-materials").innerHTML="";
 	shaft.slots.forEach(
 	function(slot)
 	{
