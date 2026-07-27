@@ -340,10 +340,9 @@ getItems(tag),
 				
 function(item)
 {
-state.components[slot] =item.guid;
-
-createMaterial(box,item,state);
-calculateWeapon(state);
+	state.components[slot] =item.guid;
+	createMaterial(box,item,state);
+	calculateWeapon(state);
 
 });
 
@@ -351,75 +350,34 @@ calculateWeapon(state);
 function createComponent(box,label,items,callback)
 {
 
-
-const selector =
-createSelect(
-label,
-items.map(function(item)
+const selector =createSelect(label,items.map(function(item)
 {
-
-return {
-
-id:item.guid,
-
-name:item.name
-
-};
-
+	return 
+	{
+		id:item.guid,
+		name:item.name
+	};
 })
 );
+selector.wrapper.classList.add("dynamic");
 
+let container = box.querySelector(".weapon-components");
 
-
-selector.wrapper.classList.add(
-"dynamic"
-);
-
-
-
-let container =
-box.querySelector(
-".weapon-components"
-);
-
-
-container.appendChild(
-selector.wrapper
-);
-
-
-
-selector.select.onchange =
-function()
+container.appendChild(selector.wrapper);
+	
+selector.select.onchange =function()
 {
-
-
-const item =
-findItem(
-selector.select.value
-);
-
-
-
-if(item)
-{
-callback(item);
-}
-
-
+	const item =findItem(selector.select.value);
+	if(item)
+	{
+		callback(item);
+	}	
 };
-
-
+	
 }
-
-
-
-
-
+	
 function createSelect(label,options)
 {
-
-
 const wrapper =
 document.createElement(
 "div"
