@@ -162,6 +162,7 @@ function buildShaftSlots(box,shaft,state)
 			calculateWeapon(state);
 		});
 	});
+}
 	function createComponent(box,label,items,callback)
 	{
 		const row = document.createElement("div");
@@ -395,7 +396,6 @@ function buildShaftSlots(box,shaft,state)
 			</div>
 		</div>`;
 	}
-}
 function updateComparison()
 {
 	const box =document.getElementById("weapon-comparison");
