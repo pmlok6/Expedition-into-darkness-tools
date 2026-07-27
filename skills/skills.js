@@ -41,49 +41,28 @@ function()
 
 
 
-function createSkillNode(container,skill)
+function createSkillNode(container, skill) 
 {
 
-    const node =
-        document.createElement("div");
+    const node = document.createElement("div");
+
+    node.className = "skill-node";
+    node.dataset.skillId = skill.id;
+
+    node.style.left = skill.x + "%";
+    node.style.top = skill.y + "%";
 
 
-    node.className =
-        "skill-node";
-
-
-    node.style.left =
-        skill.x + "%";
-
-
-    node.style.top =
-        skill.y + "%";
-
-
-    node.dataset.id =
-        skill.id;
-
-
-    node.addEventListener(
-        "mouseenter",
-        function(e)
-        {
-            showPopup(
-                e,
-                skill
-            );
-        }
-    );
-
-
-    node.addEventListener(
-        "mouseleave",
-        hidePopup
-    );
+    if(skill.icon)
+    {
+        const img = document.createElement("img");
+        img.src = "../assets/skills/" + skill.icon;
+        img.className = "skill-icon";
+        node.appendChild(img);
+    }
 
 
     container.appendChild(node);
-
 }
 
 
