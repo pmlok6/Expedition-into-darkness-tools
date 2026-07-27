@@ -1,14 +1,9 @@
 import { invoke } from "../js/wiki-api.js";
 
-
 "use strict";
 
-
 let WEAPON_ITEMS = {};
-
 let WEAPON_RECIPES = {};
-
-
 
 document.addEventListener("DOMContentLoaded",function()
 {
@@ -172,10 +167,9 @@ function buildShaftSlots(box,shaft,state)
 	{
 		const row = document.createElement("div");
 		row.className ="weapon-component-row";
-		const selector =createSelect(	label,	items.map(function(item)
+		const selector =createSelect(label,items.map(function(item)
 		{
-			return 
-			{
+			return{
 				id:item.guid,
 				name:item.name
 			};
@@ -365,137 +359,45 @@ function buildShaftSlots(box,shaft,state)
 			return;
 		}
 		const s =state.stats;
-		target.innerHTML = `<div class="weapon-card"><div class="weapon-stat">
-		<span>Damage</span>
-<b>
-${s.damage.toFixed(1)}
-</b>
-
-</div>
-
-
-
-<div class="weapon-stat">
-
-<span>
-Base Damage
-</span>
-
-<b>
-${s.base_damage.toFixed(1)}
-</b>
-
-</div>
-
-
-
-<div class="weapon-stat">
-
-<span>
-Swinging Damage
-</span>
-
-<b>
-${formatPercent(s.swinging_damage)}
-</b>
-
-</div>
-
-
-
-<div class="weapon-stat">
-
-<span>
-Thrusting Damage
-</span>
-
-<b>
-${formatPercent(s.thrusting_damage)}
-</b>
-
-</div>
-
-
-
-<div class="weapon-stat">
-
-<span>
-Cleave
-</span>
-
-<b>
-${formatPercent(s.cleave)}
-</b>
-
-</div>
-
-
-
-<div class="weapon-stat">
-
-<span>
-Attack Speed
-</span>
-
-<b>
-${formatPercent(s.attack_speed)}
-</b>
-
-</div>
-
-
-
-<div class="weapon-stat">
-
-<span>
-Stamina Cost
-</span>
-
-<b>
-${s.attack_stamina_cost.toFixed(1)}
-</b>
-
-</div>
-
-
-
-<div class="weapon-stat">
-
-<span>
-Weight
-</span>
-
-<b>
-${s.weight.toFixed(2)}
-</b>
-
-</div>
-
-
-
-<div class="weapon-stat">
-
-<span>
-Inertia
-</span>
-
-<b>
-${s.inertia.toFixed(2)}
-</b>
-
-</div>
-
-
-</div>
-
-`;
-
-}
-
-
-
-
-
+		target.innerHTML = `<div class="weapon-card">
+			<div class="weapon-stat">
+				<span>Damage</span>
+				<b>	${s.damage.toFixed(1)}	</b>
+			</div>
+			<div class="weapon-stat">
+				<span>Base Damage</span>
+				<b>${s.base_damage.toFixed(1)}</b>
+			</div>
+			<div class="weapon-stat">
+				<span>Swinging Damage</span>
+				<b>${formatPercent(s.swinging_damage)}</b>
+			</div>
+			<div class="weapon-stat">
+				<span>Thrusting Damage</span>
+				<b>${formatPercent(s.thrusting_damage)}</b>
+			</div>
+			<div class="weapon-stat">
+				<span>Cleave</span>
+				<b>${formatPercent(s.cleave)}</b>
+			</div>
+			<div class="weapon-stat">
+				<span>Attack Speed</span>
+				<b>${formatPercent(s.attack_speed)}</b>
+			</div>
+			<div class="weapon-stat">
+				<span>Stamina Cost</span>
+				<b>${s.attack_stamina_cost.toFixed(1)}</b>
+			</div>
+			<div class="weapon-stat">
+				<span>Weight</span>
+				<b>${s.weight.toFixed(2)}</b>
+			</div>
+			<div class="weapon-stat">
+				<span>Inertia</span>
+				<b>${s.inertia.toFixed(2)}</b>
+			</div>
+		</div>`;
+	}
 function updateComparison()
 {
 
