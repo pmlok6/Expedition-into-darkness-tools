@@ -1,0 +1,386 @@
+/* =========================================
+   Skill Tree Layout
+========================================= */
+
+
+.skill-tree-wrapper {
+
+    position:relative;
+
+    width:100%;
+
+    max-width:1659px;
+
+    margin:auto;
+
+}
+
+
+
+.skill-tree-background {
+
+    width:100%;
+
+}
+
+
+
+.skill-tree-background img {
+
+    display:block;
+
+    width:100%;
+
+    height:auto;
+
+}
+
+
+
+/*
+    Overlay containing nodes
+*/
+
+
+.skill-tree {
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:100%;
+
+}
+
+
+
+/* =========================================
+   Skill Nodes
+========================================= */
+
+
+.skill-node {
+
+    position:absolute;
+
+
+    transform:
+        translate(-50%, -50%);
+
+
+    width:40px;
+
+    height:40px;
+
+
+    border-radius:50%;
+
+
+    background:transparent;
+
+
+    cursor:pointer;
+
+
+    z-index:20;
+
+}
+
+
+
+.skill-node:hover {
+
+    outline:
+        2px solid rgba(255,255,255,.7);
+
+}
+
+
+
+/* =========================================
+   Skill Connections
+========================================= */
+
+
+.skill-link {
+
+    position:absolute;
+
+
+    height:2px;
+
+
+    background:
+        rgba(180,180,180,.55);
+
+
+    transform-origin:left center;
+
+
+    z-index:5;
+
+}
+
+
+
+/* =========================================
+   Popup
+========================================= */
+
+
+#skill-popup {
+
+    position:absolute;
+
+
+    display:none;
+
+
+    z-index:1000;
+
+
+    width:340px;
+
+
+    min-height:120px;
+
+
+    background:
+        linear-gradient(
+            135deg,
+            #e5d6c4,
+            #cbb8a3
+        );
+
+
+    border:
+        2px solid #7a6656;
+
+
+    border-radius:3px;
+
+
+    padding:14px;
+
+
+    color:#30251f;
+
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.65);
+
+
+}
+
+
+
+#skill-popup.is-visible {
+
+    display:block;
+
+}
+
+
+
+/* =========================================
+   Popup Header
+========================================= */
+
+
+.skill-popup-label {
+
+    position:absolute;
+
+
+    top:12px;
+
+    left:12px;
+
+
+    background:#382820;
+
+
+    color:#e5d6c4;
+
+
+    border:
+        1px solid #7a6656;
+
+
+    border-radius:3px;
+
+
+    padding:
+        3px 12px;
+
+
+    font-size:14px;
+
+
+    font-weight:bold;
+
+
+    text-transform:uppercase;
+
+
+    letter-spacing:1px;
+
+}
+
+
+
+.skill-popup-title {
+
+    margin-top:28px;
+
+
+    font-size:22px;
+
+
+    font-weight:bold;
+
+
+    color:#382820;
+
+}
+
+
+
+.skill-popup-branch {
+
+    display:inline-block;
+
+
+    margin-top:5px;
+
+
+    background:#657d31;
+
+
+    color:white;
+
+
+    padding:
+        3px 10px;
+
+
+    font-size:15px;
+
+
+    font-weight:bold;
+
+}
+
+
+
+/* =========================================
+   Popup Icon
+========================================= */
+
+
+.skill-popup-icon {
+
+    position:absolute;
+
+
+    right:18px;
+
+    top:38px;
+
+
+    width:70px;
+
+    height:70px;
+
+
+    object-fit:contain;
+
+
+    filter:
+        drop-shadow(
+            0 2px 3px rgba(0,0,0,.5)
+        );
+
+}
+
+
+
+/* =========================================
+   Popup Content
+========================================= */
+
+
+.skill-popup-description {
+
+    margin-top:15px;
+
+
+    font-size:15px;
+
+
+    color:#514037;
+
+}
+
+
+
+.skill-popup-effect {
+
+    margin-top:10px;
+
+
+    font-size:16px;
+
+
+    font-weight:bold;
+
+
+    color:#42352d;
+
+}
+
+
+
+/* =========================================
+   Responsive
+========================================= */
+
+
+@media(max-width:700px){
+
+
+    .skill-node {
+
+        width:28px;
+
+        height:28px;
+
+    }
+
+
+    #skill-popup {
+
+        width:260px;
+
+    }
+
+
+    .skill-popup-icon {
+
+        width:55px;
+
+        height:55px;
+
+    }
+
+}
