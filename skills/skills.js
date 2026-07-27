@@ -64,10 +64,16 @@ function showPopup(event,skill)
         return;
     }      
 const tags = 
-   [
-      "Skill",
-      skill.branch
-   ];
+[
+    {
+        name:"Skill",
+        type:"skill"
+    },
+    {
+        name:skill.branch,
+        type:skill.branch.toLowerCase().replaceAll(" ","-")
+    }
+];
 
 popup.innerHTML = `
 
