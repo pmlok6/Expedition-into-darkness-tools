@@ -41,15 +41,9 @@ const base =
         Maps
     </a>
 </div>
-
 <div class="nav-logo">
-
-    <a href="/Expedition-into-darkness-tools/">
-    <img  src="/Expedition-into-darkness-tools/assets/logo.png" alt="Expedition into Darkness">
-    </a>
-
+    <a href="/Expedition-into-darkness-tools/"><img  src="${base}assets/logo.png" alt="Expedition into Darkness"></a>
 </div>
-
     `;
 
 });
