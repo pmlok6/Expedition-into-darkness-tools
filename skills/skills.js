@@ -2,7 +2,7 @@
    Skill Tree
    Expedition into Darkness Tools
 ========================================== */
-import SKILLS_DATA from "../data/skillsData.js";
+import SKILLS_DATA from "../data/skillsdata.js";
 
 Object.values(SKILLS_DATA).forEach(skill=>{
     createSkillNode(tree,skill);
