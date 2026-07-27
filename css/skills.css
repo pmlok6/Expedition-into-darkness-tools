@@ -61,36 +61,25 @@
 /* =========================================
    Skill Nodes
 ========================================= */
-
-
 .skill-node {
 
     position:absolute;
 
-
-    transform:
-        translate(-50%, -50%);
-
+    transform:translate(-50%, -50%);
 
     width:40px;
-
     height:40px;
-
 
     border-radius:50%;
 
+    background:red;
 
-    background:transparent;
-
+    opacity:0.7;
 
     cursor:pointer;
 
-
     z-index:20;
-
 }
-
-
 
 .skill-node:hover {
 
@@ -98,14 +87,9 @@
         2px solid rgba(255,255,255,.7);
 
 }
-
-
-
 /* =========================================
    Skill Connections
 ========================================= */
-
-
 .skill-link {
 
     position:absolute;
