@@ -24,10 +24,6 @@ function()
         Home
     </a>
 
-    <a href="../database.html">
-        Database
-    </a>
-
     <a href="armor.html">
         Armor Calculator
     </a>
@@ -36,7 +32,7 @@ function()
         Weapon Calculator
     </a>
 
-    <a href="../leveling.html">
+    <a href="leveling.html">
         Leveling
     </a>
     
