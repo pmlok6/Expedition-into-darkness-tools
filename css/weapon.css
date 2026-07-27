@@ -199,11 +199,20 @@
 
     font-weight:bold;
 }
-
+/*===================
+		responsive
+======================*/
 @media(max-width:800px)
 {
-    .weapon-container 
+	.weapon-main-container
 	{
-        flex-direction:column;
-    }
+		grid-template-columns:1fr;
+	}
+
+
+	.weapon-component-row
+	{
+		flex-direction:column;
+		align-items:stretch;
+	}
 }
