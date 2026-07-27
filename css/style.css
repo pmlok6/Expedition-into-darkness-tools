@@ -12,6 +12,10 @@ header {
     background:#1b1b1b;
 }
 
+.title-logo{
+    width:300px;
+    height:auto;
+}
 
 .container {
     max-width:1000px;
