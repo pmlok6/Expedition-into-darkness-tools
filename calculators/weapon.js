@@ -430,6 +430,10 @@ function buildShaftSlots(box,shaft,state)
 				<span>Inertia</span>
 				<b>${s.inertia.toFixed(2)}</b>
 			</div>
+			<div class="weapon-stat">
+				<span>magical properties</span>
+				<b>${s.magical_properties}</b>
+			</div>
 		</div>`;
 	}
 
