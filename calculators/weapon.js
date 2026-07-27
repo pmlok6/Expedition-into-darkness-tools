@@ -267,7 +267,7 @@ function buildShaftSlots(box,shaft,state)
 			attack_stamina_cost:0,
 			inertia:0,
 			weight:0,
-			magic:"none"
+			magical_properties:"none"
 		};
 		Object.values(state.components).forEach(function(id)
 		{
@@ -287,8 +287,7 @@ function buildShaftSlots(box,shaft,state)
 
 	function addStats(stats,item,material)
 	{
-		stats.weight +=
-		Number(item.weight || 0);
+		stats.weight +=	Number(item.weight || 0);
 		const base =parseNumber(item.base_damage);
 		stats.base_damage +=base;
 		let damage =base;
@@ -298,6 +297,10 @@ function buildShaftSlots(box,shaft,state)
 			if(hardness)
 			{
 				damage *=hardness / 100;
+			}
+			if(material.magical_properties)
+			{
+				stats.magical_properties = material.magical_properties;
 			}
 		}
 		stats.damage +=damage;
