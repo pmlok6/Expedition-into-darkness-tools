@@ -98,13 +98,24 @@ function createWeaponType(box,state)
 
 function buildBladeWeapon(box,weaponState)
 {
-	createComponent(box,"Grip",getItems("grip"),
-		function(item)
+	const bladeParts =
+	[
+		"blade",
+		"pommel",
+		"crossguard",
+		"grip"
+	];
+	bladeParts.forEach(
+	function(part)
+	{
+		createComponent(box,part.charAt(0).toUpperCase() + part.slice(1),getItems(part),
+		function(item,row)
 		{
-			weaponState.components.blade = item.guid;
-			buildBladeSlots(box,item,weaponState);
+			weaponState.components.[part] = item.guid;
+			createMaterial(row,item,state);
 		}
-	);
+		);
+	});
 }
 
 function buildBladeSlots(box,grip,state)
