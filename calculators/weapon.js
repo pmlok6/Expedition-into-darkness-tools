@@ -10,253 +10,99 @@ let WEAPON_RECIPES = {};
 
 
 
-document.addEventListener(
-"DOMContentLoaded",
-function()
+document.addEventListener("DOMContentLoaded",function()
 {
-
-
-const root =
-document.getElementById(
-"weapon-calculator"
-);
-
-
-
-if(!root)
-{
-    return;
-}
-
-
-
-Promise.all(
-[
-
-invoke(
-"WeaponCalculatorData",
-"items"
-),
-
-
-invoke(
-"WeaponCalculatorData",
-"recipes"
-)
-
-])
-
-
-.then(function(result)
-{
-
-
-WEAPON_ITEMS = result[0];
-
-WEAPON_RECIPES = result[1];
-
-
-buildCalculator(
-root,
-WEAPON_ITEMS,
-WEAPON_RECIPES
-);
-
-
-})
-
-
-.catch(function(error)
-{
-
-console.error(
-"Weapon Calculator loading error",
-error
-);
-
+	const root =document.getElementById("weapon-calculator");
+	if(!root)
+	{
+    	return;
+	}
+	Promise.all([invoke("WeaponCalculatorData","items"),invoke("WeaponCalculatorData","recipes")]).then(function(result)
+	{
+		WEAPON_ITEMS = result[0];
+		WEAPON_RECIPES = result[1];
+		buildCalculator(root,WEAPON_ITEMS,WEAPON_RECIPES);
+	})
+	.catch(function(error)
+	{
+		console.error("Weapon Calculator loading error",error);
+	});
 });
-
-
-});
-
-
-
-
-
 function buildCalculator(root,ITEMS,RECIPES)
 {
-
-
-const state =
-{
-
-left:
-{
-type:null,
-components:{},
-materials:{},
-stats:{}
-},
-
-
-right:
-{
-type:null,
-components:{},
-materials:{},
-stats:{}
-}
-
-};
-
-window.weaponStates = state;
-
-createWeaponPanel(
-document.getElementById("weapon-left"),
-"Weapon 1",
-state.left
-);
-
-createWeaponPanel(
-document.getElementById("weapon-right"),
-"Weapon 2",
-state.right
-);
-
-createWeaponType(
-	document.querySelector("#weapon-left .weapon-selection-box"),
-	state.left
-);
-
-createWeaponType(
-	document.querySelector("#weapon-right .weapon-selection-box"),
-	state.right
-);
-
+	const state =
+	{
+		left:
+		{
+			type:null,
+			components:{},
+			materials:{},
+			stats:{}
+		},
+		right:
+		{
+			type:null,
+			components:{},
+			materials:{},
+			stats:{}
+		}
+	};
+	window.weaponStates = state;
+	createWeaponPanel(document.getElementById("weapon-left"),"Weapon 1",state.left);
+	createWeaponPanel(document.getElementById("weapon-right"),"Weapon 2",state.right);
+	createWeaponType(document.querySelector("#weapon-left .weapon-selection-box"),state.left);
+	createWeaponType(document.querySelector("#weapon-right .weapon-selection-box"),state.right);
 }
 
 function createWeaponPanel(panel,title,state)
 {
-	panel.innerHTML = `
-
-<div class="weapon-box">
-
-<h3>
-${title}
-</h3>
-
-<div class="weapon-selection-box">
-
-<div class="weapon-components"></div>
-
-<div class="weapon-materials"></div>
-
-</div>
-
-</div>
-
-
-<div class="weapon-box weapon-result-box">
-
-<h3>
-Result
-</h3>
-
-<div class="weapon-results"></div>
-
-</div>
-
-`;
+	panel.innerHTML = `<div class="weapon-box">
+		<h3>${title}</h3>
+		<div class="weapon-selection-box">
+			<div class="weapon-components"></div>
+			<div class="weapon-materials"></div>
+		</div>
+	</div>
+	<div class="weapon-box weapon-result-box">
+		<h3>Result</h3>
+		<div class="weapon-results"></div>
+	</div>`;
 }
 
 function createWeaponType(box,state)
 {
-
-const selector =
-createSelect(
-"Weapon Type",
-[
-
-{
-id:"blade",
-name:"Blade Weapon"
-},
-
-
-{
-id:"shaft",
-name:"Shaft Weapon"
-}
-
-]
-);
-
-
-
-box.appendChild(
-selector.wrapper
-);
-
-
-
-selector.select.onchange =
-function()
-{
-
-
-state.type =
-selector.select.value;
-
-
-
-state.components = {};
-
-state.materials = {};
-
-state.stats = {};
-
-
-
-clearDynamic(box);
-
-
-
-if(
-state.type === "blade"
-)
-{
-
-buildBladeWeapon(
-box.closest(".weapon-box"),
-state
-);
-
-}
-
-
-
-if(
-state.type === "shaft"
-)
-{
-
-buildShaftWeapon(
-box.closest(".weapon-box"),
-state
-);
-
-}
-
-};
-
+	const selector =createSelect("Weapon Type",[
+	{
+		id:"blade",
+		name:"Blade Weapon"
+	},
+	{
+		id:"shaft",
+		name:"Shaft Weapon"
+	}
+	]);
+	box.appendChild(selector.wrapper);
+	selector.select.onchange =function()
+	{
+		state.type =selector.select.value;
+		state.components = {};
+		state.materials = {};
+		state.stats = {};
+		clearDynamic(box);
+		if(state.type === "blade")
+		{
+			buildBladeWeapon(box.closest(".weapon-box"),state);
+		}
+		if(state.type === "shaft")
+		{	
+			buildShaftWeapon(box.closest(".weapon-box"),state);
+		}
+	};
 }
 
 function buildBladeWeapon(box,weaponState)
 {
-	createComponent(
-		box,
-		"Grip",
-		getItems("grip"),
+	createComponent(box,"Grip",	getItems("grip"),
 		function(item)
 		{
 			weaponState.components.grip = item.guid;
