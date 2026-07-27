@@ -97,7 +97,7 @@ function createWeaponType(box,state)
 
 function buildBladeWeapon(box,weaponState)
 {
-	createComponent(box,"Blade",	getItems("blade"),
+	createComponent(box,"Blade",getItems("blade"),
 		function(item)
 		{
 			weaponState.components.blade = item.guid;
@@ -120,15 +120,22 @@ function buildBladeSlots(box,grip,state)
 		slot
 		.toLowerCase()
 		.replaceAll(" ","_");
-		createComponent(box,slot,"grip"
+		createComponent(box,slot,
 		getItems(tag),
-		getItems("grip"),
 		function(item,row)
 		{
 			state.components[slot] =item.guid;
 			createMaterial(row,item,state);
 			calculateWeapon(state);
 		});
+	});
+	createComponent(box,"Grip",
+	getItems("grip"),
+	function(item,row)
+	{
+		state.components.grip = item.guid;
+		createMaterial(row,item,state);
+		calculateWeapon(state);
 	});
 }
 
