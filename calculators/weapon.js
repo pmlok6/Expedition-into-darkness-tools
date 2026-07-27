@@ -249,7 +249,7 @@ state.type === "blade"
 {
 
 buildBladeWeapon(
-box,
+box.closest(".weapon-box"),
 state
 );
 
@@ -263,7 +263,7 @@ state.type === "shaft"
 {
 
 buildShaftWeapon(
-box,
+box.closest(".weapon-box"),
 state
 );
 
