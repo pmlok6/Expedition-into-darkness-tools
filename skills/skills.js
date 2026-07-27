@@ -4,6 +4,9 @@
 ========================================== */
 import SKILLS_DATA from "../data/skillsData.js";
 
+Object.values(SKILLS_DATA).forEach(skill=>{
+    createSkillNode(tree,skill);
+});
 
 document.addEventListener(
 "DOMContentLoaded",
