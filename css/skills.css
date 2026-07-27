@@ -151,42 +151,42 @@
     border:1px solid rgba(0,0,0,.4);
 }
 
-
 /* Branch colors */
-
-.tag-skill{
-    background:#382820;
-}
-
-.tag-marksmanship{
-    background:#8b5a2b;
-}
-
-.tag-magic{
-    background:#5b3c88;
-}
-
-.tag-martial{
-    background:#8b2b2b;
-}
-
 .tag-industry{
-    background:#556b2f;
+    background:#7fbf4d; /* vert clair */
 }
 
-.tag-survivalism{
-    background:#356b35;
-}
-
-.tag-alchemy{
-    background:#277777;
+.tag-dungeoneering{
+    background:#c9a227; /* jaune brass */
 }
 
 .tag-body-and-mind{
-    background:#a06b20;
+    background:#e67e22; /* orange */
 }
 
+.tag-martial{
+    background:#4aa3df; /* bleu clair */
+}
 
+.tag-alchemy{
+    background:#a11b1b; /* rouge sang */
+}
+
+.tag-magic{
+    background:#6f42c1; /* violet (à confirmer) */
+}
+
+.tag-marksmanship{
+    background:#8b5a2b; /* brun */
+}
+
+.tag-survivalism{
+    background:#356b35; /* vert sombre */
+}
+
+.tag-skill{
+    background:#382820; /* tag général */
+}
 /* Responsive */
 
 @media(max-width:700px){
