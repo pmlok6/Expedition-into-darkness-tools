@@ -395,6 +395,7 @@ function buildShaftSlots(box,shaft,state)
 			</div>
 		</div>`;
 	}
+}
 function updateComparison()
 {
 	const box =document.getElementById("weapon-comparison");
