@@ -77,7 +77,7 @@ const tags =
 
 popup.innerHTML = `
 
-<div class="skill-popup-tags">${tags.map(tag => `<span>${tag}</span>`).join("")}</div>
+<div class="skill-popup-tags">${tags.map(function(tag){return`<span class="tag tag-${tag.type}">${tag.name}</span>`;}).join("")}</div>
 <div class="skill-popup-title">${skill.name}</div>
 <img class="skill-popup-icon" src="${skill.icon}">
 <div class="skill-popup-description">${skill.description}</div>
