@@ -3,64 +3,38 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8">
 
-<meta charset="UTF-8">
+  <title>Weapon Calculator - Expedition into Darkness</title>
 
-<title>
-Weapon Calculator - Expedition into Darkness
-</title>
-
-<link rel="stylesheet" href="../css/style.css">
-<link rel="stylesheet" href="../css/weapon.css">
-<link rel="stylesheet" href="../css/navigation.css">
-
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/weapon.css">
+  <link rel="stylesheet" href="../css/navigation.css">
 </head>
 
 <body>
+  <nav id="main-navigation"></nav>
 
-<nav id="main-navigation"></nav>
+  <div id="weapon-calculator">
 
-<div id="weapon-calculator">
+    <div class="weapon-header">
+      <h2>  Weapon Calculator  </h2>
+      <p>Build and compare weapons</p>
+    </div>
 
-<div class="weapon-header">
-
-<h2>
-Weapon Calculator
-</h2>
-
-<p>
-Build and compare weapons
-</p>
-
-</div>
-
-<div class="weapon-container">
-
-<div class="weapon-column" id="weapon-left">
-
-</div>
-
-<div class="weapon-column" id="weapon-right">
-
-</div>
-
-</div>
-
-<div 
-id="weapon-comparison" 
-class="weapon-comparison-box">
-
-<h3>
-Comparison
-</h3>
-
-</div>
+    <div class="weapon-container">
+      <div id="weapon-left"></div>
+      <div id="weapon-right"></div>
+    </div>
+    
+    <div id="weapon-comparison" class="weapon-comparison-box">
+      <h3>Comparison</h3>
+    </div>  
+    
+  </div>
   
-</div>
-  
-<script type="module" src="../js/main.js"></script>
-<script type="module" src="weapon.js"></script>
+  <script type="module" src="../js/main.js"></script>
+  <script type="module" src="weapon.js"></script>
 </body>
-
-
+  
 </html>
