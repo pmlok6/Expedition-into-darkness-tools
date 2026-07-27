@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
 function createSkillNode(container, skill) 
 {
-
     const node = document.createElement("div");
 
     node.className = "skill-node";
@@ -39,12 +38,15 @@ function createSkillNode(container, skill)
 
     if(skill.icon)
     {
-        const img = document.createElement("img");
-        img.src = "../assets/skills/" + skill.icon;
-        img.className = "skill-icon";
-        node.appendChild(img);
+      const img = document.createElement("img");
+      img.src = "../assets/skills/" + skill.icon;
+      img.onerror = function()
+      {
+        img.remove();
+      };
+      img.className = "skill-icon";
+      node.appendChild(img);
     }
-
 
     container.appendChild(node);
 }
