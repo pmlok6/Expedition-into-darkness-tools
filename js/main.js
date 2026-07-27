@@ -15,28 +15,29 @@ function()
     {
         return;
     }
-
+const base =
+"/Expedition-into-darkness-tools/";
 
     nav.innerHTML = `
 
 <div class="nav-links">
-    <a href="../index.html">
+    <a href="${base}">
         Home
     </a>
 
-    <a href="armor.html">
+    <a href="${base}calculators/armor.html">
         Armor Calculator
     </a>
 
-    <a href="weapon.html">
+    <a href="${base}calculators/weapon.html">
         Weapon Calculator
     </a>
 
-    <a href="leveling.html">
+    <a href="${base}leveling/leveling.html">
         Leveling
     </a>
     
-    <a href="../maps.html">
+    <a href="${base}maps/maps.html">
         Maps
     </a>
 </div>
