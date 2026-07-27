@@ -42,7 +42,7 @@ const base =
     </a>
 </div>
 <div class="nav-logo">
-    <a href="/Expedition-into-darkness-tools/"><img  src="${base}assets/logo.png" alt="Expedition into Darkness"></a>
+    <a href="/Expedition-into-darkness-tools/"><img  src="${base}assets/Site-logo.png" alt="Expedition into Darkness"></a>
 </div>
     `;
 
