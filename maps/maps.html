@@ -1,29 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Maps</title>
-	<link rel="stylesheet" href="../css/style.css">
-	<link rel="stylesheet" href="../css/maps.css">
-	<link rel="stylesheet" href="../css/navigation.css">
+    <meta charset="UTF-8">
+    <title>Maps</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/maps.css">
 </head>
-<body>
-	<nav id="main-navigation"></nav>
-	<div id="maps-page">
-	<h1>Maps</h1>
-		<p>	all map coming soon.</p>
-		<div class="maps-box">
-			<h2>Catacomb</h2>
-			<p><img class="floor" src="../assets/catacomb/newfloor1.png"></p>
-			<p><img class="floor" src="../assets/catacomb/newfloor0.png"></p> 
-			<p><img class="floor" src="../assets/catacomb/newfloorminus1.png"></p>
-		</div>
-		<div class="maps-box">
-			<h2>Moor</h2>
-			
-		</div>
-	</div>
-  	<script type="module" src="../js/main.js"></script>
-	<script type="module" src="maps.js"></script>
+
+<body class="maps-page">
+
+    <nav id="main-navigation"></nav>
+
+    <main>
+
+        <h1>Maps</h1>
+
+        <p>
+            Browse every map and switch instantly between floors using the elevator.
+        </p>
+
+        <div class="maps-layout">
+
+            <aside id="map-elevator"></aside>
+
+            <section class="map-viewer">
+
+                <img
+                    id="map-image"
+                    src=""
+                    alt="Map">
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <script type="module" src="../js/main.js"></script>
+    <script type="module" src="maps.js"></script>
+
 </body>
 </html>
