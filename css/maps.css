@@ -1,29 +1,161 @@
-p img{
-    width:500px;
-    height:auto;
-}
+/* =========================================
+   Maps Page
+========================================= */
+
 .maps-page{
+
     display:grid;
+
     grid-template-columns:90px 1fr;
-    gap:30px;
+
+    gap:25px;
+
+    max-width:1800px;
+
+    margin:40px auto;
+
+    padding:0 20px;
+
 }
+
+
+
+/* =========================================
+   Elevator
+========================================= */
 
 #map-elevator{
+
     display:flex;
+
     flex-direction:column;
+
     gap:10px;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    background:#222;
+
+    border:1px solid #555;
+
+    border-radius:8px;
+
 }
+
+
 
 .floor-button{
+
+    width:60px;
+
     height:60px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#3a3a3a;
+
+    color:#ddd;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.15s;
+
 }
+
+
+
+.floor-button:hover{
+
+    background:#555;
+
+}
+
+
+
+.floor-button.active{
+
+    background:#8b2b2b;
+
+    color:#fff;
+
+    box-shadow:0 0 10px rgba(255,80,80,.5);
+
+}
+
+
+
+/* =========================================
+   Viewer
+========================================= */
 
 .map-viewer{
+
     display:flex;
+
     justify-content:center;
+
+    align-items:center;
+
+    padding:20px;
+
+    background:#222;
+
+    border:1px solid #555;
+
+    border-radius:8px;
+
 }
 
+
+
+/* =========================================
+   Map Image
+========================================= */
+
 #map-image{
+
+    display:block;
+
     max-width:100%;
+
+    max-height:85vh;
+
     height:auto;
+
+    user-select:none;
+
+}
+
+
+
+/* =========================================
+   Responsive
+========================================= */
+
+@media(max-width:900px){
+
+    .maps-page{
+
+        grid-template-columns:1fr;
+
+    }
+
+    #map-elevator{
+
+        flex-direction:row;
+
+        justify-content:center;
+
+    }
+
 }
