@@ -1,76 +1,85 @@
-import MAPS from "../data/mapsData.js";
+/* ==========================================
+   Maps Selector Gadget
 
-const params=new URLSearchParams(location.search);
-const mapId=params.get("map")||Object.keys(MAPS)[0];
+   Features:
+   - Map button selection
+   - Dynamic map loading
+   - Level handling compatibility
+========================================== */
 
-const map=MAPS[mapId];
+document.addEventListener("DOMContentLoaded", () => {
 
-const elevator=document.getElementById("map-elevator");
-const image=document.getElementById("map-image");
+    const mapButtons = document.querySelectorAll(".map-button");
+    const mapImage = document.querySelector("#map-image");
+    const mapTitle = document.querySelector("#map-title");
 
-if(!map||!elevator||!image)
-{
-    throw new Error("Invalid map.");
-}
+    if (!mapButtons.length || !mapImage) return;
 
-let currentFloor=0;
 
-if(map.floors.some(f=>f.id===0))
-{
-    currentFloor=0;
-}
-else
-{
-    currentFloor=map.floors[0].id;
-}
+    const maps = {
+        catacomb: {
+            name: "Catacomb",
+            image: "asset/catacomb/0.png"
+        },
 
-function setFloor(id)
-{
-    const floor=map.floors.find(f=>f.id===id);
+        moor: {
+            name: "Moor",
+            image: "asset/moor/0.png"
+        }
+    };
 
-    if(!floor)
-    {
-        return;
+
+    function loadMap(mapId) {
+
+        const map = maps[mapId];
+
+        if (!map) return;
+
+
+        mapImage.src = map.image;
+        mapTitle.textContent = map.name;
+
+
+        // sauvegarde de la map sélectionnée
+        localStorage.setItem("selectedMap", mapId);
     }
 
-    currentFloor=id;
 
-    image.src=floor.image;
-    image.alt=`${map.name} Floor ${floor.label}`;
+    mapButtons.forEach(button => {
 
-    elevator
-        .querySelectorAll(".floor-button")
-        .forEach(button=>
-        {
-            button.classList.toggle(
-                "active",
-                Number(button.dataset.floor)===id
-            );
-        });
-}
+        button.addEventListener("click", () => {
 
-function createElevator()
-{
-    elevator.innerHTML="";
+            const mapId = button.dataset.map;
 
-    [...map.floors]
-        .sort((a,b)=>b.id-a.id)
-        .forEach(floor=>
-        {
-            const button=document.createElement("button");
+            loadMap(mapId);
 
-            button.className="floor-button";
-            button.dataset.floor=floor.id;
-            button.textContent=floor.label;
 
-            button.addEventListener(
-                "click",
-                ()=>setFloor(floor.id)
+            mapButtons.forEach(btn =>
+                btn.classList.remove("active")
             );
 
-            elevator.appendChild(button);
-        });
-}
+            button.classList.add("active");
 
-createElevator();
-setFloor(currentFloor);
+        });
+
+    });
+
+
+    // recharge la dernière map choisie
+    const savedMap = localStorage.getItem("selectedMap");
+
+    if (savedMap && maps[savedMap]) {
+        loadMap(savedMap);
+
+        const button = document.querySelector(
+            `[data-map="${savedMap}"]`
+        );
+
+        if (button)
+            button.classList.add("active");
+
+    } else {
+        loadMap("catacomb");
+    }
+
+});
