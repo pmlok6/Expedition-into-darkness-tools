@@ -1,85 +1,105 @@
 /* ==========================================
-   Maps Selector Gadget
+   Maps Viewer
+
+   Source:
+   MapsDataExport
 
    Features:
-   - Map button selection
-   - Dynamic map loading
-   - Level handling compatibility
+   - Generate map buttons
+   - Load selected map
+   - Display default floor
 ========================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
 
-    const mapButtons = document.querySelectorAll(".map-button");
-    const mapImage = document.querySelector("#map-image");
-    const mapTitle = document.querySelector("#map-title");
-
-    if (!mapButtons.length || !mapImage) return;
+import { MapsData } from "../data/MapsDataExport.js";
 
 
-    const maps = {
-        catacomb: {
-            name: "Catacomb",
-            image: "asset/catacomb/0.png"
-        },
-
-        moor: {
-            name: "Moor",
-            image: "asset/moor/0.png"
-        }
-    };
+const selector = document.getElementById("map-selector");
+const image = document.getElementById("map-image");
 
 
-    function loadMap(mapId) {
-
-        const map = maps[mapId];
-
-        if (!map) return;
+let currentMap = null;
+let currentFloor = "0";
 
 
-        mapImage.src = map.image;
-        mapTitle.textContent = map.name;
+
+function loadMap(mapId) {
+
+    const map = MapsData[mapId];
+
+    if (!map) return;
 
 
-        // sauvegarde de la map sélectionnée
-        localStorage.setItem("selectedMap", mapId);
-    }
+    currentMap = mapId;
+    currentFloor = "0";
 
 
-    mapButtons.forEach(button => {
-
-        button.addEventListener("click", () => {
-
-            const mapId = button.dataset.map;
-
-            loadMap(mapId);
+    updateImage();
 
 
-            mapButtons.forEach(btn =>
-                btn.classList.remove("active")
+    document.querySelectorAll(".map-button")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.map === mapId
             );
 
-            button.classList.add("active");
+        });
+}
+
+
+
+function updateImage() {
+
+    const map = MapsData[currentMap];
+
+    if (!map?.floors[currentFloor])
+        return;
+
+
+    image.src = map.floors[currentFloor];
+
+}
+
+
+
+function createMapButtons() {
+
+    Object.entries(MapsData)
+        .forEach(([id, map]) => {
+
+
+            const button = document.createElement("button");
+
+            button.className = "map-button";
+            button.dataset.map = id;
+            button.textContent = map.name;
+
+
+            button.addEventListener(
+                "click",
+                () => loadMap(id)
+            );
+
+
+            selector.appendChild(button);
 
         });
 
-    });
+}
 
 
-    // recharge la dernière map choisie
-    const savedMap = localStorage.getItem("selectedMap");
 
-    if (savedMap && maps[savedMap]) {
-        loadMap(savedMap);
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-        const button = document.querySelector(
-            `[data-map="${savedMap}"]`
+        createMapButtons();
+
+        loadMap(
+            Object.keys(MapsData)[0]
         );
 
-        if (button)
-            button.classList.add("active");
-
-    } else {
-        loadMap("catacomb");
     }
-
-});
+);
