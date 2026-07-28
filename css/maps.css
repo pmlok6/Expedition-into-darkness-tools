@@ -1,31 +1,20 @@
 /* =========================================
    Maps Page
 ========================================= */
-
-main{
-
+.maps-page main{
     max-width:1800px;
-
     margin:40px auto;
-
     padding:0 20px;
-
 }
 
-main h1,
-main p{
-
+.maps-page main h1,
+.maps-page main p{
     text-align:center;
-
 }
 
-main p{
-
+.maps-page main p{
     margin-bottom:30px;
-
 }
-
-
 /* =========================================
    Layout
 ========================================= */
