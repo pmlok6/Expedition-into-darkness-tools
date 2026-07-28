@@ -18,6 +18,22 @@ const elevator = document.getElementById("map-elevator");
 let currentMap = null;
 let currentFloor = "0";
 
+function createMapButtons()
+{
+    Object.entries(MAPS).forEach(([id,map])=>
+   {
+        const button = document.createElement("button");
+        button.className = "map-button";
+        button.textContent = map.name;
+        button.dataset.map = id;
+        button.onclick = () => 
+           {            
+              loadMap(id);
+           };
+        selector.appendChild(button);
+   });
+}
+
 function loadMap(mapId) 
 {
     const map = MapsData[mapId];
