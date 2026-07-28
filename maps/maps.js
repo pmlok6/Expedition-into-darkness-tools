@@ -11,7 +11,7 @@
 ========================================== */
 
 
-import { MapsData } from "../data/MapsDataExport.js";
+import { MapsData } from "../data/MapsData.js";
 
 
 const selector = document.getElementById("map-selector");
