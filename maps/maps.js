@@ -14,7 +14,7 @@
 
 import { getMaps } from "../js/mapsloader.js";
 
-
+const mapLayer = document.getElementById("map-layer");
 const selector = document.getElementById("map-selector");
 const image = document.getElementById("map-image");
 const elevator = document.getElementById("map-elevator");
@@ -133,7 +133,64 @@ function createElevator(map)
 
 }
 
+// ===============================
+// click click
+// ===============================
+function addTestMarker(x,y)
+{
 
+    const marker =
+        document.createElement("div");
+
+
+    marker.className = "map-marker";
+
+
+    marker.style.left = x + "%";
+    marker.style.top = y + "%";
+
+
+    mapLayer.appendChild(marker);
+
+}
+
+mapLayer.addEventListener(
+"click",
+(event)=>
+{
+
+    const rect =
+        mapLayer.getBoundingClientRect();
+
+
+    const x =
+        ((event.clientX - rect.left)
+        / rect.width)
+        * 100;
+
+
+    const y =
+        ((event.clientY - rect.top)
+        / rect.height)
+        * 100;
+
+
+
+    console.log(
+        "Position:",
+        x.toFixed(2),
+        "%",
+        y.toFixed(2),
+        "%"
+    );
+
+
+    addTestMarker(
+        x,
+        y
+    );
+
+});
 
 // ===============================
 // Initialisation
