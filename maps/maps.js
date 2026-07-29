@@ -137,18 +137,34 @@ document
     document
     .querySelectorAll(".map-marker")
     .forEach(marker=>marker.classList.remove("active"));
+
     markerMenu.classList.add("hidden");
+
 
     const rect=mapLayer.getBoundingClientRect();
 
     const x=((event.clientX-rect.left)/rect.width)*100;
     const y=((event.clientY-rect.top)/rect.height)*100;
 
-    console.log("Position:",x.toFixed(2),"%",y.toFixed(2),"%");
+
+    console.log(
+        "Position:",
+        x.toFixed(2),
+        "%",
+        y.toFixed(2),
+        "%"
+    );
+
+
+    if(!currentUser)
+    {
+        alert("You need an account to add markers");
+        return;
+    }
+
+
     openMarkerMenu(x,y);
 });
-
-
 if(markerMenu)
 {
     markerMenu
