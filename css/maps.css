@@ -18,7 +18,9 @@
 }
 
 
-/* Selector */
+/* =========================================
+   Map Selector
+========================================= */
 
 #map-selector{
     display:flex;
@@ -52,7 +54,9 @@
 }
 
 
-/* Layout */
+/* =========================================
+   Layout
+========================================= */
 
 .maps-layout{
     display:grid;
@@ -62,7 +66,9 @@
 }
 
 
-/* Elevator */
+/* =========================================
+   Elevator
+========================================= */
 
 #map-elevator{
     display:flex;
@@ -88,7 +94,9 @@
 }
 
 
-/* Viewer */
+/* =========================================
+   Map Viewer
+========================================= */
 
 .map-viewer{
     display:flex;
@@ -115,13 +123,20 @@
 }
 
 
-/* Marker */
+/* =========================================
+   Map Layer
+========================================= */
 
 #map-layer{
     position:absolute;
     inset:0;
     pointer-events:none;
 }
+
+
+/* =========================================
+   Markers
+========================================= */
 
 .map-marker{
     position:absolute;
@@ -152,6 +167,10 @@
 }
 
 
+/* =========================================
+   Marker Popup
+========================================= */
+
 .marker-popup{
     position:absolute;
     left:50%;
@@ -172,7 +191,6 @@
 .map-marker.active .marker-popup{
     display:block;
 }
-
 
 .marker-popup button{
     cursor:pointer;
@@ -195,6 +213,11 @@
     opacity:.7;
     font-size:12px;
 }
+
+
+/* =========================================
+   Marker Actions / Votes
+========================================= */
 
 .marker-actions{
     margin-top:10px;
@@ -233,7 +256,66 @@
 }
 
 
-/* Action Modal */
+/* =========================================
+   Create Marker Menu
+========================================= */
+
+#marker-menu{
+    position:absolute;
+    background:#222;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #555;
+    z-index:300;
+    transform:translate(-50%,-120%);
+    pointer-events:auto;
+}
+
+#marker-menu.hidden{
+    display:none;
+}
+
+
+/* =========================================
+   Legend
+========================================= */
+
+#map-legend{
+    width:220px;
+    padding:15px;
+    background:#222;
+    border:1px solid #555;
+    border-radius:8px;
+    color:#ddd;
+}
+
+#map-legend h3{
+    margin-top:0;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+#map-legend label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:8px 0;
+    cursor:pointer;
+}
+
+#map-legend label span{
+    margin-left:auto;
+}
+
+#map-legend label img{
+    width:20px;
+    height:20px;
+}
+
+
+/* =========================================
+   Action Modal
+========================================= */
 
 #action-modal{
     position:fixed;
@@ -292,64 +374,9 @@
 }
 
 
-/* Marker Menu */
-
-#marker-menu{
-    position:absolute;
-    pointer-events:auto;
-    background:#222;
-    padding:10px;
-    border-radius:8px;
-    border:1px solid #555;
-    z-index:300;
-    transform:translate(-50%,-120%);
-}
-
-#marker-menu.hidden{
-    display:none;
-}
-
-
-/* Legend */
-
-#map-legend{
-    width:220px;
-    padding:15px;
-    background:#222;
-    border:1px solid #555;
-    border-radius:8px;
-    color:#ddd;
-}
-
-#map-legend h3{
-    margin-top:0;
-    margin-bottom:15px;
-    text-align:center;
-}
-
-#map-legend label{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin:8px 0;
-    cursor:pointer;
-}
-#map-legend label{
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-#map-legend label span{
-    margin-left:auto;
-}
-
-#map-legend label img{
-    width:35px;
-    height:35px;
-}
-
-/* Responsive */
+/* =========================================
+   Responsive
+========================================= */
 
 @media(max-width:1200px){
 
