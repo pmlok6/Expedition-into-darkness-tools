@@ -104,7 +104,35 @@ mapLayer.addEventListener("click",(event)=>
     console.log("Position:",x.toFixed(2),"%",y.toFixed(2),"%");
     openMarkerMenu(x,y);
 });
+// ===============================
+// save marker
+// ===============================
+async function saveMarker(type)
+{
+    console.log("Tentative création marker:", {
+        map: currentMap,
+        floor: currentFloor,
+        position: pendingMarker,
+        type: type
+    });
+    console.log("Payload envoyé à Supabase :", markerData);
 
+    const { data, error } =await supabase.from("markers").insert(
+            {
+                floor_id: currentFloor.id,
+                x: pendingMarker.x,
+                y: pendingMarker.y,
+                type: type,
+                title:type
+            })
+            .select();
+    if(error)
+    {
+        console.error("Erreur création marker:",error);
+        return;
+    }
+    console.log("Marker enregistré !",data);
+}
 if(markerMenu)
 {
    markerMenu.querySelectorAll("button").forEach(button =>
@@ -115,6 +143,87 @@ if(markerMenu)
           markerMenu.classList.add("hidden");
        };
    });
+}
+// ===============================
+// create marker
+// ===============================
+function createMarker(marker)
+{
+    const mapContainer = document.querySelector(".map-container");
+
+    if(!mapContainer)
+    {
+        console.error("Container map introuvable");
+        return;
+    }
+
+
+    const element = document.createElement("div");
+
+    element.className = "map-marker";
+    element.dataset.id = marker.id;
+    element.dataset.type = marker.type;
+
+
+    element.style.left = marker.x + "%";
+    element.style.top = marker.y + "%";
+
+
+    element.innerHTML = getMarkerIcon(marker.type);
+
+
+    mapContainer.appendChild(element);
+}
+
+function getMarkerIcon(type)
+{
+    switch(type)
+    {
+        case "chest":
+            return "📦";
+
+        case "elevator":
+            return "🛗";
+
+        case "npc":
+            return "👤";
+
+        default:
+            return "📍";
+    }
+}
+// ===============================
+// load marker
+// ===============================
+async function loadMarkers()
+{
+    if(!currentFloor)
+    {
+        console.error("Aucun étage sélectionné");
+        return;
+    }
+
+    console.log("Chargement markers étage :", currentFloor.id);
+
+    const { data, error } = await supabase
+        .from("markers")
+        .select("*")
+        .eq("floor_id", currentFloor.id);
+
+
+    if(error)
+    {
+        console.error("Erreur chargement markers :", error);
+        return;
+    }
+
+
+    console.log("Markers trouvés :", data);
+
+
+    data.forEach(marker => {
+        createMarker(marker);
+    });
 }
 // ===============================
 // Initialisation
@@ -132,46 +241,4 @@ document.addEventListener("DOMContentLoaded",async () =>
     // Charge la première map automatiquement
     loadMap(MAPS[0]);
 });
-// ===============================
-// save marker
-// ===============================
-async function saveMarker(type)
-{
-    console.log("Tentative création marker:", {
-        map: currentMap,
-        floor: currentFloor,
-        position: pendingMarker,
-        type: type
-    });
 
-
-    const { data, error } =
-        await supabase
-            .from("markers")
-            .insert(
-            {
-                floor_id: currentFloor.id,
-                x: pendingMarker.x,
-                y: pendingMarker.y,
-                type: type,
-                title:type
-            })
-            .select();
-
-
-    if(error)
-    {
-        console.error(
-            "Erreur création marker:",
-            error
-        );
-
-        return;
-    }
-
-
-    console.log(
-        "Marker enregistré !",
-        data
-    );
-}
