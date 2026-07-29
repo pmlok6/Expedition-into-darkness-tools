@@ -7,18 +7,55 @@
    - Email signup/login
    - Logout
    - Session check
+   - OAuth callback
    - Redirect after login
 ========================================== */
 
+
 import { supabase } from "./supabase.js";
+
 
 
 // ===============================
 // Elements
 // ===============================
 
-const email = document.getElementById("email");
-const password = document.getElementById("password");
+const email =
+document.getElementById("email");
+
+const password =
+document.getElementById("password");
+
+
+
+// ===============================
+// Redirect after login
+// ===============================
+
+function redirectAfterLogin()
+{
+    const redirect =
+    sessionStorage.getItem(
+        "redirectAfterLogin"
+    );
+
+
+    sessionStorage.removeItem(
+        "redirectAfterLogin"
+    );
+
+
+    if(redirect)
+    {
+        window.location.href = redirect;
+    }
+    else
+    {
+        window.location.href =
+        window.location.origin;
+    }
+}
+
 
 
 // ===============================
@@ -27,27 +64,82 @@ const password = document.getElementById("password");
 
 async function oauthLogin(provider)
 {
-    // Sauvegarde de la page actuelle
     sessionStorage.setItem(
         "redirectAfterLogin",
         window.location.href
     );
 
 
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } =
+    await supabase.auth.signInWithOAuth({
+
         provider: provider,
+
         options:
         {
-            redirectTo: window.location.origin
+            redirectTo:
+            window.location.origin
         }
+
     });
 
 
     if(error)
     {
-        console.error("OAuth error :", error);
+        console.error(
+            "OAuth error :",
+            error
+        );
     }
 }
+
+
+
+// ===============================
+// Handle OAuth callback
+// ===============================
+
+async function handleOAuthCallback()
+{
+    const hash =
+    window.location.hash;
+
+
+    if(hash.includes("access_token"))
+    {
+        const { data, error } =
+        await supabase.auth.getSession();
+
+
+        if(error)
+        {
+            console.error(
+                "OAuth callback error :",
+                error
+            );
+
+            return;
+        }
+
+
+        console.log(
+            "OAuth session :",
+            data.session
+        );
+
+
+        // Nettoyage URL
+        window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+        );
+
+
+        redirectAfterLogin();
+    }
+}
+
 
 
 // ===============================
@@ -62,24 +154,36 @@ async function signup()
 
     const { data, error } =
     await supabase.auth.signUp({
+
         email: email.value,
+
         password: password.value
+
     });
 
 
     if(error)
     {
-        console.error("Signup error :", error);
+        console.error(
+            "Signup error :",
+            error
+        );
+
         return;
     }
 
 
-    console.log("Compte créé :", data);
+    console.log(
+        "Compte créé :",
+        data
+    );
+
 
     alert(
-        "Compte créé ! Vérifie ton email si nécessaire."
+        "Compte créé ! Vérifie ton email."
     );
 }
+
 
 
 // ===============================
@@ -94,14 +198,21 @@ async function login()
 
     const { data, error } =
     await supabase.auth.signInWithPassword({
+
         email: email.value,
+
         password: password.value
+
     });
 
 
     if(error)
     {
-        console.error("Login error :", error);
+        console.error(
+            "Login error :",
+            error
+        );
+
         return;
     }
 
@@ -114,6 +225,7 @@ async function login()
 
     redirectAfterLogin();
 }
+
 
 
 // ===============================
@@ -137,39 +249,14 @@ async function logout()
     }
 
 
-    console.log("Déconnecté");
+    console.log(
+        "Déconnecté"
+    );
+
 
     window.location.reload();
 }
 
-
-// ===============================
-// Redirect after login
-// ===============================
-
-function redirectAfterLogin()
-{
-    const redirect =
-        sessionStorage.getItem(
-            "redirectAfterLogin"
-        );
-
-
-    sessionStorage.removeItem(
-        "redirectAfterLogin"
-    );
-
-
-    if(redirect)
-    {
-        window.location.href = redirect;
-    }
-    else
-    {
-        window.location.href =
-        window.location.origin;
-    }
-}
 
 
 // ===============================
@@ -184,7 +271,10 @@ async function checkSession()
 
     if(error)
     {
-        console.error(error);
+        console.error(
+            error
+        );
+
         return;
     }
 
@@ -205,18 +295,26 @@ async function checkSession()
 }
 
 
+
 // ===============================
-// OAuth callback
+// Auth listener
 // ===============================
 
 supabase.auth.onAuthStateChange(
 (event, session) =>
 {
+    console.log(
+        "Auth event :",
+        event
+    );
+
+
     if(event === "SIGNED_IN" && session)
     {
         redirectAfterLogin();
     }
 });
+
 
 
 // ===============================
@@ -227,16 +325,24 @@ document
 .getElementById("github-login")
 ?.addEventListener(
     "click",
-    () => oauthLogin("github")
+    () =>
+    {
+        oauthLogin("github");
+    }
 );
+
 
 
 document
 .getElementById("discord-login")
 ?.addEventListener(
     "click",
-    () => oauthLogin("discord")
+    () =>
+    {
+        oauthLogin("discord");
+    }
 );
+
 
 
 document
@@ -247,12 +353,14 @@ document
 );
 
 
+
 document
 .getElementById("login")
 ?.addEventListener(
     "click",
     login
 );
+
 
 
 document
@@ -263,8 +371,11 @@ document
 );
 
 
+
 // ===============================
 // Start
 // ===============================
 
 checkSession();
+
+handleOAuthCallback();
