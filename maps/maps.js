@@ -33,6 +33,16 @@ let currentFloor=null;
 let currentUser=null;
 let pendingMarker=null;
 
+let communityReview=false;
+
+let filters={
+    chest:true,
+    monster:true,
+    resource:true,
+    elevator:true,
+    npc:true
+};
+
 // ===============================
 // Map functions
 // ===============================
