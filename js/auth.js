@@ -55,46 +55,27 @@ function redirectAfterLogin()
         window.location.origin;
     }
 }
-
-
-
 // ===============================
 // OAuth Login
 // ===============================
-
 async function oauthLogin(provider)
 {
-    sessionStorage.setItem(
-        "redirectAfterLogin",
-        window.location.href
-    );
-
-
-    const { error } =
-    await supabase.auth.signInWithOAuth({
-
-        provider: provider,
-
+    sessionStorage.setItem("redirectAfterLogin",document.referrer || "/Expedition-into-darkness-tools/");
+    const redirectUrl ="https://pmlok6.github.io/Expedition-into-darkness-tools/login.html";
+    const { error } =await supabase.auth.signInWithOAuth(
+       {
+        provider,
         options:
         {
-            redirectTo:
-            window.location.origin
+            redirectTo: redirectUrl
         }
-
     });
-
 
     if(error)
     {
-        console.error(
-            "OAuth error :",
-            error
-        );
+        console.error(error);
     }
 }
-
-
-
 // ===============================
 // Handle OAuth callback
 // ===============================
