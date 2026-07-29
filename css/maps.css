@@ -83,7 +83,26 @@
     align-items:start;
 
 }
+#map-container
+{
+    position: relative;
+}
 
+#map-layer
+{
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.map-marker
+{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    pointer-events: auto;
+    cursor: pointer;
+}
 
 /* =========================================
    Elevator
