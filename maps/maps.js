@@ -173,12 +173,23 @@ function createMarker(marker)
     element.dataset.type = marker.type;
     element.style.left = marker.x + "%";
     element.style.top = marker.y + "%";
-    element.innerHTML = `        ${getMarkerIcon(marker.type)}        
-       <div class="marker-popup">
-            <strong>${marker.title}</strong>
-            <br>${marker.description ?? ""}
-       </div>
-    `;
+    element.innerHTML = `
+    ${getMarkerIcon(marker.type)}
+
+    <div class="marker-popup">
+        <div class="marker-title">
+            ${marker.title}
+        </div>
+
+        <div class="marker-description">
+            ${marker.description ?? "No description"}
+        </div>
+
+        <div class="marker-floor">
+            Floor ${currentFloor.floor}
+        </div>
+    </div>
+`;
     mapContainer.appendChild(element);
 }
 
