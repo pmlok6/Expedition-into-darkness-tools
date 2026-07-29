@@ -10,34 +10,18 @@
    - OAuth callback
    - Redirect after login
 ========================================== */
-
-
 import { supabase } from "./supabase.js";
-
-
-
 // ===============================
 // Elements
 // ===============================
-
-const email =
-document.getElementById("email");
-
-const password =
-document.getElementById("password");
-
-
-
+const email =document.getElementById("email");
+const password =document.getElementById("password");
 // ===============================
 // Redirect after login
 // ===============================
-
 function redirectAfterLogin()
 {
-    const redirect =
-    sessionStorage.getItem(
-        "redirectAfterLogin"
-    );
+    const redirect =    sessionStorage.getItem(        "redirectAfterLogin"    );
 
 
     sessionStorage.removeItem(
