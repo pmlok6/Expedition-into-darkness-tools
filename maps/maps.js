@@ -167,7 +167,6 @@ if(markerMenu)
     });
 }
 
-
 async function saveMarker(type)
 {
     const {data:{user},error:userError}=await supabase.auth.getUser();
@@ -178,7 +177,6 @@ async function saveMarker(type)
         return;
     }
 
-
     const markerData=
     {
         floor_id:currentFloor.id,
@@ -186,15 +184,17 @@ async function saveMarker(type)
         y:pendingMarker.y,
         type:type,
         title:type,
-        description:document.getElementById("marker-description").value,
+        description:document
+        .getElementById("marker-description")
+        .value,
         created_by:user.id
     };
 
-
-    const {error}=await supabase
+    const {data,error}=await supabase
     .from("markers")
-    .insert(markerData);
-
+    .insert(markerData)
+    .select()
+    .single();
 
     if(error)
     {
@@ -202,10 +202,16 @@ async function saveMarker(type)
         return;
     }
 
+    pendingMarker=null;
+
+    document
+    .getElementById("marker-description")
+    .value="";
+
+    markerMenu.classList.add("hidden");
 
     await loadMarkers();
 }
-
 
 function createMarker(marker)
 {
@@ -394,7 +400,7 @@ async function voteMarker(markerId,vote)
 async function deleteMarker(id)
 {
     openActionModal(
-    "Delete marker?",
+    "Delete marker",
     "Are you sure you want to delete this marker?",
     async()=>
     {
@@ -413,10 +419,15 @@ async function deleteMarker(id)
         .querySelector(`.map-marker[data-id="${id}"]`)
         ?.remove();
 
+        document
+        .querySelectorAll(".map-marker")
+        .forEach(marker=>marker.classList.remove("active"));
+
+        markerMenu.classList.add("hidden");
+
         console.log("Marker deleted:",id);
     });
 }
-
 
 async function loadMarkers()
 {
@@ -431,7 +442,10 @@ async function loadMarkers()
     .from("markers")
     .select(`
         *,
-        marker_votes(vote,user_id)
+        marker_votes(
+            user_id,
+            vote
+        )
     `)
     .eq("floor_id",currentFloor.id);
 
@@ -443,8 +457,6 @@ async function loadMarkers()
 
     data.forEach(marker=>createMarker(marker));
 }
-
-
 // ===============================
 // User functions
 // ===============================
