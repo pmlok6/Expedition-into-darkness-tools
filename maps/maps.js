@@ -182,7 +182,7 @@ function getMarkerIcon(type)
     switch(type)
     {
         case "chest":
-            return "📦";
+            return `<img src="../assets/icons/${type}.png">`;
 
         case "elevator":
             return "🛗";
