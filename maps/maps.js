@@ -254,20 +254,32 @@ function createMarker(marker)
     });
 
 
-    element
-    .querySelector(".edit-marker")
-    ?.addEventListener("click",event=>
-    {
-        event.stopPropagation();
-        event.preventDefault();
-
-        console.log("Edit marker:",marker.id);
-    });
-
-
-    mapLayer.appendChild(element);
+   element
+   .querySelector(".edit-marker")
+   ?.addEventListener("click",async event=>
+   {
+       event.stopPropagation();
+       event.preventDefault();
+       const description=prompt("Edit description:",marker.description??"");
+       if(description===null)
+           return;
+       const {error}=await supabase
+       .from("markers")
+       .update(
+       {
+           description:description
+       })
+       .eq("id",marker.id);
+       if(error)
+       {
+           console.error("Edit error:",error);
+           return;
+       }
+       await loadMarkers();
+   });
 }
-
+mapLayer.appendChild(element);
+   
 function getMarkerIcon(type)
 {
     switch(type)
