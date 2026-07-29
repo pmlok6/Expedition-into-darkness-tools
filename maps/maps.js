@@ -98,7 +98,7 @@ function openMarkerMenu(x,y)
     markerMenu.classList.remove( "hidden"  );
 }
 
-mapLayer.addEventListener("click",(event)=>
+document.getElementById("map-container").addEventListener("click",(event)=>
 {
     const rect = mapLayer.getBoundingClientRect();
     const x =((event.clientX - rect.left) / rect.width) * 100;
