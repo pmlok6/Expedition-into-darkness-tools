@@ -338,8 +338,8 @@
 /* =========================================
    Pending markers
 ========================================= */
-
-.map-marker.pending{
+.map-marker.pending > img,
+.map-marker.pending:not(:has(.marker-popup)){
     opacity:.55;
     filter:grayscale(.6);
 }
