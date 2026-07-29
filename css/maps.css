@@ -296,6 +296,7 @@
 
 #marker-menu{
     position:absolute;
+    pointer-events:auto;
     background:#222;
     padding:10px;
     border-radius:8px;
