@@ -17,10 +17,7 @@
     margin-bottom:30px;
 }
 
-
-/* =========================================
-   Map Selector
-========================================= */
+/* Selector */
 
 #map-selector{
     display:flex;
@@ -41,20 +38,19 @@
     transition:.15s;
 }
 
-.map-button:hover{
+.map-button:hover,
+.floor-button:hover{
     background:#444;
 }
 
-.map-button.active{
+.map-button.active,
+.floor-button.active{
     background:#8b2b2b;
     color:#fff;
     border-color:#b54040;
 }
 
-
-/* =========================================
-   Layout
-========================================= */
+/* Layout */
 
 .maps-layout{
     display:grid;
@@ -63,10 +59,7 @@
     align-items:start;
 }
 
-
-/* =========================================
-   Elevator
-========================================= */
+/* Elevator */
 
 #map-elevator{
     display:flex;
@@ -83,213 +76,132 @@
     height:60px;
     border:none;
     border-radius:6px;
-
     background:#3a3a3a;
     color:#ddd;
-
     font-size:18px;
     font-weight:bold;
-
     cursor:pointer;
     transition:.15s;
 }
 
-.floor-button:hover{
-    background:#555;
-}
-
 .floor-button.active{
-    background:#8b2b2b;
-    color:#fff;
     box-shadow:0 0 10px rgba(255,80,80,.5);
 }
 
-
-/* =========================================
-   Map Viewer
-========================================= */
+/* Viewer */
 
 .map-viewer{
     display:flex;
     justify-content:center;
     align-items:center;
-
     padding:20px;
-
     background:#222;
     border:1px solid #555;
     border-radius:8px;
-
     overflow:hidden;
 }
-
-
-/* =========================================
-   Map Container
-========================================= */
 
 #map-container{
     position:relative;
     display:inline-block;
 }
 
-
-/* =========================================
-   Map Image
-========================================= */
-
 #map-image{
     display:block;
-
     max-width:100%;
     max-height:85vh;
-
     height:auto;
-
     user-select:none;
     pointer-events:none;
 }
 
-
-/* =========================================
-   Marker Layer
-========================================= */
+/* Marker */
 
 #map-layer{
     position:absolute;
     inset:0;
-
     pointer-events:none;
 }
 
-
-/* =========================================
-   Markers
-========================================= */
 .map-marker{
     position:absolute;
-
-    transform:translate(-50%, -50%);
-
+    transform:translate(-50%,-50%);
     cursor:pointer;
-
     z-index:10;
-
     pointer-events:auto;
 }
-
 
 .map-marker img{
     width:20px;
     height:20px;
-
     object-fit:contain;
-
     display:block;
 }
 
-.marker-popup
-{
+.marker-popup{
     position:absolute;
-
     left:50%;
     bottom:120%;
-
     transform:translateX(-50%);
-
     width:220px;
-
     padding:10px;
-
     background:#222;
-
     color:#ddd;
-
     border:1px solid #555;
-
     border-radius:8px;
-
     font-size:14px;
-
     text-align:center;
-
     opacity:0;
-
     pointer-events:none;
-
     transition:.15s;
-
     z-index:50;
 }
 
-.map-marker:hover .marker-popup
-{
+.map-marker.active .marker-popup,
+.map-marker:hover .marker-popup{
+    display:block;
     opacity:1;
 }
 
-.marker-title
-{
+.marker-title{
     font-weight:bold;
     font-size:16px;
     margin-bottom:8px;
 }
 
-.marker-description
-{
+.marker-description{
     font-size:14px;
     line-height:1.4;
 }
 
-.marker-floor
-{
+.marker-floor{
     margin-top:8px;
     opacity:.7;
     font-size:12px;
 }
 
-.map-marker .marker-popup
-{
-    display:none;
-}
-
-.map-marker.active .marker-popup
-{
-    display:block;
-}
-/* =========================================
-   Marker Menu
-========================================= */
+/* Marker Menu */
 
 #marker-menu{
     position:absolute;
-
     background:#222;
-
     padding:10px;
-
     border-radius:8px;
-
     border:1px solid #555;
-
     z-index:20;
 }
-
 
 #marker-menu.hidden{
     display:none;
 }
 
-
-/* =========================================
-   Responsive
-========================================= */
+/* Responsive */
 
 @media(max-width:900px){
 
     .maps-layout{
         grid-template-columns:1fr;
     }
-
 
     #map-elevator{
         flex-direction:row;
