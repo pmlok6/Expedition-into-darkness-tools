@@ -47,17 +47,18 @@ function createMapButtons()
 // Chargement d'une map
 // ===============================
 
-function loadMap(map)
+async function loadMap(map)
 {
-    
     currentMap = map;
     createElevator(map);
     // Affichage du niveau 0 par défaut
-    const defaultFloor =map.floors.find(floor => floor.floor === 0);
+    const defaultFloor = map.floors.find(floor => floor.floor === 0);
     if(defaultFloor)
     {
         currentFloor = defaultFloor;
         image.src = defaultFloor.image;
+        // Chargement des markers du niveau 0
+        await loadMarkers();
     }
 }
 // ===============================
@@ -77,6 +78,7 @@ function createElevator(map)
         {
            currentFloor = floor;
            image.src = floor.image;
+           await loadMarkers();
         };
         elevator.appendChild(button);
     });
@@ -109,29 +111,37 @@ mapLayer.addEventListener("click",(event)=>
 // ===============================
 async function saveMarker(type)
 {
+    const markerData = {
+        floor_id: currentFloor.id,
+        x: pendingMarker.x,
+        y: pendingMarker.y,
+        type: type,
+        title: type
+    };
+
     console.log("Tentative création marker:", {
         map: currentMap,
         floor: currentFloor,
         position: pendingMarker,
         type: type
     });
+
     console.log("Payload envoyé à Supabase :", markerData);
 
-    const { data, error } =await supabase.from("markers").insert(
-            {
-                floor_id: currentFloor.id,
-                x: pendingMarker.x,
-                y: pendingMarker.y,
-                type: type,
-                title:type
-            })
-            .select();
+
+    const { data, error } = await supabase
+        .from("markers")
+        .insert(markerData)
+        .select();
+
+
     if(error)
     {
-        console.error("Erreur création marker:",error);
+        console.error("Erreur création marker:", error);
         return;
     }
-    console.log("Marker enregistré !",data);
+
+    console.log("Marker enregistré !", data);
 }
 if(markerMenu)
 {
@@ -149,29 +159,20 @@ if(markerMenu)
 // ===============================
 function createMarker(marker)
 {
-    const mapContainer = document.querySelector(".map-container");
+    const mapContainer = document.querySelector(".map-layer");
 
     if(!mapContainer)
     {
         console.error("Container map introuvable");
         return;
     }
-
-
     const element = document.createElement("div");
-
     element.className = "map-marker";
     element.dataset.id = marker.id;
     element.dataset.type = marker.type;
-
-
     element.style.left = marker.x + "%";
     element.style.top = marker.y + "%";
-
-
     element.innerHTML = getMarkerIcon(marker.type);
-
-
     mapContainer.appendChild(element);
 }
 
@@ -197,30 +198,21 @@ function getMarkerIcon(type)
 // ===============================
 async function loadMarkers()
 {
+    document.querySelectorAll(".map-marker").forEach(marker => marker.remove());
     if(!currentFloor)
     {
         console.error("Aucun étage sélectionné");
         return;
     }
-
     console.log("Chargement markers étage :", currentFloor.id);
-
-    const { data, error } = await supabase
-        .from("markers")
-        .select("*")
-        .eq("floor_id", currentFloor.id);
-
+    const { data, error } = await supabase.from("markers").select("*").eq("floor_id", currentFloor.id);
 
     if(error)
     {
         console.error("Erreur chargement markers :", error);
         return;
     }
-
-
-    console.log("Markers trouvés :", data);
-
-
+   console.log("Markers trouvés :", data);
     data.forEach(marker => {
         createMarker(marker);
     });
