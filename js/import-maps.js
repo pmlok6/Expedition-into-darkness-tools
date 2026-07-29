@@ -1,4 +1,4 @@
-import MAPS from "../data/MapsData.js";
+import MAPS from "../data/mapsdata.js";
 import { supabase } from "./supabase.js";
 
 
