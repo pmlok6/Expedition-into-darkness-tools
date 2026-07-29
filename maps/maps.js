@@ -111,6 +111,7 @@ document.getElementById("map-container").addEventListener("click",(event)=>
 // ===============================
 async function saveMarker(type)
 {
+    const description = document.getElementById("marker-description").value;
     const markerData = {
         floor_id: currentFloor.id,
         x: pendingMarker.x,
@@ -127,7 +128,6 @@ async function saveMarker(type)
     });
 
     console.log("Payload envoyé à Supabase :", markerData);
-
 
     const { data, error } = await supabase
         .from("markers")
@@ -150,6 +150,7 @@ if(markerMenu)
        button.onclick = async () =>
        {
           await saveMarker(button.dataset.type);
+          document.getElementById("marker-description").value = "";
           markerMenu.classList.add("hidden");
        };
    });
@@ -161,10 +162,9 @@ function createMarker(marker)
 {
     const mapContainer = document.getElementById("map-layer");
 
-    console.log("map-layer :", mapContainer);
     if(!mapContainer)
     {
-        console.error("Container map introuvable");
+        console.error("Layer markers introuvable");
         return;
     }
     const element = document.createElement("div");
@@ -173,7 +173,12 @@ function createMarker(marker)
     element.dataset.type = marker.type;
     element.style.left = marker.x + "%";
     element.style.top = marker.y + "%";
-    element.innerHTML = getMarkerIcon(marker.type);
+    element.innerHTML = `        ${getMarkerIcon(marker.type)}        
+       <div class="marker-popup">
+            <strong>${marker.title}</strong>
+            <br>${marker.description ?? ""}
+       </div>
+    `;
     mapContainer.appendChild(element);
 }
 
