@@ -32,45 +32,22 @@ function loadNavigation()
 
     nav.innerHTML=
 `
-<div class="navigation-container">
-
-<a class="navigation-logo" href="${root}index.html">
-<img src="${root}assets/Site-logo.png">
-</a>
-
-<div class="navigation-links">
-
-<a class="navigation-button" href="${root}maps/maps.html">
-🗺 Maps
-</a>
-
-<a class="navigation-button" href="${root}skills/skills.html">
-🌳 Skill Tree
-</a>
-
-<a class="navigation-button" href="${root}leveling/leveling.html">
-📈 Leveling
-</a>
-
-<a class="navigation-button" href="${root}calculators/armor.html">
-🛡 Armor
-</a>
-
-<a class="navigation-button" href="${root}calculators/weapon.html">
-⚔ Weapon
-</a>
-
-<a class="navigation-button" href="${root}login.html">
-🔑 Login
-</a>
-
+<div class="nav-logo">
+    <a href="${root}index.html">
+        <img src="${root}assets/Site-logo.png">
+    </a>
 </div>
 
+<div class="nav-links">
+    <a href="${root}maps/maps.html">🗺 Maps</a>
+    <a href="${root}skills/skills.html">🌳 Skill Tree</a>
+    <a href="${root}leveling/leveling.html">📈 Leveling</a>
+    <a href="${root}calculators/armor.html">🛡 Armor</a>
+    <a href="${root}calculators/weapon.html">⚔ Weapon</a>
+    <a href="${root}login.html">🔑 Login</a>
 </div>
 `;
 }
-
-
 // ===============================
 // auth
 // ===============================
