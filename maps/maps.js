@@ -230,19 +230,6 @@ function createMarker(marker)
         }
     </div>`;
 
-
-    element.onclick=event=>
-    {
-        event.stopPropagation();
-
-        document
-        .querySelectorAll(".map-marker")
-        .forEach(m=>m.classList.remove("active"));
-
-        element.classList.add("active");
-    };
-
-
     element
     .querySelector(".delete-marker")
     ?.addEventListener("click",async event=>
@@ -252,7 +239,6 @@ function createMarker(marker)
 
         await deleteMarker(marker.id);
     });
-
 
    element
    .querySelector(".edit-marker")
