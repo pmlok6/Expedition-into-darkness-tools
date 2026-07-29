@@ -177,6 +177,12 @@ async function saveMarker(type)
         return;
     }
 
+    if(!pendingMarker||!currentFloor)
+    {
+        console.error("No marker position or floor selected");
+        return;
+    }
+
     const markerData=
     {
         floor_id:currentFloor.id,
@@ -187,14 +193,17 @@ async function saveMarker(type)
         description:document
         .getElementById("marker-description")
         .value,
-        created_by:user.id
+        created_by:user.id,
+        approved:false,
+        up_votes:0,
+        down_votes:0
     };
 
-    const {data,error}=await supabase
+
+    const {error}=await supabase
     .from("markers")
-    .insert(markerData)
-    .select()
-    .single();
+    .insert(markerData);
+
 
     if(error)
     {
@@ -202,13 +211,17 @@ async function saveMarker(type)
         return;
     }
 
+
     pendingMarker=null;
+
 
     document
     .getElementById("marker-description")
     .value="";
 
+
     markerMenu.classList.add("hidden");
+
 
     await loadMarkers();
 }
@@ -221,7 +234,6 @@ function createMarker(marker)
     const element=document.createElement("div");
 
     element.className="map-marker";
-
     element.dataset.id=marker.id;
     element.dataset.type=marker.type;
 
@@ -238,11 +250,7 @@ function createMarker(marker)
         </div>
 
         <div class="marker-status">
-            ${
-            marker.approved
-            ?"✅ Verified"
-            :"⏳ Pending"
-            }
+            ${marker.approved?"✅ Verified":"⏳ Pending"}
         </div>
 
         <div class="marker-description">
@@ -253,6 +261,9 @@ function createMarker(marker)
             Floor ${currentFloor.floor}
         </div>
 
+        ${
+        currentUser?
+        `
         <div class="marker-votes">
             <button class="vote-up">
                 👍 ${upVotes}
@@ -262,10 +273,19 @@ function createMarker(marker)
                 👎 ${downVotes}
             </button>
         </div>
+        `
+        :
+        `
+        <div class="marker-votes">
+            👍 ${upVotes} | 👎 ${downVotes}
+        </div>
+        `
+        }
 
         ${
         currentUser&&currentUser.id===marker.created_by?
-        `<div class="marker-actions">
+        `
+        <div class="marker-actions">
             <button class="edit-marker">
                 ✏ Edit
             </button>
@@ -273,8 +293,10 @@ function createMarker(marker)
             <button class="delete-marker">
                 🗑 Delete
             </button>
-        </div>`
-        :""
+        </div>
+        `
+        :
+        ""
         }
 
     </div>`;
@@ -294,7 +316,6 @@ function createMarker(marker)
         element.classList.add("active");
     };
 
-
     element
     .querySelector(".vote-up")
     ?.addEventListener("click",async event=>
@@ -304,7 +325,6 @@ function createMarker(marker)
 
         await voteMarker(marker.id,true);
     });
-
 
     element
     .querySelector(".vote-down")
@@ -316,7 +336,6 @@ function createMarker(marker)
         await voteMarker(marker.id,false);
     });
 
-
     element
     .querySelector(".edit-marker")
     ?.addEventListener("click",event=>
@@ -325,34 +344,31 @@ function createMarker(marker)
         event.preventDefault();
 
         openActionModal(
-        "Edit marker",
-        `<textarea id="edit-description">${marker.description??""}</textarea>`,
-        async()=>
-        {
-            const description=document
-            .getElementById("edit-description")
-            .value;
-
-
-            const {error}=await supabase
-            .from("markers")
-            .update({
-                description:description
-            })
-            .eq("id",marker.id);
-
-
-            if(error)
+            "Edit marker",
+            `<textarea id="edit-description">${marker.description??""}</textarea>`,
+            async()=>
             {
-                console.error("Edit error:",error);
-                return;
+                const description=document
+                .getElementById("edit-description")
+                .value;
+
+                const {error}=await supabase
+                .from("markers")
+                .update({
+                    description:description
+                })
+                .eq("id",marker.id);
+
+                if(error)
+                {
+                    console.error("Edit error:",error);
+                    return;
+                }
+
+                await loadMarkers();
             }
-
-
-            await loadMarkers();
-        });
+        );
     });
-
 
     element
     .querySelector(".delete-marker")
@@ -364,9 +380,9 @@ function createMarker(marker)
         await deleteMarker(marker.id);
     });
 
-
     mapLayer.appendChild(element);
-}   
+}
+
 function getMarkerIcon(type)
 {
     switch(type)
@@ -400,17 +416,56 @@ async function voteMarker(markerId,vote)
         return;
     }
 
-    const {error}=await supabase
+    const {data:existingVote,error:voteError}=await supabase
     .from("marker_votes")
-    .upsert(
+    .select("id,vote")
+    .eq("marker_id",markerId)
+    .eq("user_id",user.id)
+    .maybeSingle();
+
+    if(voteError)
     {
-        marker_id:markerId,
-        user_id:user.id,
-        vote:vote
-    },
+        console.error("Vote check error:",voteError);
+        return;
+    }
+
+    let error;
+
+    if(existingVote)
     {
-        onConflict:"marker_id,user_id"
-    });
+        if(existingVote.vote===vote)
+        {
+            const result=await supabase
+            .from("marker_votes")
+            .delete()
+            .eq("id",existingVote.id);
+
+            error=result.error;
+        }
+        else
+        {
+            const result=await supabase
+            .from("marker_votes")
+            .update({
+                vote:vote
+            })
+            .eq("id",existingVote.id);
+
+            error=result.error;
+        }
+    }
+    else
+    {
+        const result=await supabase
+        .from("marker_votes")
+        .insert({
+            marker_id:markerId,
+            user_id:user.id,
+            vote:vote
+        });
+
+        error=result.error;
+    }
 
     if(error)
     {
@@ -424,33 +479,41 @@ async function voteMarker(markerId,vote)
 async function deleteMarker(id)
 {
     openActionModal(
-    "Delete marker",
-    "Are you sure you want to delete this marker?",
-    async()=>
-    {
-        const {error}=await supabase
-        .from("markers")
-        .delete()
-        .eq("id",id);
-
-        if(error)
+        "Delete marker",
+        "Are you sure you want to delete this marker?",
+        async()=>
         {
-            console.error("Delete error:",error);
-            return;
+            const {error}=await supabase
+            .from("markers")
+            .delete()
+            .eq("id",id);
+
+
+            if(error)
+            {
+                console.error("Delete error:",error);
+                return;
+            }
+
+
+            document
+            .querySelector(`.map-marker[data-id="${id}"]`)
+            ?.remove();
+
+
+            document
+            .querySelectorAll(".map-marker")
+            .forEach(marker=>
+                marker.classList.remove("active")
+            );
+
+
+            markerMenu.classList.add("hidden");
+
+
+            console.log("Marker deleted:",id);
         }
-
-        document
-        .querySelector(`.map-marker[data-id="${id}"]`)
-        ?.remove();
-
-        document
-        .querySelectorAll(".map-marker")
-        .forEach(marker=>marker.classList.remove("active"));
-
-        markerMenu.classList.add("hidden");
-
-        console.log("Marker deleted:",id);
-    });
+    );
 }
 
 async function loadMarkers()
@@ -479,7 +542,10 @@ async function loadMarkers()
         return;
     }
 
-    data.forEach(marker=>createMarker(marker));
+    data.forEach(marker=>
+    {
+        createMarker(marker);
+    });
 }
 // ===============================
 // User functions
@@ -487,7 +553,14 @@ async function loadMarkers()
 
 async function getCurrentUser()
 {
-    const {data}=await supabase.auth.getSession();
+    const {data,error}=await supabase.auth.getSession();
+
+    if(error)
+    {
+        console.error("Session error:",error);
+        currentUser=null;
+        return;
+    }
 
     currentUser=data.session?.user??null;
 
@@ -500,6 +573,7 @@ async function getCurrentUser()
 function openActionModal(title,content,callback)
 {
     actionTitle.textContent=title;
+
     actionContent.innerHTML=content;
 
     actionModal.classList.remove("hidden");
@@ -507,7 +581,19 @@ function openActionModal(title,content,callback)
 
     actionConfirm.onclick=async()=>
     {
-        await callback();
+        actionConfirm.disabled=true;
+
+        try
+        {
+            await callback();
+        }
+        catch(error)
+        {
+            console.error("Action error:",error);
+        }
+
+        actionConfirm.disabled=false;
+
         actionModal.classList.add("hidden");
     };
 
