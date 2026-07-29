@@ -104,6 +104,12 @@ function openMarkerMenu(x,y)
 
 document.getElementById("map-container").addEventListener("click",(event)=>
 {
+   // Empêche la création si on clique sur un marker existant
+    if(event.target.closest(".map-marker"))
+    {
+        return;
+    }
+    markerMenu.classList.add("hidden"); //click out to close 
     const rect = mapLayer.getBoundingClientRect();
     const x =((event.clientX - rect.left) / rect.width) * 100;
     const y =((event.clientY - rect.top) / rect.height) * 100;
@@ -179,6 +185,10 @@ function createMarker(marker)
         return;
     }
     const element = document.createElement("div");
+    element.addEventListener("click",(event)=>
+    {
+       event.stopPropagation();
+    });
     element.className = "map-marker";
     element.dataset.id = marker.id;
     element.dataset.type = marker.type;
