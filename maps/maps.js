@@ -119,48 +119,27 @@ function createLegend()
 {
     if(!legend)
         return;
-
-
     legend.innerHTML="";
-
-
     const title=document.createElement("h3");
-
     title.textContent="Legend";
-
     legend.appendChild(title);
-
-
     Object.keys(filters)
     .forEach(type=>
     {
         const label=document.createElement("label");
-
         const checkbox=document.createElement("input");
-
-
         checkbox.type="checkbox";
-
         checkbox.checked=filters[type];
-
-
         checkbox.onchange=()=>
         {
             filters[type]=checkbox.checked;
-
             applyMarkerFilters();
         };
-
-
         label.appendChild(checkbox);
-
-        label.appendChild(
-            document.createTextNode(
-                " "+type
-            )
-        );
-
-
+        label.appendChild(document.createTextNode(type));
+        const icon=document.createElement("span");
+        icon.innerHTML=getMarkerIcon(type);
+        label.appendChild(icon);
         legend.appendChild(label);
     });
 
