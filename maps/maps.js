@@ -133,22 +133,45 @@ document.addEventListener("DOMContentLoaded",async () =>
     loadMap(MAPS[0]);
 });
 // ===============================
-// save floor
+// save marker
 // ===============================
 async function saveMarker(type)
 {
-    const { error } =await supabase.from("markers").insert(
+    console.log("Tentative création marker:", {
+        map: currentMap,
+        floor: currentFloor,
+        position: pendingMarker,
+        type: type
+    });
+
+
+    const { data, error } =
+        await supabase
+            .from("markers")
+            .insert(
             {
                 map_id: currentMap.id,
                 floor_id: currentFloor.id,
                 x: pendingMarker.x,
                 y: pendingMarker.y,
                 type: type
-            });
+            })
+            .select();
+
+
     if(error)
     {
-        console.error("Erreur création marker:",error);
+        console.error(
+            "Erreur création marker:",
+            error
+        );
+
         return;
     }
-    console.log("Marker enregistré !");
+
+
+    console.log(
+        "Marker enregistré !",
+        data
+    );
 }
