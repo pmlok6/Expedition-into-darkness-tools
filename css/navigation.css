@@ -1,98 +1,55 @@
 /* ==========================================================
-   Main navigat
-   ========================================================== */
+   Main navigation
+========================================================== */
 
 #main-navigation{
-
+    flex-direction:row-reverse;
     width:100%;
-
     box-sizing:border-box;
-
     background:#1b1b1b;
-
     border-bottom:1px solid #444;
-
     padding:10px 20px;
-
     display:flex;
-
     align-items:center;
-
     justify-content:space-between;
-
     gap:20px;
-
 }
 
 .nav-links{
-
     display:flex;
-
     gap:12px;
-
     align-items:center;
-
     flex-wrap:wrap;
-
 }
 
 .nav-links a{
-
     color:#ddd;
-
     text-decoration:none;
-
     padding:6px 10px;
-
     border-radius:6px;
-
     white-space:nowrap;
-
 }
 
 .nav-links a:hover{
-
     background:#333;
-
     color:white;
-
 }
 
 .nav-logo img{
-
     height:50px;
-
     width:auto;
-
     display:block;
-
 }
 
-/* ==========================================================
-   Main navigat mobile
-   ========================================================== */
 @media(max-width:700px){
-
     #main-navigation{
-
         flex-direction:column;
-
         align-items:flex-start;
-
     }
-
-
     .nav-links{
-
         width:100%;
-
     }
-
-
     .nav-logo{
-
         align-self:center;
-
     }
-
 }
