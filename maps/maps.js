@@ -99,10 +99,15 @@ function createElevator(map)
 
 function openMarkerMenu(x,y)
 {
-    pendingMarker={x:x,y:y};
+    pendingMarker={
+        x:x,
+        y:y
+    };
 
     markerMenu.style.left=x+"%";
     markerMenu.style.top=y+"%";
+
+    markerMenu.style.transform="translate(-50%,-50%)";
 
     markerMenu.classList.remove("hidden");
 }
