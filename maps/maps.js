@@ -9,7 +9,7 @@
    - Load selected map
    - Display default floor
 ========================================== */
-import MAPS from "../data/mapsdata.js";
+import { getMaps } from "../data/mapsloader.js";
 
 const selector = document.getElementById("map-selector");
 const image = document.getElementById("map-image");
@@ -19,36 +19,27 @@ let currentMap = null;
 
 function createMapButtons()
 {
-    Object.entries(MAPS).forEach(([id,map])=>
+    MAPS.forEach((map)=>
+   {
+      const button = document.createElement("button");
+       button.className="map-button";
+       button.textContent=map.name;
+       button.onclick=()=>
        {
-        const button = document.createElement("button");
-        button.className = "map-button";
-        button.textContent = map.name;
-        button.dataset.map = id;
-        button.onclick = () => 
-       {
-            loadMap(id);
+          loadMap(map);
        };
-        selector.appendChild(button);
-    });
+       selector.appendChild(button);
+   });
 }
-function loadMap(id)
+function loadMap(map)
 {
-    currentMap = id;
-    const map = MAPS[id];
-    if(!map) return;
+    currentMap = map;
     createElevator(map);
-    // affiche le niveau 0 par défaut
-    const floor = map.floors.find(floor => floor.id === 0);
+    const floor =map.floors.find(f => f.floor === 0);
     if(floor)
     {
         image.src = floor.image;
     }
-    document.querySelectorAll(".map-button")
-        .forEach(btn=>
-           {
-            btn.classList.toggle("active",btn.dataset.map === id);
-        });
 }
 function createElevator(map)
 {
@@ -66,8 +57,12 @@ function createElevator(map)
     });
 }
 
-document.addEventListener("DOMContentLoaded",()=>
+document.addEventListener("DOMContentLoaded",async () =>
 {
-   createMapButtons();
-   loadMap(Object.keys(MAPS)[0]);
+    MAPS = await getMaps();
+    createMapButtons();
+    if(MAPS.length)
+    {
+        loadMap(MAPS[0]);
+    }
 });
