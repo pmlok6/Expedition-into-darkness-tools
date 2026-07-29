@@ -1,59 +1,129 @@
+/* ==========================================
+   Supabase Auth
+
+   Features:
+   - GitHub OAuth
+   - Discord OAuth
+   - Email signup/login
+   - Logout
+   - Session check
+========================================== */
+
 import { supabase } from "./supabase.js";
 
 
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
+// ===============================
+// Config
+// ===============================
 
-import { supabase } from "./supabase.js";
+const redirectURL =
+"https://pmlok6.github.io/Expedition-into-darkness-tools/maps.html";
 
 
-async function loginGithub()
+// ===============================
+// Elements
+// ===============================
+
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+
+
+// ===============================
+// OAuth Login
+// ===============================
+
+async function oauthLogin(provider)
 {
-    await supabase.auth.signInWithOAuth({
-        provider: "github"
-    });
-}
-
-
-async function loginDiscord()
-{
-    await supabase.auth.signInWithOAuth({
-        provider: "discord"
-    });
-}
-
-
-document
-.getElementById("github-login")
-.onclick = loginGithub;
-
-
-document
-.getElementById("discord-login")
-.onclick = loginDiscord;
-async function signup()
-{
-    const { data, error } = await supabase.auth.signUp({
-        email: emailInput.value,
-        password: passwordInput.value
+    const { error } = await supabase.auth.signInWithOAuth({
+        provider: provider,
+        options:
+        {
+            redirectTo: redirectURL
+        }
     });
 
     if(error)
     {
-        console.error(error);
+        console.error("OAuth error :", error);
+    }
+}
+
+
+// ===============================
+// Email Signup
+// ===============================
+
+async function signup()
+{
+    const { data, error } = await supabase.auth.signUp({
+        email: email.value,
+        password: password.value
+    });
+
+    if(error)
+    {
+        console.error("Signup error :", error);
         return;
     }
 
     console.log("Compte créé :", data);
+
+    alert("Compte créé !");
 }
 
+
+// ===============================
+// Email Login
+// ===============================
 
 async function login()
 {
     const { data, error } = await supabase.auth.signInWithPassword({
-        email: emailInput.value,
-        password: passwordInput.value
+        email: email.value,
+        password: password.value
     });
+
+
+    if(error)
+    {
+        console.error("Login error :", error);
+        return;
+    }
+
+
+    console.log("Connexion réussie :", data);
+
+    window.location.href = redirectURL;
+}
+
+
+// ===============================
+// Logout
+// ===============================
+
+async function logout()
+{
+    const { error } = await supabase.auth.signOut();
+
+    if(error)
+    {
+        console.error("Logout error :", error);
+        return;
+    }
+
+    console.log("Déconnecté");
+
+    window.location.reload();
+}
+
+
+// ===============================
+// Session check
+// ===============================
+
+async function checkSession()
+{
+    const { data, error } = await supabase.auth.getSession();
 
     if(error)
     {
@@ -61,16 +131,39 @@ async function login()
         return;
     }
 
-    console.log("Connecté :", data);
-    window.location.href = "maps.html";
+
+    if(data.session)
+    {
+        console.log(
+            "Utilisateur connecté :",
+            data.session.user
+        );
+    }
+    else
+    {
+        console.log("Aucune session");
+    }
 }
 
 
-async function logout()
+// ===============================
+// Events
+// ===============================
+
+document
+.getElementById("github-login")
+?.addEventListener("click", () =>
 {
-    await supabase.auth.signOut();
-    console.log("Déconnecté");
-}
+    oauthLogin("github");
+});
+
+
+document
+.getElementById("discord-login")
+?.addEventListener("click", () =>
+{
+    oauthLogin("discord");
+});
 
 
 document
@@ -86,3 +179,10 @@ document
 document
 .getElementById("logout")
 ?.addEventListener("click", logout);
+
+
+// ===============================
+// Start
+// ===============================
+
+checkSession();
