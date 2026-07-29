@@ -159,8 +159,9 @@ if(markerMenu)
 // ===============================
 function createMarker(marker)
 {
-    const mapContainer = document.querySelector(".map-layer");
+    const mapContainer = document.getElementById("map-layer");
 
+    console.log("map-layer :", mapContainer);
     if(!mapContainer)
     {
         console.error("Container map introuvable");
