@@ -38,9 +38,11 @@ function createMapButtons()
     MAPS.forEach(map=>
     {
         const button=document.createElement("button");
+
         button.className="map-button";
         button.textContent=map.name;
         button.onclick=()=>loadMap(map);
+
         selector.appendChild(button);
     });
 }
@@ -48,6 +50,7 @@ function createMapButtons()
 async function loadMap(map)
 {
     currentMap=map;
+
     createElevator(map);
 
     const floor=map.floors.find(f=>f.floor===0);
@@ -56,6 +59,7 @@ async function loadMap(map)
     {
         currentFloor=floor;
         image.src=floor.image;
+
         await loadMarkers();
     }
 }
@@ -77,6 +81,7 @@ function createElevator(map)
         {
             currentFloor=floor;
             image.src=floor.image;
+
             await loadMarkers();
         };
 
@@ -120,6 +125,7 @@ document
     openMarkerMenu(x,y);
 });
 
+
 if(markerMenu)
 {
     markerMenu
@@ -141,15 +147,17 @@ if(markerMenu)
     });
 }
 
+
 async function saveMarker(type)
 {
     const {data:{user},error:userError}=await supabase.auth.getUser();
 
     if(userError||!user)
     {
-        console.error("Aucun utilisateur connecté");
+        console.error("No user connected");
         return;
     }
+
 
     const markerData=
     {
@@ -162,18 +170,22 @@ async function saveMarker(type)
         created_by:user.id
     };
 
+
     const {error}=await supabase
     .from("markers")
     .insert(markerData);
 
+
     if(error)
     {
-        console.error("Erreur création marker:",error);
+        console.error("Marker creation error:",error);
         return;
     }
 
+
     await loadMarkers();
 }
+
 
 function createMarker(marker)
 {
@@ -187,6 +199,7 @@ function createMarker(marker)
     element.style.left=marker.x+"%";
     element.style.top=marker.y+"%";
 
+
     element.innerHTML=`
     ${getMarkerIcon(marker.type)}
     <div class="marker-popup">
@@ -196,11 +209,12 @@ function createMarker(marker)
         ${
         currentUser&&currentUser.id===marker.created_by?
         `<div class="marker-actions">
-            <button class="edit-marker" data-id="${marker.id}">✏ Modifier</button>
-            <button class="delete-marker" data-id="${marker.id}">🗑 Supprimer</button>
+            <button class="edit-marker" data-id="${marker.id}">✏ Edit</button>
+            <button class="delete-marker" data-id="${marker.id}">🗑 Delete</button>
         </div>`:""
         }
     </div>`;
+
 
     element.onclick=event=>
     {
@@ -213,23 +227,28 @@ function createMarker(marker)
         element.classList.add("active");
     };
 
+
     element
     .querySelector(".delete-marker")
     ?.addEventListener("click",async event=>
     {
         event.stopPropagation();
+        event.preventDefault();
 
         await deleteMarker(marker.id);
     });
+
 
     element
     .querySelector(".edit-marker")
     ?.addEventListener("click",event=>
     {
         event.stopPropagation();
+        event.preventDefault();
 
-        console.log("Modifier marker:",marker.id);
+        console.log("Edit marker:",marker.id);
     });
+
 
     mapLayer.appendChild(element);
 }
@@ -258,24 +277,34 @@ function getMarkerIcon(type)
     }
 }
 
+
 async function deleteMarker(id)
 {
-    if(!confirm("Supprimer ce marker ?"))
+    if(!confirm("Delete this marker?"))
         return;
+
 
     const {error}=await supabase
     .from("markers")
     .delete()
     .eq("id",id);
 
+
     if(error)
     {
-        console.error("Erreur suppression:",error);
+        console.error("Delete error:",error);
         return;
     }
 
-    await loadMarkers();
+
+    document
+    .querySelector(`.map-marker[data-id="${id}"]`)
+    ?.remove();
+
+
+    console.log("Marker deleted:",id);
 }
+
 
 async function loadMarkers()
 {
@@ -283,19 +312,23 @@ async function loadMarkers()
     .querySelectorAll(".map-marker")
     .forEach(marker=>marker.remove());
 
+
     if(!currentFloor)
         return;
+
 
     const {data,error}=await supabase
     .from("markers")
     .select("*")
     .eq("floor_id",currentFloor.id);
 
+
     if(error)
     {
-        console.error("Erreur chargement:",error);
+        console.error("Load markers error:",error);
         return;
     }
+
 
     data.forEach(marker=>createMarker(marker));
 }
@@ -312,7 +345,7 @@ async function getCurrentUser()
     currentUser=data.session?.user??null;
 
     console.log(
-        "Utilisateur actuel:",
+        "Current user:",
         currentUser
     );
 }
@@ -329,12 +362,17 @@ document.addEventListener("DOMContentLoaded",async()=>
     MAPS=await getMaps();
 
     console.log(
-        "Maps chargées:",
+        "Maps loaded:",
         MAPS
     );
 
+
     if(MAPS.length===0)
+    {
+        console.warn("No maps found");
         return;
+    }
+
 
     createMapButtons();
 
