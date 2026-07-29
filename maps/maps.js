@@ -246,27 +246,36 @@ function createMarker(marker)
     });
 
    element
-   .querySelector(".edit-marker")
-   ?.addEventListener("click",async event=>
-   {
-       event.stopPropagation();
-       event.preventDefault();
-       const description=prompt("Edit description:",marker.description??"");
-       openActionModal("Edit marker",`<textarea id="edit-description">${marker.description??""}</textarea>`,async()=>
-       {
-           const description=
-           document.getElementById("edit-description").value;
+.querySelector(".edit-marker")
+?.addEventListener("click",event=>
+{
+    event.stopPropagation();
+    event.preventDefault();
 
-           await supabase
-           .from("markers")
-           .update(
-           {
-              description:description
-           })
-           .eq("id",marker.id);
-           await loadMarkers();
-       });
-   });
+    openActionModal(
+    "Edit marker",
+    `<textarea id="edit-description">${marker.description??""}</textarea>`,
+    async()=>
+    {
+        const description=
+        document.getElementById("edit-description").value;
+
+        const {error}=await supabase
+        .from("markers")
+        .update({
+            description:description
+        })
+        .eq("id",marker.id);
+
+        if(error)
+        {
+            console.error("Edit error:",error);
+            return;
+        }
+
+        await loadMarkers();
+    });
+});
    mapLayer.appendChild(element);
 }
    
@@ -298,42 +307,27 @@ function getMarkerIcon(type)
 async function deleteMarker(id)
 {
     openActionModal(
-   "Delete marker?",
-   "Are you sure you want to delete this marker?",
-   async()=>
-   {
-       const {error}=await supabase
-       .from("markers")
-       .delete()
-       .eq("id",id);
-       if(error)
-       {
-           console.error("Delete error:",error);
-           return;
-       }
-       document
-       .querySelector(`.map-marker[data-id="${id}"]`)
-       ?.remove();
-   });
-
-    const {error}=await supabase
-    .from("markers")
-    .delete()
-    .eq("id",id);
-
-    if(error)
+    "Delete marker?",
+    "Are you sure you want to delete this marker?",
+    async()=>
     {
-        console.error("Delete error:",error);
-        return;
-    }
+        const {error}=await supabase
+        .from("markers")
+        .delete()
+        .eq("id",id);
 
+        if(error)
+        {
+            console.error("Delete error:",error);
+            return;
+        }
 
-    document
-    .querySelector(`.map-marker[data-id="${id}"]`)
-    ?.remove();
+        document
+        .querySelector(`.map-marker[data-id="${id}"]`)
+        ?.remove();
 
-
-    console.log("Marker deleted:",id);
+        console.log("Marker deleted:",id);
+    });
 }
 
 
