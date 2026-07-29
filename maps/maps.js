@@ -13,6 +13,10 @@
 import { getMaps } from "../js/mapsloader.js";
 import { supabase } from "../js/supabase.js";
 
+supabase.auth.getSession().then(({ data }) => {
+    console.log("Session actuelle :", data.session);
+});
+
 const mapLayer = document.getElementById("map-layer");
 const selector = document.getElementById("map-selector");
 const image = document.getElementById("map-image");
