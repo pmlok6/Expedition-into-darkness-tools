@@ -49,13 +49,14 @@ function createMapButtons()
 
 function loadMap(map)
 {
-    currentFloor = defaultFloor;
+    
     currentMap = map;
     createElevator(map);
     // Affichage du niveau 0 par défaut
     const defaultFloor =map.floors.find(floor => floor.floor === 0);
     if(defaultFloor)
     {
+        currentFloor = defaultFloor;
         image.src = defaultFloor.image;
     }
 }
