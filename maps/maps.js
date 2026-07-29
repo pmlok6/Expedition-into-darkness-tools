@@ -150,11 +150,11 @@ async function saveMarker(type)
             .from("markers")
             .insert(
             {
-                map_id: currentMap.id,
                 floor_id: currentFloor.id,
                 x: pendingMarker.x,
                 y: pendingMarker.y,
-                type: type
+                type: type,
+                title:type
             })
             .select();
 
