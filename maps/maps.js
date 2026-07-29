@@ -113,10 +113,12 @@ document
 .addEventListener("click",event=>
 {
     if(event.target.closest(".map-marker"))
-        return;
-
+    return;
+   document
+   .querySelectorAll(".map-marker")
+   .forEach(m=>m.classList.remove("active"));
+   markerMenu.classList.add("hidden");
     const rect=mapLayer.getBoundingClientRect();
-
     const x=((event.clientX-rect.left)/rect.width)*100;
     const y=((event.clientY-rect.top)/rect.height)*100;
 
@@ -179,9 +181,13 @@ function createMarker(marker)
     element.style.top=marker.y+"%";
 
     element.onclick=event=>
-    {
-        event.stopPropagation();
-    };
+   {
+       event.stopPropagation();
+       document
+       .querySelectorAll(".map-marker")
+       .forEach(m=>m.classList.remove("active"));
+       element.classList.add("active");
+   };
 
     element.innerHTML=
 `
