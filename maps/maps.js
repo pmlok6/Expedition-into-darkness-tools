@@ -15,6 +15,11 @@
 import {getMaps} from "../js/mapsloader.js";
 import {supabase} from "../js/supabase.js";
 
+const actionModal=document.getElementById("action-modal");
+const actionTitle=document.getElementById("action-title");
+const actionContent=document.getElementById("action-content");
+const actionConfirm=document.getElementById("action-confirm");
+const actionCancel=document.getElementById("action-cancel");
 const mapLayer=document.getElementById("map-layer");
 const selector=document.getElementById("map-selector");
 const image=document.getElementById("map-image");
@@ -293,15 +298,29 @@ function getMarkerIcon(type)
 
 async function deleteMarker(id)
 {
-    if(!confirm("Delete this marker?"))
-        return;
-
+    openActionModal(
+   "Delete marker?",
+   "Are you sure you want to delete this marker?",
+   async()=>
+   {
+       const {error}=await supabase
+       .from("markers")
+       .delete()
+       .eq("id",id);
+       if(error)
+       {
+           console.error("Delete error:",error);
+           return;
+       }
+       document
+       .querySelector(`.map-marker[data-id="${id}"]`)
+       ?.remove();
+   });
 
     const {error}=await supabase
     .from("markers")
     .delete()
     .eq("id",id);
-
 
     if(error)
     {
@@ -363,7 +382,26 @@ async function getCurrentUser()
     );
 }
 
+function openActionModal(title,content,callback)
+{
+    actionTitle.textContent=title;
+    actionContent.innerHTML=content;
 
+    actionModal.classList.remove("hidden");
+
+
+    actionConfirm.onclick=async()=>
+    {
+        await callback();
+        actionModal.classList.add("hidden");
+    };
+
+
+    actionCancel.onclick=()=>
+    {
+        actionModal.classList.add("hidden");
+    };
+}
 // ===============================
 // Start
 // ===============================
