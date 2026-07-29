@@ -189,8 +189,8 @@ function openMarkerMenu(x,y)
         y:y
     };
 
-    markerMenu.style.left=x+"%";
-    markerMenu.style.top=y+"%";
+    markerMenu.style.left=`${x}%`;
+    markerMenu.style.top=`${y}%`;
 
     markerMenu.classList.remove("hidden");
 }
