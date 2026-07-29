@@ -333,7 +333,20 @@
     margin:8px 0;
     cursor:pointer;
 }
+#map-legend label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
 
+#map-legend label span{
+    margin-left:auto;
+}
+
+#map-legend label img{
+    width:20px;
+    height:20px;
+}
 
 /* Responsive */
 
