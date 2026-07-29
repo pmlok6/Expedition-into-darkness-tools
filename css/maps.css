@@ -246,6 +246,16 @@
     opacity:.7;
     font-size:12px;
 }
+
+.map-marker .marker-popup
+{
+    display:none;
+}
+
+.map-marker.active .marker-popup
+{
+    display:block;
+}
 /* =========================================
    Marker Menu
 ========================================= */
