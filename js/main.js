@@ -62,6 +62,24 @@ document
 
     window.location.reload();
 });
+// ===============================
+// Save return page
+// ===============================
+
+document
+.querySelectorAll('a[href*="login.html"]')
+.forEach(link =>
+{
+    link.addEventListener("click", () =>
+    {
+        sessionStorage.setItem(
+            "redirectAfterLogin",
+            window.location.href
+        );
+    });
+});
+
+
 
 
 // ===============================
