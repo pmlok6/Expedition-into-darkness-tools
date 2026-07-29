@@ -798,15 +798,9 @@ async function getCurrentUser()
     const {data,error}=await supabase
     .auth
     .getSession();
-
-
     if(error)
     {
-        console.error(
-            "Session error:",
-            error
-        );
-
+        console.error("Session error:",error);
         currentUser=null;
     }
     else
@@ -814,18 +808,26 @@ async function getCurrentUser()
         currentUser=
         data.session?.user??null;
     }
-
-
-    console.log(
-        "Current user:",
-        currentUser
-    );
-
-
+    console.log("Current user:",currentUser);
     if(legend)
     {
         createLegend();
     }
+}
+function listenAuthChanges()
+{
+    supabase.auth.onAuthStateChange(
+    async(_,session)=>
+    {
+        currentUser=session?.user??null;
+
+        if(!currentUser)
+            communityReview=false;
+
+        createLegend();
+
+        await loadMarkers();
+    });
 }
 
 function openActionModal(title,content,callback)
@@ -864,36 +866,17 @@ function openActionModal(title,content,callback)
 // ===============================
 // Start
 // ===============================
-
 document.addEventListener("DOMContentLoaded",async()=>
 {
     await getCurrentUser();
-
-
+    listenAuthChanges();
     createLegend();
-
-
     MAPS=await getMaps();
-
-
-    console.log(
-        "Maps loaded:",
-        MAPS
-    );
-
-
     if(MAPS.length===0)
     {
-        console.warn(
-            "No maps found"
-        );
-
+        console.warn("No maps found");
         return;
-    }
-
-
+    }   
     createMapButtons();
-
-
     await loadMap(MAPS[0]);
 });
