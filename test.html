@@ -9,37 +9,9 @@
 Loading...
 </pre>
 
-
-<script type="module">
-
-import {invoke}
-from "./js/wiki-api.js";
-
-
-async function test()
-{
-
-    const data =
-        await invoke(
-            "ArmorCalculatorData",
-            "items"
-        );
-
-
-    document
-    .getElementById("output")
-    .textContent =
-    JSON.stringify(
-        data,
-        null,
-        2
-    );
-
-}
-
-
-test();
-
+<script 
+type="module"
+src="../js/test-supabase.js">
 </script>
 
 
