@@ -16,9 +16,7 @@
 .maps-page main p{
     margin-bottom:30px;
 }
-
 /* Selector */
-
 #map-selector{
     display:flex;
     justify-content:center;
@@ -49,18 +47,14 @@
     color:#fff;
     border-color:#b54040;
 }
-
 /* Layout */
-
 .maps-layout{
     display:grid;
     grid-template-columns:90px 1fr;
     gap:25px;
     align-items:start;
 }
-
 /* Elevator */
-
 #map-elevator{
     display:flex;
     flex-direction:column;
@@ -333,17 +327,14 @@
 #map-legend input{
     cursor:pointer;
 }
-
-
 /* =========================================
    Pending markers
 ========================================= */
-.map-marker.pending > img,
-.map-marker.pending:not(:has(.marker-popup)){
+.map-marker.pending .marker-icon
+{
     opacity:.55;
     filter:grayscale(.6);
 }
-
 
 .marker-status{
     margin-top:8px;
