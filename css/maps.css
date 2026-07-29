@@ -187,6 +187,36 @@
     margin-top:10px;
 }
 
+.marker-votes{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-top:10px;
+}
+
+.marker-votes button{
+    padding:4px 10px;
+    border:1px solid #555;
+    border-radius:6px;
+    background:#333;
+    color:#ddd;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.marker-votes button:hover{
+    background:#444;
+}
+
+.vote-up.active{
+    background:#2d6a2d;
+    border-color:#4caf50;
+}
+
+.vote-down.active{
+    background:#7a2424;
+    border-color:#d9534f;
+}
 /* Action Modal */
 
 #action-modal{
