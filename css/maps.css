@@ -85,6 +85,8 @@
 }
 
 .floor-button.active{
+    background:#8b2b2b;
+    color:#fff;
     box-shadow:0 0 10px rgba(255,80,80,.5);
 }
 
@@ -151,16 +153,17 @@
     border-radius:8px;
     font-size:14px;
     text-align:center;
-    opacity:0;
-    pointer-events:none;
-    transition:.15s;
+    display:none;
     z-index:50;
 }
 
-.map-marker.active .marker-popup,
-.map-marker:hover .marker-popup{
+.map-marker.active .marker-popup{
     display:block;
-    opacity:1;
+}
+
+.marker-popup button{
+    cursor:pointer;
+    margin:5px;
 }
 
 .marker-title{
@@ -178,6 +181,10 @@
     margin-top:8px;
     opacity:.7;
     font-size:12px;
+}
+
+.marker-actions{
+    margin-top:10px;
 }
 
 /* Marker Menu */
