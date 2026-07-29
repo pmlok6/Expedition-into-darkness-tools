@@ -384,8 +384,7 @@ function createMarker(marker)
 
 
     element.innerHTML=`
-    ${getMarkerIcon(marker.type)}
-
+    <div class="marker-icon">${getMarkerIcon(marker.type)}</div>
     <div class="marker-popup">
 
         <div class="marker-title">
