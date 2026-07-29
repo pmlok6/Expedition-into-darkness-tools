@@ -209,31 +209,120 @@ async function saveMarker(type)
 
 function createMarker(marker)
 {
+    const upVotes=marker.marker_votes?.filter(v=>v.vote).length??0;
+    const downVotes=marker.marker_votes?.filter(v=>!v.vote).length??0;
+
+    const userVote=marker.marker_votes?.find(v=>
+        currentUser&&v.user_id===currentUser.id
+    );
+
     const element=document.createElement("div");
 
     element.className="map-marker";
-
     element.dataset.id=marker.id;
     element.dataset.type=marker.type;
 
     element.style.left=marker.x+"%";
     element.style.top=marker.y+"%";
 
-
     element.innerHTML=`
     ${getMarkerIcon(marker.type)}
     <div class="marker-popup">
         <div class="marker-title">${marker.title}</div>
-        <div class="marker-description">${marker.description??"No description"}</div>
-        <div class="marker-floor">Floor ${currentFloor.floor}</div>
+
+        <div class="marker-description">
+            ${marker.description??"No description"}
+        </div>
+
+        <div class="marker-floor">
+            Floor ${currentFloor.floor}
+        </div>
+
+        <div class="marker-votes">
+            <button class="vote-up ${userVote?.vote===true?"active":""}">
+                👍 ${upVotes}
+            </button>
+
+            <button class="vote-down ${userVote?.vote===false?"active":""}">
+                👎 ${downVotes}
+            </button>
+        </div>
+
         ${
         currentUser&&currentUser.id===marker.created_by?
         `<div class="marker-actions">
-            <button class="edit-marker" data-id="${marker.id}">✏ Edit</button>
-            <button class="delete-marker" data-id="${marker.id}">🗑 Delete</button>
-        </div>`:""
+            <button class="edit-marker">✏ Edit</button>
+            <button class="delete-marker">🗑 Delete</button>
+        </div>`
+        :""
         }
     </div>`;
+
+    element.onclick=event=>
+    {
+        event.stopPropagation();
+
+        document
+        .querySelectorAll(".map-marker")
+        .forEach(marker=>marker.classList.remove("active"));
+
+        markerMenu.classList.add("hidden");
+
+        element.classList.add("active");
+    };
+
+    element
+    .querySelector(".vote-up")
+    ?.addEventListener("click",async event=>
+    {
+        event.stopPropagation();
+        event.preventDefault();
+
+        await voteMarker(marker.id,true);
+    });
+
+    element
+    .querySelector(".vote-down")
+    ?.addEventListener("click",async event=>
+    {
+        event.stopPropagation();
+        event.preventDefault();
+
+        await voteMarker(marker.id,false);
+    });
+
+    element
+    .querySelector(".edit-marker")
+    ?.addEventListener("click",event=>
+    {
+        event.stopPropagation();
+        event.preventDefault();
+
+        openActionModal(
+        "Edit marker",
+        `<textarea id="edit-description">${marker.description??""}</textarea>`,
+        async()=>
+        {
+            const description=document
+            .getElementById("edit-description")
+            .value;
+
+            const {error}=await supabase
+            .from("markers")
+            .update({
+                description:description
+            })
+            .eq("id",marker.id);
+
+            if(error)
+            {
+                console.error("Edit error:",error);
+                return;
+            }
+
+            await loadMarkers();
+        });
+    });
 
     element
     .querySelector(".delete-marker")
@@ -245,38 +334,7 @@ function createMarker(marker)
         await deleteMarker(marker.id);
     });
 
-   element
-.querySelector(".edit-marker")
-?.addEventListener("click",event=>
-{
-    event.stopPropagation();
-    event.preventDefault();
-
-    openActionModal(
-    "Edit marker",
-    `<textarea id="edit-description">${marker.description??""}</textarea>`,
-    async()=>
-    {
-        const description=
-        document.getElementById("edit-description").value;
-
-        const {error}=await supabase
-        .from("markers")
-        .update({
-            description:description
-        })
-        .eq("id",marker.id);
-
-        if(error)
-        {
-            console.error("Edit error:",error);
-            return;
-        }
-
-        await loadMarkers();
-    });
-});
-   mapLayer.appendChild(element);
+    mapLayer.appendChild(element);
 }
    
 function getMarkerIcon(type)
@@ -302,7 +360,36 @@ function getMarkerIcon(type)
             return "📍";
     }
 }
+async function voteMarker(markerId,vote)
+{
+    const {data:{user}}=await supabase.auth.getUser();
 
+    if(!user)
+    {
+        console.error("No user connected");
+        return;
+    }
+
+    const {error}=await supabase
+    .from("marker_votes")
+    .upsert(
+    {
+        marker_id:markerId,
+        user_id:user.id,
+        vote:vote
+    },
+    {
+        onConflict:"marker_id,user_id"
+    });
+
+    if(error)
+    {
+        console.error("Vote error:",error);
+        return;
+    }
+
+    await loadMarkers();
+}
 
 async function deleteMarker(id)
 {
@@ -337,23 +424,22 @@ async function loadMarkers()
     .querySelectorAll(".map-marker")
     .forEach(marker=>marker.remove());
 
-
     if(!currentFloor)
         return;
 
-
     const {data,error}=await supabase
     .from("markers")
-    .select("*")
+    .select(`
+        *,
+        marker_votes(vote,user_id)
+    `)
     .eq("floor_id",currentFloor.id);
-
 
     if(error)
     {
         console.error("Load markers error:",error);
         return;
     }
-
 
     data.forEach(marker=>createMarker(marker));
 }
