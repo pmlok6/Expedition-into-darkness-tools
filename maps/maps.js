@@ -107,8 +107,6 @@ function openMarkerMenu(x,y)
     markerMenu.style.left=x+"%";
     markerMenu.style.top=y+"%";
 
-    markerMenu.style.transform="translate(-50%,-50%)";
-
     markerMenu.classList.remove("hidden");
 }
 
