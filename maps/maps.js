@@ -362,9 +362,9 @@ function getMarkerIcon(type)
 }
 async function voteMarker(markerId,vote)
 {
-    const {data:{user}}=await supabase.auth.getUser();
+    const {data:{user},error:userError}=await supabase.auth.getUser();
 
-    if(!user)
+    if(userError||!user)
     {
         console.error("No user connected");
         return;
