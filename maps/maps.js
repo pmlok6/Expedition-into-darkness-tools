@@ -134,64 +134,39 @@ function createElevator(map)
 }
 
 // ===============================
-// click click
+// marker
 // ===============================
-function addTestMarker(x,y)
+let pendingMarker = null;
+const markerMenu =document.getElementById("marker-menu");
+
+function openMarkerMenu(x,y)
 {
-
-    const marker =
-        document.createElement("div");
-
-
-    marker.className = "map-marker";
-
-
-    marker.style.left = x + "%";
-    marker.style.top = y + "%";
-
-
-    mapLayer.appendChild(marker);
-
+    pendingMarker ={x:x,y:y};
+    markerMenu.style.left = x + "%";
+    markerMenu.style.top = y + "%";
+    markerMenu.classList.remove( "hidden"  );
 }
 
-mapLayer.addEventListener(
-"click",
-(event)=>
+mapLayer.addEventListener("click",(event)=>
 {
-
-    const rect =
-        mapLayer.getBoundingClientRect();
-
-
-    const x =
-        ((event.clientX - rect.left)
-        / rect.width)
-        * 100;
-
-
-    const y =
-        ((event.clientY - rect.top)
-        / rect.height)
-        * 100;
-
-
-
-    console.log(
-        "Position:",
-        x.toFixed(2),
-        "%",
-        y.toFixed(2),
-        "%"
-    );
-
-
-    addTestMarker(
-        x,
-        y
-    );
-
+    const rect = mapLayer.getBoundingClientRect();
+    const x =((event.clientX - rect.left) / rect.width) * 100;
+    const y =((event.clientY - rect.top) / rect.height) * 100;
+    console.log("Position:",x.toFixed(2),"%",y.toFixed(2),"%");
+    openMarkerMenu(x,y);
 });
 
+if(markerMenu)
+{
+   markerMenu.querySelectorAll("button").forEach(button =>
+   {
+       button.onclick = () =>
+       {
+           console.log("Création marker:",pendingMarker,button.dataset.type);
+           markerMenu.classList.add("hidden");
+       };
+   });
+}
 // ===============================
 // Initialisation
 // ===============================
