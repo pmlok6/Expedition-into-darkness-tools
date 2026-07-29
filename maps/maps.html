@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Maps</title>
@@ -11,49 +12,104 @@
 
 <body class="maps-page">
 
-    <nav id="main-navigation"></nav>
+<nav id="main-navigation"></nav>
 
-    <main>
-        <h1>Maps</h1>
-        <p>Browse every map and switch instantly between floors using the elevator.</p>
-        <div id="map-selector"></div>
-        <div class="maps-layout">
+<main>
 
-    <aside id="map-elevator"></aside>
+    <h1>Maps</h1>
 
-    <section class="map-viewer">
-        <div id="map-container">
-            <img id="map-image" src="" alt="Map">
-            <div id="map-layer"></div>
+    <p>
+        Browse every map and switch instantly between floors using the elevator.
+    </p>
+
+
+    <div id="map-selector"></div>
+
+
+    <div class="maps-layout">
+
+        <!-- Elevator -->
+        <aside id="map-elevator"></aside>
+
+
+        <!-- Map Viewer -->
+        <section class="map-viewer">
+
+            <div id="map-container">
+
+                <img id="map-image" src="" alt="Map">
+
+                <div id="map-layer"></div>
+
+
+                <!-- Marker Creation Menu -->
+                <div id="marker-menu" class="hidden">
+
+                    <input
+                        id="marker-description"
+                        type="text"
+                        placeholder="Add a description..."
+                    >
+
+                    <button data-type="chest">
+                        Chest
+                    </button>
+
+                    <button data-type="monster">
+                        Monster
+                    </button>
+
+                    <button data-type="resource">
+                        Resource
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Legend -->
+        <aside id="map-legend"></aside>
+
+    </div>
+
+
+</main>
+
+
+<!-- Action Modal -->
+
+<div id="action-modal" class="hidden">
+
+    <div class="action-box">
+
+        <div id="action-title"></div>
+
+        <div id="action-content"></div>
+
+
+        <div class="action-buttons">
+
+            <button id="action-cancel">
+                Cancel
+            </button>
+
+            <button id="action-confirm">
+                Confirm
+            </button>
+
         </div>
-    </section>
 
-    <aside id="map-legend"></aside>
+    </div>
 
 </div>
-        <div id="map-container"><img id="map-image" src="" alt="Map">
-            <div id="map-layer"></div>
 
-            <div id="marker-menu" class="hidden">
-                <input id="marker-description" type="text" placeholder="Ajouter une légende...">
-                <button data-type="chest">Coffre</button>
-                <button data-type="monster">Monstre</button>
-                <button data-type="resource">Ressource</button>
-            </div>
-        </div>
-    </main>
-    <div id="action-modal" class="hidden">
-        <div class="action-box">
-            <div id="action-title"></div>
-            <div id="action-content"></div>
-            <div class="action-buttons">
-                <button id="action-cancel">Cancel</button>
-                <button id="action-confirm">Confirm</button>
-            </div>
-        </div>
-    </div>
-    <script type="module" src="../js/main.js"></script>
-    <script type="module" src="maps.js"></script>
+
+<script type="module" src="../js/main.js"></script>
+<script type="module" src="maps.js"></script>
 
 </body>
+
 </html>
