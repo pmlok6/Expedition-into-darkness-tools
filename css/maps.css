@@ -296,12 +296,12 @@
 
 #marker-menu{
     position:absolute;
-    transform:translate(-10%,-50%);
     background:#222;
     padding:10px;
     border-radius:8px;
     border:1px solid #555;
     z-index:300;
+    transform:translate(-50%,-120%);
 }
 
 #marker-menu.hidden{
