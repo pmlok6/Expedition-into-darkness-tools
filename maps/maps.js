@@ -20,12 +20,14 @@ const actionTitle=document.getElementById("action-title");
 const actionContent=document.getElementById("action-content");
 const actionConfirm=document.getElementById("action-confirm");
 const actionCancel=document.getElementById("action-cancel");
+
 const mapLayer=document.getElementById("map-layer");
 const selector=document.getElementById("map-selector");
 const image=document.getElementById("map-image");
 const elevator=document.getElementById("map-elevator");
 const markerMenu=document.getElementById("marker-menu");
 const legend=document.getElementById("map-legend");
+
 
 let MAPS=[];
 let currentMap=null;
@@ -42,7 +44,6 @@ let filters={
     elevator:true,
     npc:true
 };
-
 // ===============================
 // Map functions
 // ===============================
