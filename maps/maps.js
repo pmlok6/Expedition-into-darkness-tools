@@ -215,16 +215,13 @@ async function saveMarker(type)
 
 function createMarker(marker)
 {
-    const upVotes=marker.marker_votes?.filter(v=>v.vote).length??0;
-    const downVotes=marker.marker_votes?.filter(v=>!v.vote).length??0;
-
-    const userVote=marker.marker_votes?.find(v=>
-        currentUser&&v.user_id===currentUser.id
-    );
+    const upVotes=marker.up_votes??0;
+    const downVotes=marker.down_votes??0;
 
     const element=document.createElement("div");
 
     element.className="map-marker";
+
     element.dataset.id=marker.id;
     element.dataset.type=marker.type;
 
@@ -233,8 +230,20 @@ function createMarker(marker)
 
     element.innerHTML=`
     ${getMarkerIcon(marker.type)}
+
     <div class="marker-popup">
-        <div class="marker-title">${marker.title}</div>
+
+        <div class="marker-title">
+            ${marker.title}
+        </div>
+
+        <div class="marker-status">
+            ${
+            marker.approved
+            ?"✅ Verified"
+            :"⏳ Pending"
+            }
+        </div>
 
         <div class="marker-description">
             ${marker.description??"No description"}
@@ -245,11 +254,11 @@ function createMarker(marker)
         </div>
 
         <div class="marker-votes">
-            <button class="vote-up ${userVote?.vote===true?"active":""}">
+            <button class="vote-up">
                 👍 ${upVotes}
             </button>
 
-            <button class="vote-down ${userVote?.vote===false?"active":""}">
+            <button class="vote-down">
                 👎 ${downVotes}
             </button>
         </div>
@@ -257,11 +266,17 @@ function createMarker(marker)
         ${
         currentUser&&currentUser.id===marker.created_by?
         `<div class="marker-actions">
-            <button class="edit-marker">✏ Edit</button>
-            <button class="delete-marker">🗑 Delete</button>
+            <button class="edit-marker">
+                ✏ Edit
+            </button>
+
+            <button class="delete-marker">
+                🗑 Delete
+            </button>
         </div>`
         :""
         }
+
     </div>`;
 
     element.onclick=event=>
@@ -270,12 +285,15 @@ function createMarker(marker)
 
         document
         .querySelectorAll(".map-marker")
-        .forEach(marker=>marker.classList.remove("active"));
+        .forEach(marker=>
+            marker.classList.remove("active")
+        );
 
         markerMenu.classList.add("hidden");
 
         element.classList.add("active");
     };
+
 
     element
     .querySelector(".vote-up")
@@ -287,6 +305,7 @@ function createMarker(marker)
         await voteMarker(marker.id,true);
     });
 
+
     element
     .querySelector(".vote-down")
     ?.addEventListener("click",async event=>
@@ -296,6 +315,7 @@ function createMarker(marker)
 
         await voteMarker(marker.id,false);
     });
+
 
     element
     .querySelector(".edit-marker")
@@ -313,6 +333,7 @@ function createMarker(marker)
             .getElementById("edit-description")
             .value;
 
+
             const {error}=await supabase
             .from("markers")
             .update({
@@ -320,15 +341,18 @@ function createMarker(marker)
             })
             .eq("id",marker.id);
 
+
             if(error)
             {
                 console.error("Edit error:",error);
                 return;
             }
 
+
             await loadMarkers();
         });
     });
+
 
     element
     .querySelector(".delete-marker")
@@ -340,9 +364,9 @@ function createMarker(marker)
         await deleteMarker(marker.id);
     });
 
+
     mapLayer.appendChild(element);
-}
-   
+}   
 function getMarkerIcon(type)
 {
     switch(type)
