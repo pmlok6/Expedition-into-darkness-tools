@@ -615,10 +615,8 @@ async function voteMarker(markerId,vote)
     const {data:{user},error:userError}=await supabase.auth.getUser();
 
     if(userError||!user)
-    {
-        console.error("No user connected");
         return;
-    }
+
 
     const {data:existingVote,error:voteError}=await supabase
     .from("marker_votes")
@@ -627,55 +625,75 @@ async function voteMarker(markerId,vote)
     .eq("user_id",user.id)
     .maybeSingle();
 
+
     if(voteError)
     {
         console.error("Vote check error:",voteError);
         return;
     }
 
+
     let error;
+
 
     if(existingVote)
     {
         if(existingVote.vote===vote)
         {
-            const result=await supabase
+            error=(await supabase
             .from("marker_votes")
             .delete()
-            .eq("id",existingVote.id);
-
-            error=result.error;
+            .eq("id",existingVote.id)).error;
         }
         else
         {
-            const result=await supabase
+            error=(await supabase
             .from("marker_votes")
-            .update({
-                vote:vote
-            })
-            .eq("id",existingVote.id);
-
-            error=result.error;
+            .update({vote:vote})
+            .eq("id",existingVote.id)).error;
         }
     }
     else
     {
-        const result=await supabase
+        error=(await supabase
         .from("marker_votes")
         .insert({
             marker_id:markerId,
             user_id:user.id,
             vote:vote
-        });
-
-        error=result.error;
+        })).error;
     }
+
 
     if(error)
     {
         console.error("Vote error:",error);
         return;
     }
+
+
+    const {data:votes}=await supabase
+    .from("marker_votes")
+    .select("vote")
+    .eq("marker_id",markerId);
+
+
+    const score=votes.reduce(
+        (total,item)=>total+item.vote,
+        0
+    );
+
+
+    if(score>=5)
+    {
+        await supabase
+        .from("markers")
+        .update({
+            approved:true
+        })
+        .eq("id",markerId);
+    }
+
 
     await loadMarkers();
 }
