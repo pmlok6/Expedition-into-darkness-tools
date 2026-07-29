@@ -2,223 +2,98 @@
    Main JS
 
    Features:
+   - Navigation
    - Auth state
-   - User display
-   - Logout
-   - Save page before login
 ========================================== */
 
 import { supabase } from "./supabase.js";
 
-// ===============================
-// Navigation
-// ===============================
 
+// ===============================
+// navigation
+// ===============================
 function loadNavigation()
 {
-    const nav =
-    document.getElementById(
-        "main-navigation"
-    );
-
+    const nav=document.getElementById("main-navigation");
 
     if(!nav)
         return;
 
+    const root=
+    location.pathname.includes("/maps/")||
+    location.pathname.includes("/skills/")||
+    location.pathname.includes("/leveling/")||
+    location.pathname.includes("/calculators/")
+    ?
+    "../"
+    :
+    "./";
 
-    nav.innerHTML = `
 
-        <a href="/Expedition-into-darkness-tools/">
-            🏠 Home
-        </a>
+    nav.innerHTML=
+`
+<div class="navigation-container">
 
-        <a href="/Expedition-into-darkness-tools/maps/maps.html">
-            🗺 Maps
-        </a>
+<a class="navigation-logo" href="${root}index.html">
+<img src="${root}assets/Site-logo.png">
+</a>
 
-        <a href="/Expedition-into-darkness-tools/skills/skills.html">
-            🌳 Skills
-        </a>
+<div class="navigation-links">
 
-        <a href="/Expedition-into-darkness-tools/leveling/leveling.html">
-            📈 Leveling
-        </a>
+<a class="navigation-button" href="${root}maps/maps.html">
+🗺 Maps
+</a>
 
-    `;
+<a class="navigation-button" href="${root}skills/skills.html">
+🌳 Skill Tree
+</a>
+
+<a class="navigation-button" href="${root}leveling/leveling.html">
+📈 Leveling
+</a>
+
+<a class="navigation-button" href="${root}calculators/armor.html">
+🛡 Armor
+</a>
+
+<a class="navigation-button" href="${root}calculators/weapon.html">
+⚔ Weapon
+</a>
+
+<a class="navigation-button" href="${root}login.html">
+🔑 Login
+</a>
+
+</div>
+
+</div>
+`;
 }
-// ===============================
-// Check user
-// ===============================
 
+
+// ===============================
+// auth
+// ===============================
 async function checkUser()
 {
-    const { data, error } =
-    await supabase.auth.getSession();
+    const {data}=await supabase.auth.getSession();
 
+    const user=data.session?.user??null;
 
-    if(error)
-    {
-        console.error(
-            "Session error :",
-            error
-        );
-        return;
-    }
-
-
-    const user =
-    data.session?.user;
-
-
-    const loginButton =
-    document.getElementById(
-        "login-button"
+    console.log(
+        user?
+        "Utilisateur connecté :":
+        "Aucun utilisateur",
+        user
     );
-
-
-    const logoutButton =
-    document.getElementById(
-        "logout-button"
-    );
-
-
-    const userInfo =
-    document.getElementById(
-        "user-info"
-    );
-
-
-
-    if(user)
-    {
-        console.log(
-            "Utilisateur connecté :",
-            user
-        );
-
-
-        if(userInfo)
-        {
-            userInfo.textContent =
-            user.user_metadata?.user_name ??
-            user.email ??
-            "Utilisateur";
-        }
-
-
-        loginButton
-        ?.classList
-        .add("hidden");
-
-
-        logoutButton
-        ?.classList
-        .remove("hidden");
-    }
-    else
-    {
-        console.log(
-            "Aucun utilisateur"
-        );
-
-
-        loginButton
-        ?.classList
-        .remove("hidden");
-
-
-        logoutButton
-        ?.classList
-        .add("hidden");
-
-
-        if(userInfo)
-        {
-            userInfo.textContent = "";
-        }
-    }
 }
 
 
-
 // ===============================
-// Logout
+// start
 // ===============================
-
-document
-.getElementById("logout-button")
-?.addEventListener(
-"click",
-async () =>
+document.addEventListener("DOMContentLoaded",()=>
 {
-    const { error } =
-    await supabase.auth.signOut();
-
-
-    if(error)
-    {
-        console.error(
-            "Logout error :",
-            error
-        );
-
-        return;
-    }
-
-
-    window.location.reload();
+    loadNavigation();
+    checkUser();
 });
-
-
-
-// ===============================
-// Save current page
-// before login
-// ===============================
-
-document
-.querySelectorAll(
-    'a[href*="login.html"]'
-)
-.forEach(link =>
-{
-    link.addEventListener(
-        "click",
-        () =>
-        {
-            sessionStorage.setItem(
-                "redirectAfterLogin",
-                window.location.href
-            );
-        }
-    );
-});
-
-
-
-// ===============================
-// Auth changes
-// ===============================
-
-supabase.auth.onAuthStateChange(
-(event, session) =>
-{
-    if(event === "SIGNED_IN")
-    {
-        checkUser();
-    }
-
-
-    if(event === "SIGNED_OUT")
-    {
-        checkUser();
-    }
-});
-
-
-
-// ===============================
-// Start
-// ===============================
-loadNavigation();
-checkUser();
