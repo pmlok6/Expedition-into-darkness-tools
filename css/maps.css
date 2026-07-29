@@ -288,6 +288,7 @@
     border-radius:8px;
     border:1px solid #555;
     z-index:20;
+    transform:translate(-50%,-50%);
 }
 
 #marker-menu.hidden{
