@@ -7,16 +7,10 @@
    - Email signup/login
    - Logout
    - Session check
+   - Redirect after login
 ========================================== */
 
 import { supabase } from "./supabase.js";
-
-
-// ===============================
-// Config
-// ===============================
-
-const redirectURL = window.location.href;
 
 
 // ===============================
@@ -33,6 +27,7 @@ const password = document.getElementById("password");
 
 async function oauthLogin(provider)
 {
+    // Sauvegarde de la page actuelle
     sessionStorage.setItem(
         "redirectAfterLogin",
         window.location.href
@@ -40,7 +35,11 @@ async function oauthLogin(provider)
 
 
     const { error } = await supabase.auth.signInWithOAuth({
-        provider: provider
+        provider: provider,
+        options:
+        {
+            redirectTo: window.location.origin
+        }
     });
 
 
@@ -57,10 +56,16 @@ async function oauthLogin(provider)
 
 async function signup()
 {
-    const { data, error } = await supabase.auth.signUp({
+    if(!email || !password)
+        return;
+
+
+    const { data, error } =
+    await supabase.auth.signUp({
         email: email.value,
         password: password.value
     });
+
 
     if(error)
     {
@@ -68,9 +73,12 @@ async function signup()
         return;
     }
 
+
     console.log("Compte créé :", data);
 
-    alert("Compte créé !");
+    alert(
+        "Compte créé ! Vérifie ton email si nécessaire."
+    );
 }
 
 
@@ -80,7 +88,12 @@ async function signup()
 
 async function login()
 {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    if(!email || !password)
+        return;
+
+
+    const { data, error } =
+    await supabase.auth.signInWithPassword({
         email: email.value,
         password: password.value
     });
@@ -93,9 +106,13 @@ async function login()
     }
 
 
-    console.log("Connexion réussie :", data);
+    console.log(
+        "Connexion réussie :",
+        data
+    );
 
-    window.location.href = redirectURL;
+
+    redirectAfterLogin();
 }
 
 
@@ -105,17 +122,53 @@ async function login()
 
 async function logout()
 {
-    const { error } = await supabase.auth.signOut();
+    const { error } =
+    await supabase.auth.signOut();
+
 
     if(error)
     {
-        console.error("Logout error :", error);
+        console.error(
+            "Logout error :",
+            error
+        );
+
         return;
     }
+
 
     console.log("Déconnecté");
 
     window.location.reload();
+}
+
+
+// ===============================
+// Redirect after login
+// ===============================
+
+function redirectAfterLogin()
+{
+    const redirect =
+        sessionStorage.getItem(
+            "redirectAfterLogin"
+        );
+
+
+    sessionStorage.removeItem(
+        "redirectAfterLogin"
+    );
+
+
+    if(redirect)
+    {
+        window.location.href = redirect;
+    }
+    else
+    {
+        window.location.href =
+        window.location.origin;
+    }
 }
 
 
@@ -125,7 +178,9 @@ async function logout()
 
 async function checkSession()
 {
-    const { data, error } = await supabase.auth.getSession();
+    const { data, error } =
+    await supabase.auth.getSession();
+
 
     if(error)
     {
@@ -143,61 +198,69 @@ async function checkSession()
     }
     else
     {
-        console.log("Aucune session");
+        console.log(
+            "Aucune session"
+        );
     }
 }
-supabase.auth.onAuthStateChange((event, session) =>
+
+
+// ===============================
+// OAuth callback
+// ===============================
+
+supabase.auth.onAuthStateChange(
+(event, session) =>
 {
     if(event === "SIGNED_IN" && session)
     {
-        const redirect =
-            sessionStorage.getItem("redirectAfterLogin");
-
-
-        if(redirect)
-        {
-            sessionStorage.removeItem(
-                "redirectAfterLogin"
-            );
-
-            window.location.href = redirect;
-        }
+        redirectAfterLogin();
     }
 });
 
+
 // ===============================
-// Events
+// Buttons
 // ===============================
 
 document
 .getElementById("github-login")
-?.addEventListener("click", () =>
-{
-    oauthLogin("github");
-});
+?.addEventListener(
+    "click",
+    () => oauthLogin("github")
+);
 
 
 document
 .getElementById("discord-login")
-?.addEventListener("click", () =>
-{
-    oauthLogin("discord");
-});
+?.addEventListener(
+    "click",
+    () => oauthLogin("discord")
+);
 
 
 document
 .getElementById("signup")
-?.addEventListener("click", signup);
+?.addEventListener(
+    "click",
+    signup
+);
 
 
 document
 .getElementById("login")
-?.addEventListener("click", login);
+?.addEventListener(
+    "click",
+    login
+);
 
 
 document
 .getElementById("logout")
-?.addEventListener("click", logout);
+?.addEventListener(
+    "click",
+    logout
+);
 
 
 // ===============================
