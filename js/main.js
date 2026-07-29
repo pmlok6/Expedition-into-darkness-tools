@@ -1,174 +1,49 @@
-/* ==========================================
-   Supabase Auth
+console.log("Expedition Tools loaded");
 
-   Features:
-   - GitHub OAuth
-   - Discord OAuth
-   - Email signup/login
-   - Logout
-   - Session check
-========================================== */
-
-import { supabase } from "./supabase.js";
-
-
-// ===============================
-// Elements
-// ===============================
-
-const email = document.getElementById("email");
-const password = document.getElementById("password");
-
-
-// ===============================
-// Redirect
-// ===============================
-
-const redirect = () =>
+document.addEventListener(
+"DOMContentLoaded",
+function()
 {
-    window.location.href = "maps.html";
-};
 
-
-// ===============================
-// OAuth Login
-// ===============================
-
-async function oauthLogin(provider)
-{
-    const { error } = await supabase.auth.signInWithOAuth({
-        provider: provider,
-        options:
-        {
-            redirectTo: window.location.href
-        }
-    });
-
-    if(error)
-        console.error("OAuth error :", error);
-}
-
-
-// ===============================
-// Email Signup
-// ===============================
-
-async function signup()
-{
-    const { data, error } = await supabase.auth.signUp({
-        email: email.value,
-        password: password.value
-    });
-
-
-    if(error)
-    {
-        console.error("Signup error :", error);
-        return;
-    }
-
-
-    console.log("Compte créé :", data);
-
-    alert("Compte créé !");
-}
-
-
-// ===============================
-// Email Login
-// ===============================
-
-async function login()
-{
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.value,
-        password: password.value
-    });
-
-
-    if(error)
-    {
-        console.error("Login error :", error);
-        return;
-    }
-
-
-    console.log("Connecté :", data);
-
-    redirect();
-}
-
-
-// ===============================
-// Logout
-// ===============================
-
-async function logout()
-{
-    await supabase.auth.signOut();
-
-    console.log("Déconnecté");
-
-    window.location.reload();
-}
-
-
-// ===============================
-// Session check
-// ===============================
-
-async function checkSession()
-{
-    const { data } = await supabase.auth.getSession();
-
-    if(data.session)
-    {
-        console.log(
-            "Utilisateur connecté :",
-            data.session.user
+    const nav =
+        document.getElementById(
+            "main-navigation"
         );
-    }
-    else
+
+
+    if(!nav)
     {
-        console.log("Aucune session");
+        return;
     }
-}
+const base =
+"/Expedition-into-darkness-tools/";
 
+    nav.innerHTML = `
 
-// ===============================
-// Events
-// ===============================
+<div class="nav-links">
+    <a href="${base}">
+        Home
+    </a>
 
-document
-.getElementById("github-login")
-?.addEventListener("click", () =>
-{
-    oauthLogin("github");
+    <a href="${base}calculators/armor.html">
+        Armor Calculator
+    </a>
+
+    <a href="${base}calculators/weapon.html">
+        Weapon Calculator
+    </a>
+
+    <a href="${base}leveling/leveling.html">
+        Leveling
+    </a>
+    
+    <a href="${base}maps/maps.html">
+        Maps
+    </a>
+</div>
+<div class="nav-logo">
+    <a href="/Expedition-into-darkness-tools/"><img  src="${base}assets/Site-logo.png" alt="Expedition into Darkness"></a>
+</div>
+    `;
+
 });
-
-
-document
-.getElementById("discord-login")
-?.addEventListener("click", () =>
-{
-    oauthLogin("discord");
-});
-
-
-document
-.getElementById("signup")
-?.addEventListener("click", signup);
-
-
-document
-.getElementById("login")
-?.addEventListener("click", login);
-
-
-document
-.getElementById("logout")
-?.addEventListener("click", logout);
-
-
-// Start
-checkSession();
