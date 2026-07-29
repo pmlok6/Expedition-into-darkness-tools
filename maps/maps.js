@@ -10,9 +10,8 @@
    - Generate elevator
    - Display selected floor
 ========================================== */
-
-
 import { getMaps } from "../js/mapsloader.js";
+import { supabase } from "../js/supabase.js";
 
 const mapLayer = document.getElementById("map-layer");
 const selector = document.getElementById("map-selector");
@@ -22,7 +21,7 @@ const elevator = document.getElementById("map-elevator");
 
 let MAPS = [];
 let currentMap = null;
-
+let currentFloor = null;
 
 
 // ===============================
@@ -31,106 +30,55 @@ let currentMap = null;
 
 function createMapButtons()
 {
-
     selector.innerHTML = "";
-
-
     MAPS.forEach(map =>
     {
-
         const button = document.createElement("button");
-
         button.className = "map-button";
         button.textContent = map.name;
-
-
         button.onclick = () =>
         {
             loadMap(map);
         };
-
-
         selector.appendChild(button);
-
     });
-
 }
-
-
-
 // ===============================
 // Chargement d'une map
 // ===============================
 
 function loadMap(map)
 {
-
+    currentFloor = defaultFloor;
     currentMap = map;
-
-
     createElevator(map);
-
-
     // Affichage du niveau 0 par défaut
-
-    const defaultFloor =
-        map.floors.find(
-            floor => floor.floor === 0
-        );
-
-
+    const defaultFloor =map.floors.find(floor => floor.floor === 0);
     if(defaultFloor)
     {
         image.src = defaultFloor.image;
     }
-
-
 }
-
-
-
 // ===============================
 // Création ascenseur
 // ===============================
 
 function createElevator(map)
 {
-
     elevator.innerHTML = "";
-
-
-    const floors =
-        [...map.floors]
-        .sort(
-            (a,b) => b.floor - a.floor
-        );
-
-
-
+    const floors =[...map.floors].sort((a,b) => b.floor - a.floor);
     floors.forEach(floor =>
     {
-
         const button = document.createElement("button");
-
-
         button.className = "floor-button";
-
-        button.textContent =
-            floor.label;
-
-
-
+        button.textContent =floor.label;
         button.onclick = () =>
         {
-            image.src = floor.image;
+           currentFloor = floor;
+           image.src = floor.image;
         };
-
-
-
         elevator.appendChild(button);
-
     });
-
 }
 
 // ===============================
@@ -160,46 +108,46 @@ if(markerMenu)
 {
    markerMenu.querySelectorAll("button").forEach(button =>
    {
-       button.onclick = () =>
+       button.onclick = async () =>
        {
-           console.log("Création marker:",pendingMarker,button.dataset.type);
-           markerMenu.classList.add("hidden");
+          await saveMarker(button.dataset.type);
+          markerMenu.classList.add("hidden");
        };
    });
 }
 // ===============================
 // Initialisation
 // ===============================
-
-document.addEventListener(
-"DOMContentLoaded",
-async () =>
+document.addEventListener("DOMContentLoaded",async () =>
 {
-
     MAPS = await getMaps();
-
-
-    console.log(
-        "Maps chargées:",
-        MAPS
-    );
-
-
+    console.log("Maps chargées:",MAPS);
     if(MAPS.length === 0)
     {
-        console.warn(
-            "Aucune map disponible"
-        );
-
+        console.warn("Aucune map disponible");
         return;
     }
-
-
     createMapButtons();
-
-
     // Charge la première map automatiquement
-
     loadMap(MAPS[0]);
-
 });
+// ===============================
+// save floor
+// ===============================
+async function saveMarker(type)
+{
+    const { error } =await supabase.from("markers").insert(
+            {
+                map_id: currentMap.id,
+                floor_id: currentFloor.id,
+                x: pendingMarker.x,
+                y: pendingMarker.y,
+                type: type
+            });
+    if(error)
+    {
+        console.error("Erreur création marker:",error);
+        return;
+    }
+    console.log("Marker enregistré !");
+}
