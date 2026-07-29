@@ -50,10 +50,9 @@ function redirectAfterLogin()
         window.location.href = redirect;
     }
     else
-    {
-        window.location.href =
-        window.location.origin;
-    }
+   {
+       window.location.href ="https://pmlok6.github.io/Expedition-into-darkness-tools/";
+   }
 }
 // ===============================
 // OAuth Login
