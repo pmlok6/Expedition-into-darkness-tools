@@ -222,10 +222,29 @@
     z-index:50;
 }
 
-
 .map-marker:hover .marker-popup
 {
     opacity:1;
+}
+
+.marker-title
+{
+    font-weight:bold;
+    font-size:16px;
+    margin-bottom:8px;
+}
+
+.marker-description
+{
+    font-size:14px;
+    line-height:1.4;
+}
+
+.marker-floor
+{
+    margin-top:8px;
+    opacity:.7;
+    font-size:12px;
 }
 /* =========================================
    Marker Menu
