@@ -1,44 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+
 <head>
-  	<link rel="stylesheet" href="css/style.css">
-	  <link rel="stylesheet" href="css/navigation.css">
+
+    <meta charset="UTF-8">
+    <title>Connexion</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/login.css">
+
 </head>
+
 
 <body>
 
-<h1>Connexion</h1>
 
-<input id="email" type="email" placeholder="Email">
+<!-- Navigation si tu l'utilises -->
+<div id="navigation"></div>
 
-<input id="password" type="password" placeholder="Mot de passe">
 
-<button id="signup">
-Créer un compte
-</button>
 
-<button id="login">
-Connexion
-</button>
+<main class="login-container">
 
-<button id="logout">
-Déconnexion
-</button>
+    <h1>Connexion</h1>
 
-	<button id="github-login">
-Connexion GitHub
-</button>
 
-<button id="discord-login">
-Connexion Discord
-</button>
+    <!-- OAuth -->
+    <button id="github-login">
+        Connexion avec GitHub
+    </button>
 
-<button id="email-login">
-Connexion Email
-</button>
 
-	<script type="module" src="js/main.js"></script>
+    <button id="discord-login">
+        Connexion avec Discord
+    </button>
+
+
+    <div class="separator">
+        ou
+    </div>
+
+
+    <!-- Email -->
+    <input 
+        id="email"
+        type="email"
+        placeholder="Email"
+    >
+
+
+    <input
+        id="password"
+        type="password"
+        placeholder="Mot de passe"
+    >
+
+
+
+    <button id="signup">
+        Créer un compte
+    </button>
+
+
+    <button id="login">
+        Connexion
+    </button>
+
+
+    <button id="logout">
+        Déconnexion
+    </button>
+
+
+</main>
+
+
+
+<script type="module" src="js/main.js"></script>
 <script type="module" src="./js/auth.js"></script>
 
+
 </body>
+
 </html>
