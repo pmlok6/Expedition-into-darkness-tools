@@ -1,6 +1,7 @@
 /* =========================================
    Maps Page
 ========================================= */
+
 .maps-page main{
     max-width:1800px;
     margin:40px auto;
@@ -15,230 +16,203 @@
 .maps-page main p{
     margin-bottom:30px;
 }
+
+
 /* =========================================
    Map Selector
 ========================================= */
 
 #map-selector{
-
     display:flex;
-
     justify-content:center;
-
     flex-wrap:wrap;
-
     gap:12px;
-
     margin:30px 0;
-
 }
 
 .map-button{
-
     padding:10px 24px;
-
     border:1px solid #555;
-
     border-radius:6px;
-
     background:#2f2f2f;
-
     color:#ddd;
-
     font-size:16px;
-
     cursor:pointer;
-
     transition:.15s;
-
 }
 
 .map-button:hover{
-
     background:#444;
-
 }
 
 .map-button.active{
-
     background:#8b2b2b;
-
     color:#fff;
-
     border-color:#b54040;
-
 }
+
+
 /* =========================================
    Layout
 ========================================= */
 
 .maps-layout{
-
     display:grid;
-
     grid-template-columns:90px 1fr;
-
     gap:25px;
-
     align-items:start;
-
-}
-#map-container
-{
-    position: relative;
 }
 
-#map-layer
-{
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-}
-
-.map-marker
-{
-    position: absolute;
-    transform: translate(-50%, -50%);
-    font-size: 24px;
-    pointer-events: auto;
-    cursor: pointer;
-}
 
 /* =========================================
    Elevator
 ========================================= */
 
 #map-elevator{
-
     display:flex;
-
     flex-direction:column;
-
     gap:10px;
-
     padding:20px;
-
     background:#222;
-
     border:1px solid #555;
-
     border-radius:8px;
-
 }
 
 .floor-button{
-
     width:60px;
-
     height:60px;
-
     border:none;
-
     border-radius:6px;
 
     background:#3a3a3a;
-
     color:#ddd;
 
     font-size:18px;
-
     font-weight:bold;
 
     cursor:pointer;
-
     transition:.15s;
-
 }
 
 .floor-button:hover{
-
     background:#555;
-
 }
 
 .floor-button.active{
-
     background:#8b2b2b;
-
     color:#fff;
-
     box-shadow:0 0 10px rgba(255,80,80,.5);
-
 }
 
 
 /* =========================================
-   Viewer
+   Map Viewer
 ========================================= */
 
 .map-viewer{
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
 
     padding:20px;
 
     background:#222;
-
     border:1px solid #555;
-
     border-radius:8px;
 
     overflow:hidden;
-
 }
 
 
 /* =========================================
-   Image
+   Map Container
+========================================= */
+
+#map-container{
+    position:relative;
+    display:inline-block;
+}
+
+
+/* =========================================
+   Map Image
 ========================================= */
 
 #map-image{
-
     display:block;
 
     max-width:100%;
-
     max-height:85vh;
 
     height:auto;
 
     user-select:none;
+    pointer-events:none;
+}
+
+
+/* =========================================
+   Marker Layer
+========================================= */
+
+#map-layer{
+    position:absolute;
+    inset:0;
 
     pointer-events:none;
-
 }
+
+
 /* =========================================
-   marker
+   Markers
 ========================================= */
-#marker-menu
-{
-    position: absolute;
 
-    background: #222;
+.map-marker{
+    position:absolute;
 
-    padding: 10px;
+    transform:translate(-50%, -50%);
 
-    border-radius: 8px;
+    width:18px;
+    height:18px;
+
+    border-radius:50%;
+
+    background:red;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    z-index:10;
+
+    pointer-events:auto;
 }
 
 
-#marker-menu.hidden
-{
+/* =========================================
+   Marker Menu
+========================================= */
+
+#marker-menu{
+    position:absolute;
+
+    background:#222;
+
+    padding:10px;
+
+    border-radius:8px;
+
+    border:1px solid #555;
+
+    z-index:20;
+}
+
+
+#marker-menu.hidden{
     display:none;
 }
 
-.map-marker
-{
-    position:absolute;
-    transform:translate(-50%, -50%);
-    cursor:pointer;
-    font-size:24px;
-    z-index:10;
-}
+
 /* =========================================
    Responsive
 ========================================= */
@@ -246,55 +220,14 @@
 @media(max-width:900px){
 
     .maps-layout{
-
         grid-template-columns:1fr;
-
     }
+
 
     #map-elevator{
-
         flex-direction:row;
-
         justify-content:center;
-
         flex-wrap:wrap;
-
     }
 
-}
-#map-container
-{
-    position: relative;
-    display: inline-block;
-}
-
-
-#map-image
-{
-    display: block;
-    max-width: 100%;
-}
-
-
-#map-layer
-{
-    position: absolute;
-    inset: 0;
-}
-
-
-.map-marker
-{
-    position: absolute;
-
-    width: 18px;
-    height: 18px;
-
-    border-radius: 50%;
-
-    transform: translate(-50%, -50%);
-
-    background: red;
-
-    cursor: pointer;
 }
