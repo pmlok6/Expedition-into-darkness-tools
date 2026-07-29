@@ -74,7 +74,7 @@ function createElevator(map)
         const button = document.createElement("button");
         button.className = "floor-button";
         button.textContent =floor.label;
-        button.onclick = () =>
+        button.onclick = async () =>
         {
            currentFloor = floor;
            image.src = floor.image;
