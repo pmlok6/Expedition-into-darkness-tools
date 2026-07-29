@@ -6,14 +6,14 @@
 
    Features:
    - Load maps
-   - Generate buttons
+   - Generate map buttons
    - Generate elevator
    - Display floors
-   - Create/Delete markers
+   - Manage markers
 ========================================== */
 
-import { getMaps } from "../js/mapsloader.js";
-import { supabase } from "../js/supabase.js";
+import {getMaps} from "../js/mapsloader.js";
+import {supabase} from "../js/supabase.js";
 
 const mapLayer=document.getElementById("map-layer");
 const selector=document.getElementById("map-selector");
@@ -28,19 +28,9 @@ let currentUser=null;
 let pendingMarker=null;
 
 // ===============================
-// user
+// Map functions
 // ===============================
-async function getCurrentUser()
-{
-    const {data}=await supabase.auth.getSession();
 
-    currentUser=data.session?.user??null;
-
-    console.log("Utilisateur:",currentUser);
-}
-// ===============================
-// maps
-// ===============================
 function createMapButtons()
 {
     selector.innerHTML="";
@@ -48,11 +38,9 @@ function createMapButtons()
     MAPS.forEach(map=>
     {
         const button=document.createElement("button");
-
         button.className="map-button";
         button.textContent=map.name;
         button.onclick=()=>loadMap(map);
-
         selector.appendChild(button);
     });
 }
@@ -60,14 +48,14 @@ function createMapButtons()
 async function loadMap(map)
 {
     currentMap=map;
-
     createElevator(map);
 
-    currentFloor=map.floors.find(floor=>floor.floor===0);
+    const floor=map.floors.find(f=>f.floor===0);
 
-    if(currentFloor)
+    if(floor)
     {
-        image.src=currentFloor.image;
+        currentFloor=floor;
+        image.src=floor.image;
         await loadMarkers();
     }
 }
@@ -96,11 +84,12 @@ function createElevator(map)
     });
 }
 // ===============================
-// marker menu
+// Marker functions
 // ===============================
+
 function openMarkerMenu(x,y)
 {
-    pendingMarker={x,y};
+    pendingMarker={x:x,y:y};
 
     markerMenu.style.left=x+"%";
     markerMenu.style.top=y+"%";
@@ -112,35 +101,62 @@ document
 .getElementById("map-container")
 .addEventListener("click",event=>
 {
-    if(event.target.closest(".map-marker"))
-    return;
-   document
-   .querySelectorAll(".map-marker")
-   .forEach(m=>m.classList.remove("active"));
-   markerMenu.classList.add("hidden");
-    const rect=mapLayer.getBoundingClientRect();
-    const x=((event.clientX-rect.left)/rect.width)*100;
-    const y=((event.clientY-rect.top)/rect.height)*100;
+    if(event.target.closest(".map-marker,.marker-popup,#marker-menu"))
+        return;
+
+    document
+    .querySelectorAll(".map-marker")
+    .forEach(marker=>marker.classList.remove("active"));
 
     markerMenu.classList.add("hidden");
 
+    const rect=mapLayer.getBoundingClientRect();
+
+    const x=((event.clientX-rect.left)/rect.width)*100;
+    const y=((event.clientY-rect.top)/rect.height)*100;
+
+    console.log("Position:",x.toFixed(2),"%",y.toFixed(2),"%");
+
     openMarkerMenu(x,y);
 });
-// ===============================
-// save marker
-// ===============================
+
+if(markerMenu)
+{
+    markerMenu
+    .querySelectorAll("button")
+    .forEach(button=>
+    {
+        button.onclick=async event=>
+        {
+            event.stopPropagation();
+
+            await saveMarker(button.dataset.type);
+
+            document
+            .getElementById("marker-description")
+            .value="";
+
+            markerMenu.classList.add("hidden");
+        };
+    });
+}
+
 async function saveMarker(type)
 {
-    const {data:{user}}=await supabase.auth.getUser();
+    const {data:{user},error:userError}=await supabase.auth.getUser();
 
-    if(!user||!pendingMarker||!currentFloor)
+    if(userError||!user)
+    {
+        console.error("Aucun utilisateur connecté");
         return;
+    }
 
-    const markerData={
+    const markerData=
+    {
         floor_id:currentFloor.id,
         x:pendingMarker.x,
         y:pendingMarker.y,
-        type,
+        type:type,
         title:type,
         description:document.getElementById("marker-description").value,
         created_by:user.id
@@ -152,85 +168,70 @@ async function saveMarker(type)
 
     if(error)
     {
-        console.error("Erreur création:",error);
+        console.error("Erreur création marker:",error);
         return;
     }
-
-    document.getElementById("marker-description").value="";
-
-    markerMenu.classList.add("hidden");
 
     await loadMarkers();
 }
 
-markerMenu?.querySelectorAll("button")
-.forEach(button=>
-{
-    button.onclick=()=>saveMarker(button.dataset.type);
-});
-// ===============================
-// create marker
-// ===============================
 function createMarker(marker)
 {
     const element=document.createElement("div");
 
     element.className="map-marker";
 
+    element.dataset.id=marker.id;
+    element.dataset.type=marker.type;
+
     element.style.left=marker.x+"%";
     element.style.top=marker.y+"%";
 
-    element.onclick=event=>
-   {
-       event.stopPropagation();
-       document
-       .querySelectorAll(".map-marker")
-       .forEach(m=>m.classList.remove("active"));
-       element.classList.add("active");
-   };
-
-    element.innerHTML=
-`
-<div class="marker-icon">
+    element.innerHTML=`
     ${getMarkerIcon(marker.type)}
-</div>
+    <div class="marker-popup">
+        <div class="marker-title">${marker.title}</div>
+        <div class="marker-description">${marker.description??"No description"}</div>
+        <div class="marker-floor">Floor ${currentFloor.floor}</div>
+        ${
+        currentUser&&currentUser.id===marker.created_by?
+        `<div class="marker-actions">
+            <button class="edit-marker" data-id="${marker.id}">✏ Modifier</button>
+            <button class="delete-marker" data-id="${marker.id}">🗑 Supprimer</button>
+        </div>`:""
+        }
+    </div>`;
 
-<div class="marker-popup">
-    <div class="marker-title">
-        ${marker.title}
-    </div>
+    element.onclick=event=>
+    {
+        event.stopPropagation();
 
-    <div class="marker-description">
-        ${marker.description??"No description"}
-    </div>
+        document
+        .querySelectorAll(".map-marker")
+        .forEach(m=>m.classList.remove("active"));
 
-    <div class="marker-floor">
-        Floor ${currentFloor.floor}
-    </div>
-
-    ${
-    currentUser?.id===marker.created_by
-    ?
-    `
-    <div class="marker-actions">
-        <button class="edit-marker">✏ Modifier</button>
-        <button class="delete-marker">🗑 Supprimer</button>
-    </div>
-    `
-    :
-    ""
-    }
-</div>
-`;
-
-    mapLayer.appendChild(element);
+        element.classList.add("active");
+    };
 
     element
     .querySelector(".delete-marker")
-    ?.addEventListener("click",()=>
+    ?.addEventListener("click",async event=>
     {
-        deleteMarker(marker.id);
+        event.stopPropagation();
+
+        await deleteMarker(marker.id);
     });
+
+    element
+    .querySelector(".edit-marker")
+    ?.addEventListener("click",event=>
+    {
+        event.stopPropagation();
+
+        console.log("Modifier marker:",marker.id);
+    });
+
+    mapLayer.appendChild(element);
 }
 
 function getMarkerIcon(type)
@@ -238,7 +239,7 @@ function getMarkerIcon(type)
     switch(type)
     {
         case "chest":
-            return `<img src="../assets/icons/chest.png" alt="chest">`;
+            return `<img src="../assets/icons/${type}.png" alt="${type}">`;
 
         case "elevator":
             return "🛗";
@@ -246,13 +247,17 @@ function getMarkerIcon(type)
         case "npc":
             return "👤";
 
+        case "monster":
+            return "👹";
+
+        case "resource":
+            return "🌿";
+
         default:
             return "📍";
     }
 }
-// ===============================
-// delete marker
-// ===============================
+
 async function deleteMarker(id)
 {
     if(!confirm("Supprimer ce marker ?"))
@@ -271,9 +276,7 @@ async function deleteMarker(id)
 
     await loadMarkers();
 }
-// ===============================
-// load markers
-// ===============================
+
 async function loadMarkers()
 {
     document
@@ -296,19 +299,41 @@ async function loadMarkers()
 
     data.forEach(marker=>createMarker(marker));
 }
+
+
 // ===============================
-// start
+// User functions
 // ===============================
-document
-.addEventListener("DOMContentLoaded",async()=>
+
+async function getCurrentUser()
+{
+    const {data}=await supabase.auth.getSession();
+
+    currentUser=data.session?.user??null;
+
+    console.log(
+        "Utilisateur actuel:",
+        currentUser
+    );
+}
+
+
+// ===============================
+// Start
+// ===============================
+
+document.addEventListener("DOMContentLoaded",async()=>
 {
     await getCurrentUser();
 
     MAPS=await getMaps();
 
-    console.log("Maps chargées:",MAPS);
+    console.log(
+        "Maps chargées:",
+        MAPS
+    );
 
-    if(!MAPS.length)
+    if(MAPS.length===0)
         return;
 
     createMapButtons();
