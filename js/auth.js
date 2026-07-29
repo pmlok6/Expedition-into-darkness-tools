@@ -16,8 +16,7 @@ import { supabase } from "./supabase.js";
 // Config
 // ===============================
 
-const redirectURL =
-"https://pmlok6.github.io/Expedition-into-darkness-tools/maps.html";
+const redirectURL = window.location.href;
 
 
 // ===============================
@@ -34,13 +33,16 @@ const password = document.getElementById("password");
 
 async function oauthLogin(provider)
 {
+    sessionStorage.setItem(
+        "redirectAfterLogin",
+        window.location.href
+    );
+
+
     const { error } = await supabase.auth.signInWithOAuth({
-        provider: provider,
-        options:
-        {
-            redirectTo: redirectURL
-        }
+        provider: provider
     });
+
 
     if(error)
     {
@@ -144,7 +146,24 @@ async function checkSession()
         console.log("Aucune session");
     }
 }
+supabase.auth.onAuthStateChange((event, session) =>
+{
+    if(event === "SIGNED_IN" && session)
+    {
+        const redirect =
+            sessionStorage.getItem("redirectAfterLogin");
 
+
+        if(redirect)
+        {
+            sessionStorage.removeItem(
+                "redirectAfterLogin"
+            );
+
+            window.location.href = redirect;
+        }
+    }
+});
 
 // ===============================
 // Events
