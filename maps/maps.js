@@ -277,8 +277,8 @@ function createMarker(marker)
        }
        await loadMarkers();
    });
+   mapLayer.appendChild(element);
 }
-mapLayer.appendChild(element);
    
 function getMarkerIcon(type)
 {
