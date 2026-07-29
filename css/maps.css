@@ -294,6 +294,11 @@
     display:none;
 }
 
+.marker-status{
+    margin:5px 0;
+    font-size:13px;
+    opacity:.8;
+}
 /* Responsive */
 
 @media(max-width:900px){
