@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded",async () =>
 
         return;
     }
+   console.log(MAPS);
     createMapButtons();
     loadMap(MAPS[0]);
 
