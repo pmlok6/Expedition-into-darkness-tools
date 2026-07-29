@@ -188,6 +188,45 @@
     display:block;
 }
 
+.marker-popup
+{
+    position:absolute;
+
+    left:50%;
+    bottom:120%;
+
+    transform:translateX(-50%);
+
+    width:220px;
+
+    padding:10px;
+
+    background:#222;
+
+    color:#ddd;
+
+    border:1px solid #555;
+
+    border-radius:8px;
+
+    font-size:14px;
+
+    text-align:center;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.15s;
+
+    z-index:50;
+}
+
+
+.map-marker:hover .marker-popup
+{
+    opacity:1;
+}
 /* =========================================
    Marker Menu
 ========================================= */
