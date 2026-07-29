@@ -1,49 +1,71 @@
-console.log("Expedition Tools loaded");
+/* ==========================================
+   Main JS
 
-document.addEventListener(
-"DOMContentLoaded",
-function()
+   Features:
+   - Navigation
+   - Auth state
+   - User display
+========================================== */
+
+import { supabase } from "./supabase.js";
+
+
+// ===============================
+// Auth state
+// ===============================
+
+async function checkUser()
 {
+    const { data } = await supabase.auth.getSession();
 
-    const nav =
-        document.getElementById(
-            "main-navigation"
-        );
+    const user = data.session?.user;
+
+    const loginButton = document.getElementById("login-button");
+    const logoutButton = document.getElementById("logout-button");
+    const userInfo = document.getElementById("user-info");
 
 
-    if(!nav)
+    if(user)
     {
-        return;
+        console.log("Utilisateur connecté :", user);
+
+
+        if(userInfo)
+        {
+            userInfo.textContent =
+            user.email ?? "Utilisateur";
+        }
+
+
+        loginButton?.classList.add("hidden");
+        logoutButton?.classList.remove("hidden");
     }
-const base =
-"/Expedition-into-darkness-tools/";
+    else
+    {
+        console.log("Aucun utilisateur");
 
-    nav.innerHTML = `
+        loginButton?.classList.remove("hidden");
+        logoutButton?.classList.add("hidden");
+    }
+}
 
-<div class="nav-links">
-    <a href="${base}">
-        Home
-    </a>
 
-    <a href="${base}calculators/armor.html">
-        Armor Calculator
-    </a>
+// ===============================
+// Logout
+// ===============================
 
-    <a href="${base}calculators/weapon.html">
-        Weapon Calculator
-    </a>
+document
+.getElementById("logout-button")
+?.addEventListener("click", async () =>
+{
+    await supabase.auth.signOut();
 
-    <a href="${base}leveling/leveling.html">
-        Leveling
-    </a>
-    
-    <a href="${base}maps/maps.html">
-        Maps
-    </a>
-</div>
-<div class="nav-logo">
-    <a href="/Expedition-into-darkness-tools/"><img  src="${base}assets/Site-logo.png" alt="Expedition into Darkness"></a>
-</div>
-    `;
-
+    window.location.reload();
 });
+
+
+// ===============================
+// Start
+// ===============================
+
+checkUser();
