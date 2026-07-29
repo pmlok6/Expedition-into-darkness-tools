@@ -220,5 +220,5 @@ supabase.auth.onAuthStateChange(
 // ===============================
 // Start
 // ===============================
-
+loadNavigation();
 checkUser();
