@@ -111,37 +111,44 @@ document.getElementById("map-container").addEventListener("click",(event)=>
 // ===============================
 async function saveMarker(type)
 {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+    console.log("Utilisateur connecté :", user);
+
+    if(userError || !user)
+    {
+        console.error("Aucun utilisateur connecté");
+        return;
+    }
+
     const description = document.getElementById("marker-description").value;
+
     const markerData = {
         floor_id: currentFloor.id,
         x: pendingMarker.x,
         y: pendingMarker.y,
         type: type,
-        title: type
+        title: type,
+        description: description,
+        created_by: user.id
     };
 
-    console.log("Tentative création marker:", {
-        map: currentMap,
-        floor: currentFloor,
-        position: pendingMarker,
-        type: type
-    });
-
-    console.log("Payload envoyé à Supabase :", markerData);
+    console.log("Payload envoyé :", markerData);
 
     const { data, error } = await supabase
         .from("markers")
         .insert(markerData)
         .select();
 
-
     if(error)
     {
-        console.error("Erreur création marker:", error);
+        console.error("Erreur création marker :", error);
         return;
     }
 
-    console.log("Marker enregistré !", data);
+    console.log("Marker créé :", data);
+
+    await loadMarkers();
 }
 if(markerMenu)
 {
