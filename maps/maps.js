@@ -9,7 +9,7 @@
    - Load selected map
    - Display default floor
 ========================================== */
-import { getMaps } from "./mapLoader.js";
+import { getMaps } from "./js/mapLoader.js";
 
 const selector = document.getElementById("map-selector");
 const image = document.getElementById("map-image");
