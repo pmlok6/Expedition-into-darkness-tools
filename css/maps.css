@@ -296,7 +296,7 @@
 
 #marker-menu{
     position:absolute;
-    transform:translate(-50%,-50%);
+    transform:translate(-10%,-110%);
     background:#222;
     padding:10px;
     border-radius:8px;
