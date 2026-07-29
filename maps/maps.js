@@ -106,13 +106,29 @@ document
 .getElementById("map-container")
 .addEventListener("click",event=>
 {
-    if(event.target.closest(".map-marker,.marker-popup,#marker-menu"))
+    if(event.target.closest(".marker-popup"))
         return;
+
+    if(event.target.closest(".map-marker"))
+    {
+        document
+        .querySelectorAll(".map-marker")
+        .forEach(marker=>marker.classList.remove("active"));
+
+        event.target
+        .closest(".map-marker")
+        .classList.add("active");
+
+        return;
+    }
+
+    if(event.target.closest("#marker-menu"))
+        return;
+
 
     document
     .querySelectorAll(".map-marker")
     .forEach(marker=>marker.classList.remove("active"));
-
     markerMenu.classList.add("hidden");
 
     const rect=mapLayer.getBoundingClientRect();
@@ -121,7 +137,6 @@ document
     const y=((event.clientY-rect.top)/rect.height)*100;
 
     console.log("Position:",x.toFixed(2),"%",y.toFixed(2),"%");
-
     openMarkerMenu(x,y);
 });
 
