@@ -26,7 +26,7 @@ const elevator = document.getElementById("map-elevator");
 let MAPS = [];
 let currentMap = null;
 let currentFloor = null;
-
+let currentUser = null;
 
 // ===============================
 // Création des boutons de maps
@@ -195,13 +195,20 @@ function createMarker(marker)
         <div class="marker-description">
             ${marker.description ?? "No description"}
         </div>
-
-        <div class="marker-floor">
-            Floor ${currentFloor.floor}
-        </div>
-    </div>
-`;
-    mapContainer.appendChild(element);
+         <div class="marker-floor">    Floor ${currentFloor.floor}</div>
+         ${
+             currentUser &&    currentUser.id === marker.created_by    ?
+             `   <div class="marker-actions">
+             <button         class="edit-marker"        data-id="${marker.id}">        ✏ Modifier    </button>
+             <button         class="delete-marker"        data-id="${marker.id}">        🗑 Supprimer    </button>
+             </div>`:""
+         }    
+         </div>`;
+         mapContainer.appendChild(element);
+         element.querySelector(".delete-marker")?.addEventListener("click",async () =>
+         {
+             await deleteMarker(marker.id);
+         });
 }
 
 function getMarkerIcon(type)
@@ -220,6 +227,49 @@ function getMarkerIcon(type)
         default:
             return "📍";
     }
+}
+// ===============================
+// delete marker
+// ===============================
+async function deleteMarker(id)
+{
+    const confirmDelete =
+    confirm(
+        "Supprimer ce marker ?"
+    );
+
+
+    if(!confirmDelete)
+        return;
+
+
+    const { error } =
+    await supabase
+    .from("markers")
+    .delete()
+    .eq(
+        "id",
+        id
+    );
+
+
+    if(error)
+    {
+        console.error(
+            "Erreur suppression :",
+            error
+        );
+
+        return;
+    }
+
+
+    console.log(
+        "Marker supprimé"
+    );
+
+
+    loadMarkers();
 }
 // ===============================
 // load marker
@@ -246,10 +296,25 @@ async function loadMarkers()
     });
 }
 // ===============================
+// user
+// ===============================
+async function getCurrentUser()
+{
+    const { data } = await supabase.auth.getSession();
+
+    currentUser = data.session?.user ?? null;
+
+    console.log(
+        "Utilisateur actuel :",
+        currentUser
+    );
+}
+// ===============================
 // Initialisation
 // ===============================
 document.addEventListener("DOMContentLoaded",async () =>
 {
+    await getCurrentUser();
     MAPS = await getMaps();
     console.log("Maps chargées:",MAPS);
     if(MAPS.length === 0)
