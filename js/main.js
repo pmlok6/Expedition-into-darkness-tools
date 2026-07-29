@@ -10,7 +10,42 @@
 
 import { supabase } from "./supabase.js";
 
+// ===============================
+// Navigation
+// ===============================
 
+function loadNavigation()
+{
+    const nav =
+    document.getElementById(
+        "main-navigation"
+    );
+
+
+    if(!nav)
+        return;
+
+
+    nav.innerHTML = `
+
+        <a href="/Expedition-into-darkness-tools/">
+            🏠 Home
+        </a>
+
+        <a href="/Expedition-into-darkness-tools/maps/maps.html">
+            🗺 Maps
+        </a>
+
+        <a href="/Expedition-into-darkness-tools/skills/skills.html">
+            🌳 Skills
+        </a>
+
+        <a href="/Expedition-into-darkness-tools/leveling/leveling.html">
+            📈 Leveling
+        </a>
+
+    `;
+}
 // ===============================
 // Check user
 // ===============================
