@@ -192,7 +192,25 @@
     pointer-events:none;
 
 }
+/* =========================================
+   marker
+========================================= */
+#marker-menu
+{
+    position: absolute;
 
+    background: #222;
+
+    padding: 10px;
+
+    border-radius: 8px;
+}
+
+
+#marker-menu.hidden
+{
+    display:none;
+}
 
 /* =========================================
    Responsive
