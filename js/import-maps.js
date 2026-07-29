@@ -21,7 +21,8 @@ async function importMaps()
                 .upsert(
                 {
                     slug: slug,
-                    name: map.name
+                    name: map.name,
+                    updated_at: new Date()
                 },
                 {
                     onConflict: "slug"
@@ -68,7 +69,8 @@ async function importMaps()
                         map_id: mapId,
                         floor: floor.id,
                         label: floor.label,
-                        image: floor.image
+                        image: floor.image,
+                        updated_at: new Date()
                     },
                     {
                         onConflict:
