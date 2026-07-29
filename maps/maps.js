@@ -25,7 +25,6 @@ const selector=document.getElementById("map-selector");
 const image=document.getElementById("map-image");
 const elevator=document.getElementById("map-elevator");
 const markerMenu=document.getElementById("marker-menu");
-const markerMenu=document.getElementById("marker-menu");
 const legend=document.getElementById("map-legend");
 
 let MAPS=[];
