@@ -108,9 +108,12 @@ function createLegend()
     if(!legend)
         return;
 
+
     legend.innerHTML="";
 
+
     const title=document.createElement("h3");
+
     title.textContent="Legend";
 
     legend.appendChild(title);
@@ -123,10 +126,10 @@ function createLegend()
 
         const checkbox=document.createElement("input");
 
-        checkbox.type="checkbox";
-        checkbox.checked=filters[type];
 
-        checkbox.dataset.type=type;
+        checkbox.type="checkbox";
+
+        checkbox.checked=filters[type];
 
 
         checkbox.onchange=()=>
@@ -161,15 +164,18 @@ function createLegend()
 
         const checkbox=document.createElement("input");
 
+
         checkbox.type="checkbox";
+
         checkbox.checked=communityReview;
 
 
-        checkbox.onchange=()=>
+        checkbox.onchange=async()=>
         {
             communityReview=checkbox.checked;
 
-            loadMarkers();
+
+            await loadMarkers();
         };
 
 
@@ -185,28 +191,6 @@ function createLegend()
         legend.appendChild(label);
     }
 }
-// ===============================
-// Marker functions
-// ===============================
-function applyMarkerFilters()
-{
-    document
-    .querySelectorAll(".map-marker")
-    .forEach(marker=>
-    {
-        const type=marker.dataset.type;
-
-        if(filters[type])
-        {
-            marker.style.display="block";
-        }
-        else
-        {
-            marker.style.display="none";
-        }
-    });
-}
-
 function openMarkerMenu(x,y)
 {
     pendingMarker={
@@ -405,38 +389,23 @@ function createMarker(marker)
         </div>
 
         ${
-        !marker.approved?
-        `
-        <div class="marker-status">
-            ⏳ Pending review
-        </div>
+            !marker.approved?`
+            <div class="marker-status">
+                ⏳ Pending review
+            </div>
 
-        ${
-        communityReview?
-        `
-        <div class="marker-votes">
-            👍 ${upVotes}
-            👎 ${downVotes}
-        </div>
-
-        <div class="vote-actions">
-            <button class="vote-up">
-                👍
-            </button>
-
-            <button class="vote-down">
-                👎
-            </button>
-        </div>
-        `
-        :""
-        }
-
-        `
-        :""
-        }
-
-
+            ${
+            communityReview?`
+            <div class="marker-votes">
+                👍 ${upVotes}
+                👎 ${downVotes}
+            </div>
+            <div class="vote-actions">
+                <button class="vote-up">👍</button>
+                <button class="vote-down">👎</button>
+            </div>`:""
+            }`:""
+         }
         ${
         currentUser&&currentUser.id===marker.created_by?
         `
@@ -558,6 +527,53 @@ function createMarker(marker)
 
 
     mapLayer.appendChild(element);
+}
+
+function applyMarkerFilters()
+{
+    document
+    .querySelectorAll(".map-marker")
+    .forEach(marker=>
+    {
+        const type=marker.dataset.type;
+
+
+        const typeVisible=
+        filters[type]!==false;
+
+
+        let visible=true;
+
+
+        if(!typeVisible)
+        {
+            visible=false;
+        }
+
+
+        if(communityReview)
+        {
+            if(!marker.classList.contains("pending"))
+            {
+                visible=false;
+            }
+        }
+        else
+        {
+            if(marker.classList.contains("pending"))
+            {
+                visible=false;
+            }
+        }
+
+
+        marker.style.display=
+        visible
+        ?
+        "block"
+        :
+        "none";
+    });
 }
 
 function getMarkerIcon(type)
@@ -706,14 +722,11 @@ async function loadMarkers()
 
     let query=supabase
     .from("markers")
-    .select(`
-        *,
-        marker_votes(
-            user_id,
-            vote
-        )
-    `)
-    .eq("floor_id",currentFloor.id);
+    .select("*")
+    .eq(
+        "floor_id",
+        currentFloor.id
+    );
 
 
     if(communityReview)
@@ -732,7 +745,7 @@ async function loadMarkers()
     }
 
 
-    const {data,error}=await query;
+    const {data:markers,error}=await query;
 
 
     if(error)
@@ -746,10 +759,32 @@ async function loadMarkers()
     }
 
 
-    data.forEach(marker=>
+    for(const marker of markers)
     {
+        const {data:votes,error:voteError}=await supabase
+        .from("marker_votes")
+        .select("user_id,vote")
+        .eq(
+            "marker_id",
+            marker.id
+        );
+
+
+        if(voteError)
+        {
+            console.error(
+                "Load votes error:",
+                voteError
+            );
+        }
+        else
+        {
+            marker.marker_votes=votes;
+        }
+
+
         createMarker(marker);
-    });
+    }
 
 
     applyMarkerFilters();
