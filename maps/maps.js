@@ -252,21 +252,20 @@ function createMarker(marker)
        event.stopPropagation();
        event.preventDefault();
        const description=prompt("Edit description:",marker.description??"");
-       if(description===null)
-           return;
-       const {error}=await supabase
-       .from("markers")
-       .update(
+       openActionModal("Edit marker",`<textarea id="edit-description">${marker.description??""}</textarea>`,async()=>
        {
-           description:description
-       })
-       .eq("id",marker.id);
-       if(error)
-       {
-           console.error("Edit error:",error);
-           return;
-       }
-       await loadMarkers();
+           const description=
+           document.getElementById("edit-description").value;
+
+           await supabase
+           .from("markers")
+           .update(
+           {
+              description:description
+           })
+           .eq("id",marker.id);
+           await loadMarkers();
+       });
    });
    mapLayer.appendChild(element);
 }
