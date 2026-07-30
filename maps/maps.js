@@ -268,6 +268,54 @@ document
     openMarkerWizard();
 });
 
+   function showMarkerTypes(category)
+{
+    markerWizardStep="type";
+
+
+    actionTitle.textContent=
+        category
+        .charAt(0)
+        .toUpperCase()
+        +
+        category.slice(1);
+
+
+    actionContent.innerHTML="";
+
+
+    markerCategories[category]
+    .forEach(type=>
+    {
+        const button=document.createElement("button");
+
+        button.className="marker-type-button";
+
+        button.innerHTML=
+        `
+        ${getMarkerIcon(type)}
+        ${formatMarkerName(type)}
+        `;
+
+
+        button.onclick=()=>
+        {
+            selectedMarkerType=type;
+
+            showMarkerForm(type);
+        };
+
+
+        actionContent.appendChild(button);
+    });
+
+
+    actionCancel.onclick=()=>
+    {
+        openMarkerWizard();
+    };
+}
+
    function showMarkerForm(type)
 {
     markerWizardStep="form";
@@ -802,11 +850,7 @@ async function deleteMarker(id)
             .forEach(marker=>
                 marker.classList.remove("active")
             );
-
-
-            markerMenu.classList.add("hidden");
-
-
+            actionModal.classList.add("hidden");
             console.log("Marker deleted:",id);
         }
     );
@@ -1022,9 +1066,11 @@ function openMarkerWizard()
 
 
     actionCancel.onclick=()=>
-    {
-        actionModal.classList.add("hidden");
-    };
+{
+    actionModal.classList.add("hidden");
+
+    pendingMarker=null;
+};
 }
 // ===============================
 // Start
