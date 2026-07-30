@@ -11,7 +11,6 @@
    - Display floors
    - Manage markers
 ========================================== */
-
 import {getMaps} from "../js/mapsloader.js";
 import {supabase} from "../js/supabase.js";
 
@@ -27,7 +26,6 @@ const image=document.getElementById("map-image");
 const elevator=document.getElementById("map-elevator");
 const markerMenu=document.getElementById("marker-menu");
 const legend=document.getElementById("map-legend");
-
 
 let MAPS=[];
 let currentMap=null;
@@ -55,6 +53,45 @@ let filters={
     body:true,
     armor_stand:true
 };
+
+const markerCategories={
+    access:[
+        "door",
+        "door_need_key",
+        "entrance_exit_door",
+        "exit_door",
+        "entrance_exit_elevator",
+        "exit_elevator",
+        "harrow"
+    ],
+
+    interactable:[
+        "rope",
+        "exit_rope",
+        "lever",
+        "button"
+    ],
+
+    loot:[
+        "chest",
+        "body",
+        "armor_stand"
+    ],
+
+    creatures:[
+        "boss",
+        "big_mob_spawn"
+    ]
+};
+
+const ROTATABLE=[
+    "door",
+    "door_need_key",
+    "entrance_exit_door",
+    "exit_door",
+    "harrow",
+    "lever"
+];
 // ===============================
 // Map functions
 // ===============================
