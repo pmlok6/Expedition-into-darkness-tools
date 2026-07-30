@@ -20,8 +20,8 @@
 
     <p>
         Browse every map and switch instantly between floors using the elevator.<br>
-        you need log for use creation marker and vote for add it on map.<br>
-        rule is 10vote and 80% good vote for all see it.        
+        You need an account to create markers and vote.<br>
+        A marker becomes visible after 10 votes with 80% approval.
     </p>
 
 
@@ -30,11 +30,9 @@
 
     <div class="maps-layout">
 
-        <!-- Elevator -->
         <aside id="map-elevator"></aside>
 
 
-        <!-- Map Viewer -->
         <section class="map-viewer">
 
             <div id="map-container">
@@ -43,47 +41,20 @@
 
                 <div id="map-layer"></div>
 
-
-                <!-- Marker Creation Menu -->
-                <div id="action-modal" class="hidden">
-
-                    <div class="action-box">
-
-                        <div id="action-title"></div>
-
-                        <div id="action-content"></div>
-
-                        <div class="action-buttons">
-
-                            <button id="action-cancel">
-                            Cancel
-                            </button>
-
-                            <button id="action-confirm">
-                            Confirm
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
             </div>
 
         </section>
 
 
-        <!-- Legend -->
         <aside id="map-legend"></aside>
 
     </div>
 
-
 </main>
 
 
-<!-- Action Modal -->
+
+<!-- Marker Action Modal -->
 
 <div id="action-modal" class="hidden">
 
@@ -92,7 +63,6 @@
         <div id="action-title"></div>
 
         <div id="action-content"></div>
-
 
         <div class="action-buttons">
 
@@ -109,6 +79,7 @@
     </div>
 
 </div>
+
 
 
 <script type="module" src="../js/main.js"></script>
