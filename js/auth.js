@@ -41,22 +41,27 @@ function redirectAfterLogin()
 // ===============================
 // OAuth Login
 // ===============================
+
 async function oauthLogin(provider)
 {
-    sessionStorage.setItem("redirectAfterLogin",document.referrer || "/Expedition-into-darkness-tools/");
-    const redirectUrl ="https://pmlok6.github.io/Expedition-into-darkness-tools/login.html";
-    const { error } =await supabase.auth.signInWithOAuth(
-       {
-        provider,
+    const {error}=await supabase.auth.signInWithOAuth(
+    {
+        provider:provider,
+
         options:
         {
-            redirectTo: redirectUrl
+            redirectTo:
+            "https://pmlok6.github.io/Expedition-into-darkness-tools/login.html"
         }
     });
 
+
     if(error)
     {
-        console.error(error);
+        console.error(
+            "OAuth error:",
+            error
+        );
     }
 }
 // ===============================
@@ -65,47 +70,32 @@ async function oauthLogin(provider)
 
 async function handleOAuthCallback()
 {
-    const hash =
-    window.location.hash;
+    const {data,error}=await supabase.auth.getSession();
 
 
-    if(hash.includes("access_token"))
+    if(error)
     {
-        const { data, error } =
-        await supabase.auth.getSession();
+        console.error(
+            "OAuth callback error:",
+            error
+        );
+
+        return;
+    }
 
 
-        if(error)
-        {
-            console.error(
-                "OAuth callback error :",
-                error
-            );
-
-            return;
-        }
-
-
+    if(data.session)
+    {
         console.log(
-            "OAuth session :",
-            data.session
+            "OAuth connected:",
+            data.session.user
         );
 
 
-        // Nettoyage URL
-        window.history.replaceState(
-            {},
-            document.title,
-            window.location.pathname
-        );
-
-
-        redirectAfterLogin();
+        window.location.href =
+        "https://pmlok6.github.io/Expedition-into-darkness-tools/";
     }
 }
-
-
-
 // ===============================
 // Email Signup
 // ===============================
@@ -158,18 +148,11 @@ async function login()
 {
     if(!email || !password)
         return;
-
-
     const { data, error } =
     await supabase.auth.signInWithPassword({
-
         email: email.value,
-
         password: password.value
-
     });
-
-
     if(error)
     {
         console.error(
@@ -179,15 +162,10 @@ async function login()
 
         return;
     }
-
-
     console.log(
         "Connexion réussie :",
         data
     );
-
-
-    redirectAfterLogin();
 }
 
 
