@@ -45,25 +45,27 @@
 
 
                 <!-- Marker Creation Menu -->
-                <div id="marker-menu" class="hidden">
+                <div id="action-modal" class="hidden">
 
-                    <input id="marker-description" type="text" placeholder="Add a description...">
-                    <button data-type="door">Door</button>
-                    <button data-type="rope">Rope</button>
-                    <button data-type="door_need_key">Door Need Key</button>
-                    <button data-type="entrance_exit_door">Entrance / Exit Door</button>
-                    <button data-type="entrance_exit_elevator">Entrance / Exit Elevator</button>
-                    <button data-type="exit_door">Exit Door</button>
-                    <button data-type="exit_elevator">Exit Elevator</button>
-                    <button data-type="exit_rope">Exit Rope</button>
-                    <button data-type="harrow">Harrow</button>
-                    <button data-type="lever">Lever</button>
-                    <button data-type="button">Button</button>
-                    <button data-type="boss">Boss</button>
-                    <button data-type="big_mob_spawn">Big Mob Spawn</button>
-                    <button data-type="chest">Chest</button>
-                    <button data-type="armor_stand">armor stand</button>
-                    <button data-type="body">Body</button>
+                    <div class="action-box">
+
+                        <div id="action-title"></div>
+
+                        <div id="action-content"></div>
+
+                        <div class="action-buttons">
+
+                            <button id="action-cancel">
+                            Cancel
+                            </button>
+
+                            <button id="action-confirm">
+                            Confirm
+                            </button>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
