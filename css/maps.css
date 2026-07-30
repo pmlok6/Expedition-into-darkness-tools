@@ -30,7 +30,6 @@
     margin:30px 0;
 }
 
-
 .map-button{
     padding:10px 24px;
     border:1px solid #555;
@@ -42,23 +41,21 @@
     transition:.15s;
 }
 
-
 .map-button:hover,
 .floor-button:hover{
     background:#444;
 }
 
-
 .map-button.active,
 .floor-button.active{
     background:#8b2b2b;
-    color:#fff;
+    color:white;
     border-color:#b54040;
 }
 
 
 /* =========================================
-   Rotation
+   Rotation Selector
 ========================================= */
 
 .rotation-selector{
@@ -68,11 +65,9 @@
     margin-top:10px;
 }
 
-
 .rotation-button{
     min-width:60px;
 }
-
 
 .rotation-button.active{
     background:#8b2b2b;
@@ -100,24 +95,29 @@
     display:flex;
     flex-direction:column;
     gap:10px;
+
     padding:20px;
+
     background:#222;
+
     border:1px solid #555;
     border-radius:8px;
 }
 
-
 .floor-button{
     width:60px;
     height:60px;
+
     border:none;
     border-radius:6px;
+
     background:#3a3a3a;
     color:#ddd;
+
     font-size:18px;
     font-weight:bold;
+
     cursor:pointer;
-    transition:.15s;
 }
 
 
@@ -129,10 +129,14 @@
     display:flex;
     justify-content:center;
     align-items:center;
+
     padding:20px;
+
     background:#222;
+
     border:1px solid #555;
     border-radius:8px;
+
     overflow:hidden;
 }
 
@@ -145,20 +149,20 @@
 
 #map-image{
     display:block;
+
     max-width:100%;
     max-height:85vh;
+
     user-select:none;
     pointer-events:none;
 }
 
 
-/* =========================================
-   Map Layer
-========================================= */
-
 #map-layer{
     position:absolute;
+
     inset:0;
+
     pointer-events:none;
 }
 
@@ -169,9 +173,13 @@
 
 .map-marker{
     position:absolute;
+
     transform:translate(-50%,-50%);
+
     cursor:pointer;
+
     z-index:10;
+
     pointer-events:auto;
 }
 
@@ -186,12 +194,10 @@
 }
 
 
-.marker-icon img,
-#map-legend img{
-    max-width:25px;
-    max-height:25px;
-    width:auto;
-    height:auto;
+.marker-icon img{
+    width:32px;
+    height:32px;
+
     object-fit:contain;
 }
 
@@ -203,13 +209,15 @@
 
 
 /* =========================================
-   Marker Popup
+   Popup
 ========================================= */
 
 .marker-popup{
     position:absolute;
+
     left:50%;
     bottom:120%;
+
     transform:translateX(-50%);
 
     width:220px;
@@ -223,13 +231,12 @@
     border-radius:8px;
 
     font-size:14px;
+
     text-align:center;
 
     display:none;
 
     z-index:200;
-
-    pointer-events:auto;
 }
 
 
@@ -247,6 +254,7 @@
 .marker-title{
     font-weight:bold;
     font-size:16px;
+
     margin-bottom:8px;
 }
 
@@ -259,7 +267,9 @@
 
 .marker-floor{
     margin-top:8px;
+
     opacity:.7;
+
     font-size:12px;
 }
 
@@ -275,42 +285,42 @@
 
 .marker-status{
     margin-top:8px;
+
     padding:4px;
 
     border-radius:4px;
 
     background:#5a3b00;
+
     color:#ffcc66;
 
     font-size:13px;
 }
 
 
-.marker-votes{
+.marker-votes,
+.vote-actions{
+
     display:flex;
+
     justify-content:center;
-    gap:8px;
+
+    gap:10px;
 
     margin-top:10px;
 }
 
 
-.vote-actions{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-
-    margin-top:8px;
-}
-
-
 .vote-actions button{
+
     padding:5px 10px;
 
     border:1px solid #555;
+
     border-radius:6px;
 
     background:#333;
+
     color:#ddd;
 
     cursor:pointer;
@@ -318,89 +328,68 @@
 
 
 /* =========================================
-   Create Marker Menu
+   Marker Wizard
 ========================================= */
 
-#marker-menu{
-    position:absolute;
+.category-button,
+.marker-type-button{
 
-    background:#222;
-
-    padding:10px;
-
-    border-radius:8px;
-
-    border:1px solid #555;
-
-    z-index:300;
-
-    transform:translate(-50%,-120%);
-
-    pointer-events:auto;
-}
-
-
-#marker-menu.hidden{
-    display:none;
-}
-
-
-/* =========================================
-   Legend
-========================================= */
-
-#map-legend{
-    width:220px;
-
-    padding:15px;
-
-    background:#222;
-
-    border:1px solid #555;
-
-    border-radius:8px;
-
-    color:#ddd;
-}
-
-
-#map-legend h3{
-    margin-top:0;
-    margin-bottom:15px;
-
-    text-align:center;
-}
-
-
-#map-legend label{
     display:flex;
 
     align-items:center;
 
-    gap:8px;
+    justify-content:center;
 
-    margin:8px 0;
+    gap:10px;
+
+    width:100%;
+
+    padding:10px;
+
+    margin:6px 0;
+
+    background:#333;
+
+    color:#ddd;
+
+    border:1px solid #555;
+
+    border-radius:6px;
 
     cursor:pointer;
 }
 
 
-#map-legend label span{
-    margin-left:auto;
+.category-button:hover,
+.marker-type-button:hover{
+
+    background:#444;
 }
 
 
-#map-legend label img{
-    width:20px;
-    height:20px;
+/* Icones du menu */
+
+.marker-type-button img,
+.category-button img{
+
+    width:32px;
+
+    height:32px;
+
+    max-width:32px;
+
+    max-height:32px;
+
+    object-fit:contain;
 }
 
 
 /* =========================================
-   Action Modal
+   Modal
 ========================================= */
 
 #action-modal{
+
     position:fixed;
 
     inset:0;
@@ -418,11 +407,13 @@
 
 
 #action-modal.hidden{
+
     display:none;
 }
 
 
 .action-box{
+
     width:320px;
 
     padding:20px;
@@ -438,6 +429,7 @@
 
 
 #action-title{
+
     font-size:18px;
 
     font-weight:bold;
@@ -447,6 +439,7 @@
 
 
 #action-content textarea{
+
     width:100%;
 
     min-height:80px;
@@ -466,6 +459,7 @@
 
 
 .action-buttons{
+
     margin-top:15px;
 
     display:flex;
@@ -477,6 +471,7 @@
 
 
 .action-buttons button{
+
     padding:8px 20px;
 
     border-radius:6px;
@@ -492,18 +487,73 @@
 
 
 /* =========================================
+   Legend
+========================================= */
+
+#map-legend{
+
+    width:220px;
+
+    padding:15px;
+
+    background:#222;
+
+    border:1px solid #555;
+
+    border-radius:8px;
+
+    color:#ddd;
+}
+
+
+#map-legend h3{
+
+    margin-top:0;
+
+    text-align:center;
+}
+
+
+#map-legend label{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin:8px 0;
+
+}
+
+
+#map-legend img{
+
+    width:20px;
+
+    height:20px;
+
+    object-fit:contain;
+}
+
+
+/* =========================================
    Responsive
 ========================================= */
 
 @media(max-width:1200px){
 
     .maps-layout{
+
         grid-template-columns:1fr;
+
     }
 
 
     #map-legend{
+
         width:auto;
+
     }
 
 }
@@ -512,11 +562,13 @@
 @media(max-width:900px){
 
     #map-elevator{
+
         flex-direction:row;
 
         justify-content:center;
 
         flex-wrap:wrap;
+
     }
 
 }
