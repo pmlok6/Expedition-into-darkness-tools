@@ -70,6 +70,18 @@ async function oauthLogin(provider)
 
 async function handleOAuthCallback()
 {
+    const hash = window.location.hash;
+
+    // Seulement après un retour OAuth
+    if(
+        !hash.includes("access_token") &&
+        !hash.includes("code")
+    )
+    {
+        return;
+    }
+
+
     const {data,error}=await supabase.auth.getSession();
 
 
@@ -79,7 +91,6 @@ async function handleOAuthCallback()
             "OAuth callback error:",
             error
         );
-
         return;
     }
 
@@ -89,6 +100,14 @@ async function handleOAuthCallback()
         console.log(
             "OAuth connected:",
             data.session.user
+        );
+
+
+        // Nettoyage de l'URL
+        window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
         );
 
 
