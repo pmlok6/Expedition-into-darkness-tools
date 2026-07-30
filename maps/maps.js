@@ -1047,21 +1047,28 @@ function openMarkerWizard()
     .forEach(button=>
     {
         button.onclick=()=>
-        {
-            selectedMarkerCategory =
-                button.dataset.category;
+{
+    selectedMarkerCategory =
+        button.dataset.category;
 
 
-            console.log(
-                "Category selected:",
-                selectedMarkerCategory
-            );
+    console.log(
+        "Category selected:",
+        selectedMarkerCategory
+    );
 
 
-            showMarkerTypes(
-                selectedMarkerCategory
-            );
-        };
+    actionTitle.textContent =
+        "Selected : " + selectedMarkerCategory;
+
+
+    actionContent.innerHTML =
+    `
+    <p>
+        Category loaded
+    </p>
+    `;
+};
     });
 
 
