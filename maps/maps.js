@@ -24,7 +24,6 @@ const mapLayer=document.getElementById("map-layer");
 const selector=document.getElementById("map-selector");
 const image=document.getElementById("map-image");
 const elevator=document.getElementById("map-elevator");
-const markerMenu=document.getElementById("marker-menu");
 const legend=document.getElementById("map-legend");
 
 let MAPS=[];
@@ -214,26 +213,16 @@ function createLegend()
         legend.appendChild(label);
     }
 }
-function openMarkerMenu(x,y)
-{
-    pendingMarker={
-        x:x,
-        y:y
-    };
-
-    markerMenu.style.left=`${x}%`;
-    markerMenu.style.top=`${y}%`;
-
-    markerMenu.classList.remove("hidden");
-}
 
 document
 .getElementById("map-container")
 .addEventListener("click",event=>
 {
+    // Clic sur une popup → ne rien faire
     if(event.target.closest(".marker-popup"))
         return;
 
+    // Clic sur un marker → l'activer
     if(event.target.closest(".map-marker"))
     {
         document
@@ -247,22 +236,15 @@ document
         return;
     }
 
-    if(event.target.closest("#marker-menu"))
-        return;
-
-
+    // Fermer les autres popups
     document
     .querySelectorAll(".map-marker")
     .forEach(marker=>marker.classList.remove("active"));
-
-    markerMenu.classList.add("hidden");
-
 
     const rect=mapLayer.getBoundingClientRect();
 
     const x=((event.clientX-rect.left)/rect.width)*100;
     const y=((event.clientY-rect.top)/rect.height)*100;
-
 
     console.log(
         "Position:",
@@ -272,158 +254,98 @@ document
         "%"
     );
 
-
     if(!currentUser)
     {
         alert("You need an account to add markers");
         return;
     }
-    pendingMarker=
-    {
-       x:x,
-       y:y
+
+    pendingMarker={
+        x:x,
+        y:y
     };
-   openMarkerWizard();
 
-   function showMarkerTypes(category)
-{
-    markerWizardStep="type";
-
-    const types=markerCategories[category];
-
-
-    actionTitle.textContent=
-        category.charAt(0).toUpperCase()+category.slice(1);
-
-
-    actionContent.innerHTML="";
-
-
-    types.forEach(type=>
-    {
-        const button=document.createElement("button");
-
-        button.className="marker-type-button";
-
-        button.dataset.type=type;
-
-        button.innerHTML=
-        `
-        ${getMarkerIcon(type)}
-        ${type.replaceAll("_"," ")}
-        `;
-
-
-        button.onclick=()=>
-        {
-            selectedMarkerType=type;
-
-            showMarkerForm(type);
-        };
-
-
-        actionContent.appendChild(button);
-    });
-
-
-    actionCancel.onclick=()=>
-    {
-        openMarkerWizard();
-    };
-}
+    openMarkerWizard();
+});
 
    function showMarkerForm(type)
 {
     markerWizardStep="form";
 
-
     actionTitle.textContent=
-        "Create "+type.replaceAll("_"," ");
-
+        type
+        .replaceAll("_"," ")
+        .replace(/\b\w/g,l=>l.toUpperCase());
 
     actionContent.innerHTML=
     `
-    <label>
-        Description
-    </label>
+    <label>Description</label>
 
-    <textarea id="marker-description"
-        placeholder="Add a description...">
-    </textarea>
+    <textarea
+        id="marker-description"
+        placeholder="Add a description..."
+    ></textarea>
     `;
-
 
     if(ROTATABLE.includes(type))
     {
         actionContent.innerHTML+=
         `
-        <label>
-            Rotation
-        </label>
+        <br>
 
-        <div class="rotation-buttons">
+        <label>Rotation</label>
 
-            <button data-rotation="0">
+        <div class="rotation-selector">
+
+            <button class="rotation-button" data-rotation="0">
                 0°
             </button>
 
-            <button data-rotation="90">
+            <button class="rotation-button" data-rotation="90">
                 90°
             </button>
 
-            <button data-rotation="180">
+            <button class="rotation-button" data-rotation="180">
                 180°
             </button>
 
-            <button data-rotation="270">
+            <button class="rotation-button" data-rotation="270">
                 270°
             </button>
 
         </div>
         `;
+
+        document
+        .querySelectorAll(".rotation-button")
+        .forEach(button=>
+        {
+            button.onclick=()=>
+            {
+                selectedRotation=
+                Number(button.dataset.rotation);
+
+                document
+                .querySelectorAll(".rotation-button")
+                .forEach(b=>b.classList.remove("active"));
+
+                button.classList.add("active");
+            };
+        });
+
+        selectedRotation=0;
     }
 
-
-    document
-    .querySelectorAll("[data-rotation]")
-    .forEach(button=>
+    actionCancel.onclick=()=>
     {
-        button.onclick=()=>
-        {
-            selectedRotation=
-            Number(button.dataset.rotation);
-        };
-    });
-
+        showMarkerTypes(selectedMarkerCategory);
+    };
 
     actionConfirm.onclick=async()=>
     {
         await saveMarker(type);
-        actionModal.classList.add("hidden");
     };
 }
-});
-if(markerMenu)
-{
-    markerMenu
-    .querySelectorAll("button")
-    .forEach(button=>
-    {
-        button.onclick=async event=>
-        {
-            event.stopPropagation();
-
-            await saveMarker(button.dataset.type);
-
-            document
-            .getElementById("marker-description")
-            .value="";
-
-            markerMenu.classList.add("hidden");
-        };
-    });
-}
-
 async function saveMarker(type)
 {
     const {data:{user},error:userError}=await supabase.auth.getUser();
@@ -439,43 +361,42 @@ async function saveMarker(type)
         console.error("No marker position or floor selected");
         return;
     }
-const descriptionInput=
-document.getElementById("marker-description");
 
+    const descriptionInput=document.getElementById("marker-description");
 
-const markerData=
-{
-    floor_id:currentFloor.id,
+    const markerData=
+    {
+        floor_id:currentFloor.id,
 
-    x:pendingMarker.x,
+        x:pendingMarker.x,
 
-    y:pendingMarker.y,
+        y:pendingMarker.y,
 
-    type:type,
+        type:type,
 
-    title:type,
+        title:type,
 
-    description:
-        descriptionInput
-        ?
-        descriptionInput.value
-        :
-        "",
+        description:
+            descriptionInput
+            ?
+            descriptionInput.value
+            :
+            "",
 
-    rotation:selectedRotation,
+        rotation:selectedRotation,
 
-    created_by:user.id,
+        created_by:user.id,
 
-    approved:false,
+        approved:false,
 
-    up_votes:0,
+        up_votes:0,
 
-    down_votes:0
-};
+        down_votes:0
+    };
+
     const {error}=await supabase
     .from("markers")
     .insert(markerData);
-
 
     if(error)
     {
@@ -483,19 +404,13 @@ const markerData=
         return;
     }
 
-
     pendingMarker=null;
-   selectedMarkerType=null;
-selectedMarkerCategory=null;
-selectedRotation=0;
 
-    document
-    .getElementById("marker-description")
-    .value="";
+    selectedMarkerCategory=null;
+    selectedMarkerType=null;
+    selectedRotation=0;
 
-
-    markerMenu.classList.add("hidden");
-
+    actionModal.classList.add("hidden");
 
     await loadMarkers();
 }
