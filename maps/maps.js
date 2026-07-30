@@ -38,11 +38,21 @@ let pendingMarker=null;
 let communityReview=false;
 
 let filters={
+    door:true,
+    rope:true,
+    door_need_key:true,
+    entrance_exit_door:true,
+    entrance_exit_elevator:true,
+    exit_door:true,
+    exit_elevator:true,
+    exit_rope:true,
+    harrow:true,
+    lever:true,
+    button:true,
+    boss:true,
+    big_mob_spawn:true,
     chest:true,
-    monster:true,
-    resource:true,
-    elevator:true,
-    npc:true
+    body:true
 };
 // ===============================
 // Map functions
@@ -136,7 +146,7 @@ function createLegend()
             applyMarkerFilters();
         };
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(type));
+        label.appendChild(document.createTextNode(formatMarkerName(type)));
         const icon=document.createElement("span");
         icon.innerHTML=getMarkerIcon(type);
         label.appendChild(icon);
@@ -147,38 +157,18 @@ function createLegend()
     if(currentUser)
     {
         const separator=document.createElement("hr");
-
         legend.appendChild(separator);
-
-
         const label=document.createElement("label");
-
         const checkbox=document.createElement("input");
-
-
         checkbox.type="checkbox";
-
         checkbox.checked=communityReview;
-
-
         checkbox.onchange=async()=>
         {
             communityReview=checkbox.checked;
-
-
             await loadMarkers();
         };
-
-
         label.appendChild(checkbox);
-
-        label.appendChild(
-            document.createTextNode(
-                " Community review"
-            )
-        );
-
-
+        label.appendChild(document.createTextNode(" Community review"));
         legend.appendChild(label);
     }
 }
@@ -568,27 +558,31 @@ function applyMarkerFilters()
 
 function getMarkerIcon(type)
 {
-    switch(type)
-    {
-        case "chest":
-            return `<img src="../assets/icons/${type}.png" alt="${type}">`;
-
-        case "elevator":
-            return "🛗";
-
-        case "npc":
-            return "👤";
-
-        case "monster":
-            return "👹";
-
-        case "resource":
-            return "🌿";
-
-        default:
-            return "📍";
-    }
+    return `<img src="../assets/icons/${type}.png" alt="${type}">`;
 }
+
+function formatMarkerName(type)
+{
+    const names={
+        door:"Door",
+        rope:"Rope",
+        door_need_key:"Door Need Key",
+        entrance_exit_door:"Entrance / Exit Door",
+        entrance_exit_elevator:"Entrance / Exit Elevator",
+        exit_door:"Exit Door",
+        exit_elevator:"Exit Elevator",
+        exit_rope:"Exit Rope",
+        harrow:"Harrow",
+        lever:"Lever",
+        button:"Button",
+        boss:"Boss",
+        big_mob_spawn:"Big Mob Spawn",
+        chest:"Chest",
+        body:"Body"
+    };
+    return names[type]||type;
+}
+
 async function voteMarker(markerId,vote)
 {
     const {data:{user},error:userError}=await supabase.auth.getUser();
