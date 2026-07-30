@@ -32,6 +32,10 @@ let currentMap=null;
 let currentFloor=null;
 let currentUser=null;
 let pendingMarker=null;
+let markerWizardStep=null;
+let selectedMarkerType=null;
+let selectedMarkerCategory=null;
+let selectedRotation=0;
 
 let communityReview=false;
 
@@ -274,9 +278,130 @@ document
         alert("You need an account to add markers");
         return;
     }
+    pendingMarker=
+    {
+       x:x,
+       y:y
+    };
+   openMarkerWizard();
+
+   function showMarkerTypes(category)
+{
+    markerWizardStep="type";
+
+    const types=markerCategories[category];
 
 
-    openMarkerMenu(x,y);
+    actionTitle.textContent=
+        category.charAt(0).toUpperCase()+category.slice(1);
+
+
+    actionContent.innerHTML="";
+
+
+    types.forEach(type=>
+    {
+        const button=document.createElement("button");
+
+        button.className="marker-type-button";
+
+        button.dataset.type=type;
+
+        button.innerHTML=
+        `
+        ${getMarkerIcon(type)}
+        ${type.replaceAll("_"," ")}
+        `;
+
+
+        button.onclick=()=>
+        {
+            selectedMarkerType=type;
+
+            showMarkerForm(type);
+        };
+
+
+        actionContent.appendChild(button);
+    });
+
+
+    actionCancel.onclick=()=>
+    {
+        openMarkerWizard();
+    };
+}
+
+   function showMarkerForm(type)
+{
+    markerWizardStep="form";
+
+
+    actionTitle.textContent=
+        "Create "+type.replaceAll("_"," ");
+
+
+    actionContent.innerHTML=
+    `
+    <label>
+        Description
+    </label>
+
+    <textarea id="marker-description"
+        placeholder="Add a description...">
+    </textarea>
+    `;
+
+
+    if(ROTATABLE.includes(type))
+    {
+        actionContent.innerHTML+=
+        `
+        <label>
+            Rotation
+        </label>
+
+        <div class="rotation-buttons">
+
+            <button data-rotation="0">
+                0°
+            </button>
+
+            <button data-rotation="90">
+                90°
+            </button>
+
+            <button data-rotation="180">
+                180°
+            </button>
+
+            <button data-rotation="270">
+                270°
+            </button>
+
+        </div>
+        `;
+    }
+
+
+    document
+    .querySelectorAll("[data-rotation]")
+    .forEach(button=>
+    {
+        button.onclick=()=>
+        {
+            selectedRotation=
+            Number(button.dataset.rotation);
+        };
+    });
+
+
+    actionConfirm.onclick=async()=>
+    {
+        await saveMarker(type);
+        actionModal.classList.add("hidden");
+    };
+}
 });
 if(markerMenu)
 {
@@ -314,24 +439,39 @@ async function saveMarker(type)
         console.error("No marker position or floor selected");
         return;
     }
-
-    const markerData=
-    {
-        floor_id:currentFloor.id,
-        x:pendingMarker.x,
-        y:pendingMarker.y,
-        type:type,
-        title:type,
-        description:document
-        .getElementById("marker-description")
-        .value,
-        created_by:user.id,
-        approved:false,
-        up_votes:0,
-        down_votes:0
-    };
+const descriptionInput=
+document.getElementById("marker-description");
 
 
+const markerData=
+{
+    floor_id:currentFloor.id,
+
+    x:pendingMarker.x,
+
+    y:pendingMarker.y,
+
+    type:type,
+
+    title:type,
+
+    description:
+        descriptionInput
+        ?
+        descriptionInput.value
+        :
+        "",
+
+    rotation:selectedRotation,
+
+    created_by:user.id,
+
+    approved:false,
+
+    up_votes:0,
+
+    down_votes:0
+};
     const {error}=await supabase
     .from("markers")
     .insert(markerData);
@@ -345,7 +485,9 @@ async function saveMarker(type)
 
 
     pendingMarker=null;
-
+   selectedMarkerType=null;
+selectedMarkerCategory=null;
+selectedRotation=0;
 
     document
     .getElementById("marker-description")
@@ -378,6 +520,11 @@ function createMarker(marker)
     element.style.left=marker.x+"%";
     element.style.top=marker.y+"%";
 
+   element.style.transform=
+`
+translate(-50%,-50%)
+rotate(${marker.rotation || 0}deg)
+`;
 
     const votes=marker.marker_votes??[];
 
@@ -903,6 +1050,49 @@ function openActionModal(title,content,callback)
     {
         actionModal.classList.add("hidden");
     };
+}
+
+function openMarkerWizard()
+{
+    markerWizardStep="category";
+
+    openActionModal(
+        "Add Marker",
+        `
+        <button class="category-button" data-category="access">
+            🚪 Access
+        </button>
+
+        <button class="category-button" data-category="interactable">
+            ⚙️ Interactable
+        </button>
+
+        <button class="category-button" data-category="loot">
+            📦 Loot
+        </button>
+
+        <button class="category-button" data-category="creatures">
+            👹 Creatures
+        </button>
+        `,
+        ()=>{}
+    );
+
+
+    document
+    .querySelectorAll(".category-button")
+    .forEach(button=>
+    {
+        button.onclick=()=>
+        {
+            selectedMarkerCategory=
+                button.dataset.category;
+
+            showMarkerTypes(
+                selectedMarkerCategory
+            );
+        };
+    });
 }
 // ===============================
 // Start
