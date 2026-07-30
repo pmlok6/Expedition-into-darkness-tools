@@ -155,8 +155,8 @@
 }
 
 .marker-icon img, #map-legend img{
-    max-width:35px;
-    max-height:35px;
+    max-width:25px;
+    max-height:25px;
     width:auto;
     height:auto;
     object-fit:contain;
