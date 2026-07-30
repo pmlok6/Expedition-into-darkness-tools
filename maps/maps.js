@@ -356,10 +356,11 @@ document
 
     actionContent.innerHTML=
     `
-    <input
-        id="marker-title"
-        placeholder="Location name..."
-    >
+    <textarea
+    id="marker-title"
+    placeholder="Location name..."
+    rows="2"
+    ></textarea>
     `;
 
 
