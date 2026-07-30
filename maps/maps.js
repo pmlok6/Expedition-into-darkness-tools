@@ -558,16 +558,30 @@ function createMarker(marker)
     ).length;
 
 
+    const rotation=
+        marker.type==="location"
+        ?
+        0
+        :
+        (marker.rotation || 0);
+
+
+
     element.innerHTML=
     `
-    <div class="marker-icon">
-    ${
-    marker.type==="location"
-    ?
-    `<span class="location-label">${marker.title}</span>`
-    :
-    getMarkerIcon(marker.type)
-    }
+    <div class="marker-icon"
+         style="transform:rotate(${rotation}deg);">
+
+        ${
+            marker.type==="location"
+            ?
+            `<span class="location-label">
+                ${marker.title}
+             </span>`
+            :
+            getMarkerIcon(marker.type)
+        }
+
     </div>
 
 
@@ -578,9 +592,17 @@ function createMarker(marker)
         </div>
 
 
-        <div class="marker-description">
-            ${marker.description??"No description"}
-        </div>
+        ${
+            marker.description
+            ?
+            `
+            <div class="marker-description">
+                ${marker.description}
+            </div>
+            `
+            :
+            ""
+        }
 
 
         <div class="marker-floor">
@@ -589,64 +611,71 @@ function createMarker(marker)
 
 
         ${
-        !marker.approved
-        ?
-        `
-        <div class="marker-status">
-            ⏳ Pending review
-        </div>
+            !marker.approved
+            ?
+            `
+            <div class="marker-status">
+                ⏳ Pending review
+            </div>
+
+
+            ${
+                communityReview
+                ?
+                `
+                <div class="marker-votes">
+                    👍 ${upVotes}
+                    👎 ${downVotes}
+                </div>
+
+
+                <div class="vote-actions">
+
+                    <button class="vote-up">
+                        👍
+                    </button>
+
+                    <button class="vote-down">
+                        👎
+                    </button>
+
+                </div>
+                `
+                :
+                ""
+            }
+            `
+            :
+            ""
+        }
+
 
         ${
-        communityReview
-        ?
-        `
-        <div class="marker-votes">
-            👍 ${upVotes}
-            👎 ${downVotes}
-        </div>
+            currentUser &&
+            currentUser.id===marker.created_by
+            ?
+            `
+            <div class="marker-actions">
 
-        <div class="vote-actions">
-            <button class="vote-up">
-                👍
-            </button>
+                <button class="edit-marker">
+                    ✏ Edit
+                </button>
 
-            <button class="vote-down">
-                👎
-            </button>
-        </div>
-        `
-        :
-        ""
-        }
-        `
-        :
-        ""
+
+                <button class="delete-marker">
+                    🗑 Delete
+                </button>
+
+            </div>
+            `
+            :
+            ""
         }
 
-
-        ${
-        currentUser &&
-        currentUser.id===marker.created_by
-        ?
-        `
-        <div class="marker-actions">
-
-            <button class="edit-marker">
-                ✏ Edit
-            </button>
-
-            <button class="delete-marker">
-                🗑 Delete
-            </button>
-
-        </div>
-        `
-        :
-        ""
-        }
 
     </div>
     `;
+
 
 
     element
@@ -663,6 +692,7 @@ function createMarker(marker)
     );
 
 
+
     element
     .querySelector(".edit-marker")
     ?.addEventListener(
@@ -675,13 +705,11 @@ function createMarker(marker)
 
             openActionModal(
                 "Edit marker",
-
                 `
                 <textarea id="edit-description">
                 ${marker.description??""}
                 </textarea>
                 `,
-
                 async()=>
                 {
                     const description=
@@ -719,6 +747,7 @@ function createMarker(marker)
     );
 
 
+
     element
     .querySelector(".vote-up")
     ?.addEventListener(
@@ -735,6 +764,7 @@ function createMarker(marker)
     );
 
 
+
     element
     .querySelector(".vote-down")
     ?.addEventListener(
@@ -749,6 +779,7 @@ function createMarker(marker)
             );
         }
     );
+
 
 
     mapLayer.appendChild(element);
