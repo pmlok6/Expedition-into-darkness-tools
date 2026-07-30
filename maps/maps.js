@@ -577,8 +577,8 @@ function createMarker(marker)
             marker.type==="location"
             ?
             `<span class="location-label">
-                ${marker.title}
-             </span>`
+            ${marker.title.replace(/\n/g,"<br>")}
+            </span>`
             :
             getMarkerIcon(marker.type)
         }
