@@ -52,7 +52,8 @@ let filters={
     boss:true,
     big_mob_spawn:true,
     chest:true,
-    body:true
+    body:true,
+    armor_stand:true
 };
 // ===============================
 // Map functions
@@ -578,7 +579,8 @@ function formatMarkerName(type)
         boss:"Boss",
         big_mob_spawn:"Big Mob Spawn",
         chest:"Chest",
-        body:"Body"
+        body:"Body",
+        armor_stand:"Armor Stand"
     };
     return names[type]||type;
 }
