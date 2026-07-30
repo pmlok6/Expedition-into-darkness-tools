@@ -971,27 +971,31 @@ function openMarkerWizard()
 {
     markerWizardStep="category";
 
-    openActionModal(
-        "Add Marker",
-        `
-        <button class="category-button" data-category="access">
-            🚪 Access
-        </button>
 
-        <button class="category-button" data-category="interactable">
-            ⚙️ Interactable
-        </button>
+    actionTitle.textContent="Add Marker";
 
-        <button class="category-button" data-category="loot">
-            📦 Loot
-        </button>
 
-        <button class="category-button" data-category="creatures">
-            👹 Creatures
-        </button>
-        `,
-        ()=>{}
-    );
+    actionContent.innerHTML=
+    `
+    <button class="category-button" data-category="access">
+        🚪 Access
+    </button>
+
+    <button class="category-button" data-category="interactable">
+        ⚙️ Interactable
+    </button>
+
+    <button class="category-button" data-category="loot">
+        📦 Loot
+    </button>
+
+    <button class="category-button" data-category="creatures">
+        👹 Creatures
+    </button>
+    `;
+
+
+    actionModal.classList.remove("hidden");
 
 
     document
@@ -1000,14 +1004,27 @@ function openMarkerWizard()
     {
         button.onclick=()=>
         {
-            selectedMarkerCategory=
+            selectedMarkerCategory =
                 button.dataset.category;
+
+
+            console.log(
+                "Category selected:",
+                selectedMarkerCategory
+            );
+
 
             showMarkerTypes(
                 selectedMarkerCategory
             );
         };
     });
+
+
+    actionCancel.onclick=()=>
+    {
+        actionModal.classList.add("hidden");
+    };
 }
 // ===============================
 // Start
