@@ -509,10 +509,9 @@ function createMarker(marker)
     element.style.left=marker.x+"%";
     element.style.top=marker.y+"%";
 
-   element.style.transform=
+   element.style.transform =
 `
 translate(-50%,-50%)
-rotate(${marker.rotation || 0}deg)
 `;
 
     const votes=marker.marker_votes??[];
