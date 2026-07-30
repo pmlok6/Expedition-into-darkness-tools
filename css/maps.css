@@ -141,7 +141,10 @@
     object-fit:contain;
 }
 
-.map-marker.pending{
+
+/* Pending uniquement sur l'image */
+
+.map-marker.pending .marker-icon img{
     opacity:.55;
     filter:grayscale(.5);
 }
@@ -156,15 +159,23 @@
     left:50%;
     bottom:120%;
     transform:translateX(-50%);
+
     width:220px;
     padding:10px;
+
     background:#222;
     color:#ddd;
+
     border:1px solid #555;
     border-radius:8px;
+
     text-align:center;
+
     display:none;
     z-index:200;
+
+    opacity:1;
+    filter:none;
 }
 
 .map-marker.active .marker-popup{
@@ -194,9 +205,12 @@
 #map-legend{
     width:220px;
     padding:15px;
+
     background:#222;
+
     border:1px solid #555;
     border-radius:8px;
+
     color:#ddd;
 }
 
@@ -207,6 +221,7 @@
 #map-legend label{
     display:flex;
     align-items:center;
+
     gap:8px;
     margin:8px 0;
 }
@@ -224,10 +239,13 @@
 #action-modal{
     position:fixed;
     inset:0;
+
     background:rgba(0,0,0,.7);
+
     display:flex;
     justify-content:center;
     align-items:center;
+
     z-index:1000;
 }
 
@@ -237,24 +255,31 @@
 
 .action-box{
     width:320px;
+
     padding:20px;
+
     background:#222;
+
     border:1px solid #555;
     border-radius:10px;
+
     text-align:center;
 }
 
 #action-content textarea{
     width:100%;
     min-height:80px;
+
     background:#111;
     color:#ddd;
+
     border:1px solid #555;
     border-radius:6px;
 }
 
 .action-buttons{
     margin-top:15px;
+
     display:flex;
     justify-content:center;
     gap:10px;
@@ -262,10 +287,13 @@
 
 .action-buttons button{
     padding:8px 20px;
+
     border-radius:6px;
     border:1px solid #555;
+
     background:#333;
     color:#ddd;
+
     cursor:pointer;
 }
 
@@ -276,17 +304,24 @@
 
 .category-button,
 .marker-type-button{
+
     width:100%;
+
     padding:10px;
     margin:5px 0;
+
     display:flex;
     justify-content:center;
     align-items:center;
+
     gap:10px;
+
     background:#333;
     color:#ddd;
+
     border:1px solid #555;
     border-radius:6px;
+
     cursor:pointer;
 }
 
