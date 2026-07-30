@@ -1101,6 +1101,13 @@ function openMarkerWizard()
         pendingMarker=null;
     };
 }
+
+console.log(
+    "Modal visible:",
+    actionModal,
+    getComputedStyle(actionModal).zIndex,
+    getComputedStyle(actionModal).display
+);
 // ===============================
 // Start
 // ===============================
