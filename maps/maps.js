@@ -220,21 +220,25 @@ document
 {
     // Clic sur une popup → ne rien faire
     if(event.target.closest(".marker-popup"))
-        return;
+{
+    return;
+}
 
-    // Clic sur un marker → l'activer
-    if(event.target.closest(".map-marker"))
-    {
-        document
-        .querySelectorAll(".map-marker")
-        .forEach(marker=>marker.classList.remove("active"));
 
-        event.target
-        .closest(".map-marker")
-        .classList.add("active");
+if(event.target.closest(".marker-icon"))
+{
+    document
+    .querySelectorAll(".map-marker")
+    .forEach(marker=>
+        marker.classList.remove("active")
+    );
 
-        return;
-    }
+    event.target
+    .closest(".map-marker")
+    .classList.add("active");
+
+    return;
+}
 
     // Fermer les autres popups
     document
