@@ -1041,64 +1041,50 @@ function openActionModal(title,content,callback)
     };
 }
 
-
-
-
 function openMarkerWizard()
 {
     markerWizardStep="category";
-
 
     actionTitle.textContent="Add Marker";
 
 
     actionContent.innerHTML=
     `
-        <button class="category-button" data-category="access">
-            🚪 Access
-        </button>
+    <button class="category-button" data-category="access">
+        🚪 Access
+    </button>
 
-        <button class="category-button" data-category="interactable">
-            ⚙️ Interactable
-        </button>
+    <button class="category-button" data-category="interactable">
+        ⚙️ Interactable
+    </button>
 
-        <button class="category-button" data-category="loot">
-            📦 Loot
-        </button>
+    <button class="category-button" data-category="loot">
+        📦 Loot
+    </button>
 
-        <button class="category-button" data-category="creatures">
-            👹 Creatures
-        </button>
+    <button class="category-button" data-category="creatures">
+        👹 Creatures
+    </button>
     `;
 
 
     actionModal.classList.remove("hidden");
 
 
-    const buttons=
-        document.querySelectorAll(
-            ".category-button"
-        );
-
-
-    console.log(
-        "Category buttons:",
-        buttons.length
-    );
-
-
-    buttons.forEach(button=>
+    document
+    .querySelectorAll(".category-button")
+    .forEach(button=>
     {
         button.onclick=()=>
         {
-            console.log(
-                "CLICK CATEGORY:",
-                button.dataset.category
-            );
-
-
-            selectedMarkerCategory=
+            selectedMarkerCategory =
                 button.dataset.category;
+
+
+            console.log(
+                "Category selected:",
+                selectedMarkerCategory
+            );
 
 
             showMarkerTypes(
@@ -1108,16 +1094,11 @@ function openMarkerWizard()
     });
 
 
-
     actionCancel.onclick=()=>
     {
         actionModal.classList.add("hidden");
 
-
         pendingMarker=null;
-
-
-        selectedMarkerCategory=null;
     };
 }
 // ===============================
