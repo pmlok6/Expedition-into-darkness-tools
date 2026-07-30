@@ -39,6 +39,7 @@ let selectedRotation=0;
 let communityReview=false;
 
 let filters={
+    location:true,
     door:true,
     rope:true,
     door_need_key:true,
@@ -58,6 +59,9 @@ let filters={
 };
 
 const markerCategories={
+    location:[
+        "location"
+    ],
     access:[
         "door",
         "door_need_key",
@@ -346,6 +350,34 @@ document
 {
     markerWizardStep="form";
 
+   if(type==="location")
+{
+    actionTitle.textContent="Location Name";
+
+    actionContent.innerHTML=
+    `
+    <input
+        id="marker-title"
+        placeholder="Location name..."
+    >
+    `;
+
+
+    actionCancel.onclick=()=>
+    {
+        showMarkerTypes(selectedMarkerCategory);
+    };
+
+
+    actionConfirm.onclick=async()=>
+    {
+        await saveMarker(type);
+    };
+
+
+    return;
+}
+
     actionTitle.textContent=
         type
         .replaceAll("_"," ")
@@ -448,7 +480,12 @@ async function saveMarker(type)
 
         type:type,
 
-        title:type,
+        title:
+         type==="location"
+         ?
+         document.getElementById("marker-title").value
+         :
+         type,
 
         description:
             descriptionInput
@@ -523,11 +560,14 @@ function createMarker(marker)
 
     element.innerHTML=
     `
-    <div class="marker-icon"
-         style="
-         transform:rotate(${marker.rotation || 0}deg);
-         ">
-        ${getMarkerIcon(marker.type)}
+    <div class="marker-icon">
+    ${
+    marker.type==="location"
+    ?
+    `<span class="location-label">${marker.title}</span>`
+    :
+    getMarkerIcon(marker.type)
+    }
     </div>
 
 
@@ -763,6 +803,9 @@ function applyMarkerFilters()
 
 function getMarkerIcon(type)
 {
+    if(type==="location")
+        return "";
+
     return `<img src="../assets/icons/${type}.png" alt="${type}">`;
 }
 
@@ -1107,6 +1150,10 @@ function openMarkerWizard()
 
     actionContent.innerHTML=
     `
+    <button class="category-button" data-category="location">
+    📍 Location
+    </button>
+
     <button class="category-button" data-category="access">
         🚪 Access
     </button>
