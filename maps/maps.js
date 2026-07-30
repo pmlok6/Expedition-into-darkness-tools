@@ -506,13 +506,13 @@ function createMarker(marker)
     element.dataset.type=marker.type;
 
 
+    // Position uniquement
     element.style.left=marker.x+"%";
     element.style.top=marker.y+"%";
 
-   element.style.transform =
-`
-translate(-50%,-50%)
-`;
+
+    const rotation=marker.rotation || 0;
+
 
     const votes=marker.marker_votes??[];
 
@@ -525,42 +525,80 @@ translate(-50%,-50%)
     ).length;
 
 
-    element.innerHTML=`
-    <div class="marker-icon">${getMarkerIcon(marker.type)}</div>
+
+    element.innerHTML=
+    `
+    <div class="marker-icon"
+         style="transform:rotate(${rotation}deg)">
+         
+        ${getMarkerIcon(marker.type)}
+
+    </div>
+
+
     <div class="marker-popup">
 
         <div class="marker-title">
             ${marker.title}
         </div>
 
+
         <div class="marker-description">
             ${marker.description??"No description"}
         </div>
+
 
         <div class="marker-floor">
             Floor ${currentFloor.floor}
         </div>
 
-        ${
-            !marker.approved?`
-            <div class="marker-status">
-                ⏳ Pending review
-            </div>
 
-            ${
-            communityReview?`
-            <div class="marker-votes">
-                👍 ${upVotes}
-                👎 ${downVotes}
-            </div>
-            <div class="vote-actions">
-                <button class="vote-up">👍</button>
-                <button class="vote-down">👎</button>
-            </div>`:""
-            }`:""
-         }
         ${
-        currentUser&&currentUser.id===marker.created_by?
+        !marker.approved
+        ?
+        `
+        <div class="marker-status">
+            ⏳ Pending review
+        </div>
+
+
+        ${
+        communityReview
+        ?
+        `
+        <div class="marker-votes">
+            👍 ${upVotes}
+            👎 ${downVotes}
+        </div>
+
+
+        <div class="vote-actions">
+
+            <button class="vote-up">
+                👍
+            </button>
+
+            <button class="vote-down">
+                👎
+            </button>
+
+        </div>
+        `
+        :
+        ""
+        }
+
+        `
+        :
+        ""
+        }
+
+
+
+        ${
+        currentUser &&
+        currentUser.id===marker.created_by
+        ?
         `
         <div class="marker-actions">
 
@@ -568,16 +606,24 @@ translate(-50%,-50%)
                 ✏ Edit
             </button>
 
+
             <button class="delete-marker">
                 🗑 Delete
             </button>
 
         </div>
         `
-        :""
+        :
+        ""
         }
 
-    </div>`;
+
+    </div>
+    `;
+
+
+    mapLayer.appendChild(element);
+
 
 
     element
@@ -621,7 +667,7 @@ translate(-50%,-50%)
                     const {error}=await supabase
                     .from("markers")
                     .update({
-                        description:description
+                        description
                     })
                     .eq(
                         "id",
@@ -677,9 +723,6 @@ translate(-50%,-50%)
             );
         }
     );
-
-
-    mapLayer.appendChild(element);
 }
 
 function applyMarkerFilters()
