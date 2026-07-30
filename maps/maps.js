@@ -218,37 +218,56 @@ document
 .getElementById("map-container")
 .addEventListener("click",event=>
 {
-    // Clic sur une popup → ne rien faire
     if(event.target.closest(".marker-popup"))
-{
-    return;
-}
+        return;
 
 
-if(event.target.closest(".marker-icon"))
-{
+    if(event.target.closest(".map-marker"))
+    {
+        document
+        .querySelectorAll(".map-marker")
+        .forEach(marker=>
+            marker.classList.remove("active")
+        );
+
+
+        event.target
+        .closest(".map-marker")
+        .classList.add("active");
+
+        return;
+    }
+
+
     document
     .querySelectorAll(".map-marker")
     .forEach(marker=>
         marker.classList.remove("active")
     );
 
-    event.target
-    .closest(".map-marker")
-    .classList.add("active");
 
-    return;
-}
+    // IMPORTANT : prendre la taille de l'image
+    const rect=image.getBoundingClientRect();
 
-    // Fermer les autres popups
-    document
-    .querySelectorAll(".map-marker")
-    .forEach(marker=>marker.classList.remove("active"));
 
-    const rect=mapLayer.getBoundingClientRect();
+    const x=
+    ((event.clientX-rect.left)/rect.width)*100;
 
-    const x=((event.clientX-rect.left)/rect.width)*100;
-    const y=((event.clientY-rect.top)/rect.height)*100;
+
+    const y=
+    ((event.clientY-rect.top)/rect.height)*100;
+
+
+    if(
+        x<0 ||
+        x>100 ||
+        y<0 ||
+        y>100
+    )
+    {
+        return;
+    }
+
 
     console.log(
         "Position:",
@@ -258,16 +277,19 @@ if(event.target.closest(".marker-icon"))
         "%"
     );
 
+
     if(!currentUser)
     {
         alert("You need an account to add markers");
         return;
     }
 
+
     pendingMarker={
         x:x,
         y:y
     };
+
 
     openMarkerWizard();
 });
