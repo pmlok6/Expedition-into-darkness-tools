@@ -10,18 +10,48 @@
    - OAuth callback
    - Redirect after login
 ========================================== */
-import { supabase } from "./supabase.js";
+
+import {supabase} from "./supabase.js";
+
+
 // ===============================
 // Elements
 // ===============================
-const email =document.getElementById("email");
-const password =document.getElementById("password");
+
+const email=document.getElementById("email");
+const password=document.getElementById("password");
+
+
+
 // ===============================
-// Redirect after login
+// Redirect management
 // ===============================
+
+function saveRedirect()
+{
+    if(
+        !sessionStorage.getItem(
+            "redirectAfterLogin"
+        )
+    )
+    {
+        sessionStorage.setItem(
+            "redirectAfterLogin",
+            document.referrer
+            ||
+            window.location.href
+        );
+    }
+}
+
+
+
 function redirectAfterLogin()
 {
-    const redirect =    sessionStorage.getItem(        "redirectAfterLogin"    );
+    const redirect=
+    sessionStorage.getItem(
+        "redirectAfterLogin"
+    );
 
 
     sessionStorage.removeItem(
@@ -29,24 +59,35 @@ function redirectAfterLogin()
     );
 
 
-    if(redirect)
+    if(
+        redirect &&
+        !redirect.includes("login.html")
+    )
     {
-        window.location.href = redirect;
+        window.location.href=redirect;
+        return;
     }
-    else
-   {
-       window.location.href ="https://pmlok6.github.io/Expedition-into-darkness-tools/";
-   }
+
+
+    console.log(
+        "No redirect needed"
+    );
 }
+
+
+
 // ===============================
 // OAuth Login
 // ===============================
 
 async function oauthLogin(provider)
 {
+    saveRedirect();
+
+
     const {error}=await supabase.auth.signInWithOAuth(
     {
-        provider:provider,
+        provider,
 
         options:
         {
@@ -64,24 +105,15 @@ async function oauthLogin(provider)
         );
     }
 }
+
+
+
 // ===============================
-// Handle OAuth callback
+// OAuth Callback
 // ===============================
 
 async function handleOAuthCallback()
 {
-    const hash = window.location.hash;
-
-    // Seulement après un retour OAuth
-    if(
-        !hash.includes("access_token") &&
-        !hash.includes("code")
-    )
-    {
-        return;
-    }
-
-
     const {data,error}=await supabase.auth.getSession();
 
 
@@ -91,6 +123,7 @@ async function handleOAuthCallback()
             "OAuth callback error:",
             error
         );
+
         return;
     }
 
@@ -103,7 +136,6 @@ async function handleOAuthCallback()
         );
 
 
-        // Nettoyage de l'URL
         window.history.replaceState(
             {},
             document.title,
@@ -111,12 +143,14 @@ async function handleOAuthCallback()
         );
 
 
-        window.location.href =
-        "https://pmlok6.github.io/Expedition-into-darkness-tools/";
+        redirectAfterLogin();
     }
 }
+
+
+
 // ===============================
-// Email Signup
+// Signup
 // ===============================
 
 async function signup()
@@ -125,20 +159,18 @@ async function signup()
         return;
 
 
-    const { data, error } =
-    await supabase.auth.signUp({
+    const {data,error}=await supabase.auth.signUp(
+    {
+        email:email.value,
 
-        email: email.value,
-
-        password: password.value
-
+        password:password.value
     });
 
 
     if(error)
     {
         console.error(
-            "Signup error :",
+            "Signup error:",
             error
         );
 
@@ -147,44 +179,54 @@ async function signup()
 
 
     console.log(
-        "Compte créé :",
+        "Account created:",
         data
     );
 
 
     alert(
-        "Compte créé ! Vérifie ton email."
+        "Account created. Check your email."
     );
 }
 
 
 
 // ===============================
-// Email Login
+// Login
 // ===============================
 
 async function login()
 {
     if(!email || !password)
         return;
-    const { data, error } =
-    await supabase.auth.signInWithPassword({
-        email: email.value,
-        password: password.value
+
+
+    const {data,error}=await supabase.auth.signInWithPassword(
+    {
+        email:email.value,
+
+        password:password.value
     });
+
+
     if(error)
     {
         console.error(
-            "Login error :",
+            "Login error:",
             error
         );
 
         return;
     }
+
+
     console.log(
-        "Connexion réussie :",
+        "Login success:",
         data
     );
+
+
+    redirectAfterLogin();
 }
 
 
@@ -195,14 +237,13 @@ async function login()
 
 async function logout()
 {
-    const { error } =
-    await supabase.auth.signOut();
+    const {error}=await supabase.auth.signOut();
 
 
     if(error)
     {
         console.error(
-            "Logout error :",
+            "Logout error:",
             error
         );
 
@@ -211,7 +252,7 @@ async function logout()
 
 
     console.log(
-        "Déconnecté"
+        "Logout success"
     );
 
 
@@ -226,13 +267,13 @@ async function logout()
 
 async function checkSession()
 {
-    const { data, error } =
-    await supabase.auth.getSession();
+    const {data,error}=await supabase.auth.getSession();
 
 
     if(error)
     {
         console.error(
+            "Session error:",
             error
         );
 
@@ -243,14 +284,14 @@ async function checkSession()
     if(data.session)
     {
         console.log(
-            "Utilisateur connecté :",
+            "Connected user:",
             data.session.user
         );
     }
     else
     {
         console.log(
-            "Aucune session"
+            "No session"
         );
     }
 }
@@ -262,17 +303,20 @@ async function checkSession()
 // ===============================
 
 supabase.auth.onAuthStateChange(
-(event, session) =>
+(event,session)=>
 {
     console.log(
-        "Auth event :",
+        "Auth event:",
         event
     );
 
 
-    if(event === "SIGNED_IN" && session)
+    if(session)
     {
-        redirectAfterLogin();
+        console.log(
+            "User:",
+            session.user
+        );
     }
 });
 
@@ -285,32 +329,30 @@ supabase.auth.onAuthStateChange(
 document
 .getElementById("github-login")
 ?.addEventListener(
-    "click",
-    () =>
-    {
-        oauthLogin("github");
-    }
-);
+"click",
+()=>
+{
+    oauthLogin("github");
+});
 
 
 
 document
 .getElementById("discord-login")
 ?.addEventListener(
-    "click",
-    () =>
-    {
-        oauthLogin("discord");
-    }
-);
+"click",
+()=>
+{
+    oauthLogin("discord");
+});
 
 
 
 document
 .getElementById("signup")
 ?.addEventListener(
-    "click",
-    signup
+"click",
+signup
 );
 
 
@@ -318,8 +360,8 @@ document
 document
 .getElementById("login")
 ?.addEventListener(
-    "click",
-    login
+"click",
+login
 );
 
 
@@ -327,8 +369,8 @@ document
 document
 .getElementById("logout")
 ?.addEventListener(
-    "click",
-    logout
+"click",
+logout
 );
 
 
@@ -337,6 +379,6 @@ document
 // Start
 // ===============================
 
-checkSession();
+await checkSession();
 
-handleOAuthCallback();
+await handleOAuthCallback();
