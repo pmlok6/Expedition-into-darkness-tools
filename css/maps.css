@@ -52,7 +52,24 @@
     color:#fff;
     border-color:#b54040;
 }
+.rotation-selector
+{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-top:10px;
+}
 
+.rotation-button
+{
+    min-width:60px;
+}
+
+.rotation-button.active
+{
+    background:#8b2b2b;
+    color:white;
+}
 
 /* =========================================
    Layout
