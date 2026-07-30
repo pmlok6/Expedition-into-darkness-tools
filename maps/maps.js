@@ -506,12 +506,8 @@ function createMarker(marker)
     element.dataset.type=marker.type;
 
 
-    // Position uniquement
     element.style.left=marker.x+"%";
     element.style.top=marker.y+"%";
-
-
-    const rotation=marker.rotation || 0;
 
 
     const votes=marker.marker_votes??[];
@@ -525,14 +521,13 @@ function createMarker(marker)
     ).length;
 
 
-
     element.innerHTML=
     `
     <div class="marker-icon"
-         style="transform:rotate(${rotation}deg)">
-         
+         style="
+         transform:rotate(${marker.rotation || 0}deg);
+         ">
         ${getMarkerIcon(marker.type)}
-
     </div>
 
 
@@ -561,7 +556,6 @@ function createMarker(marker)
             ⏳ Pending review
         </div>
 
-
         ${
         communityReview
         ?
@@ -571,9 +565,7 @@ function createMarker(marker)
             👎 ${downVotes}
         </div>
 
-
         <div class="vote-actions">
-
             <button class="vote-up">
                 👍
             </button>
@@ -581,18 +573,15 @@ function createMarker(marker)
             <button class="vote-down">
                 👎
             </button>
-
         </div>
         `
         :
         ""
         }
-
         `
         :
         ""
         }
-
 
 
         ${
@@ -606,7 +595,6 @@ function createMarker(marker)
                 ✏ Edit
             </button>
 
-
             <button class="delete-marker">
                 🗑 Delete
             </button>
@@ -617,13 +605,8 @@ function createMarker(marker)
         ""
         }
 
-
     </div>
     `;
-
-
-    mapLayer.appendChild(element);
-
 
 
     element
@@ -649,13 +632,16 @@ function createMarker(marker)
             event.stopPropagation();
             event.preventDefault();
 
+
             openActionModal(
                 "Edit marker",
+
                 `
                 <textarea id="edit-description">
                 ${marker.description??""}
                 </textarea>
                 `,
+
                 async()=>
                 {
                     const description=
@@ -667,7 +653,7 @@ function createMarker(marker)
                     const {error}=await supabase
                     .from("markers")
                     .update({
-                        description
+                        description:description
                     })
                     .eq(
                         "id",
@@ -723,6 +709,9 @@ function createMarker(marker)
             );
         }
     );
+
+
+    mapLayer.appendChild(element);
 }
 
 function applyMarkerFilters()
