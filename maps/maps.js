@@ -925,27 +925,90 @@ async function voteMarker(markerId,vote)
     }
 
 
-    const {data:votes}=await supabase
-    .from("marker_votes")
-    .select("vote")
-    .eq("marker_id",markerId);
+    const {data:votes,error:votesError}=await supabase
+.from("marker_votes")
+.select("vote")
+.eq("marker_id",markerId);
 
 
-    const score=votes.reduce(
-        (total,item)=>total+item.vote,
-        0
+if(votesError)
+{
+    console.error(
+        "Vote count error:",
+        votesError
     );
 
+    return;
+}
 
-    if(score>=5)
+
+const totalVotes=votes.length;
+
+
+if(totalVotes>=10)
+{
+    const positiveVotes=votes.filter(
+        v=>v.vote===1
+    ).length;
+
+    const negativeVotes=votes.filter(
+        v=>v.vote===-1
+    ).length;
+
+
+    const positivePercent=
+        (positiveVotes/totalVotes)*100;
+
+
+    const negativePercent=
+        (negativeVotes/totalVotes)*100;
+
+
+
+    // Validation communautaire
+    if(positivePercent>=80)
     {
         await supabase
         .from("markers")
         .update({
             approved:true
         })
-        .eq("id",markerId);
+        .eq(
+            "id",
+            markerId
+        );
     }
+
+
+
+    // Suppression communautaire
+    if(negativePercent>=80)
+    {
+        const {error:deleteError}=await supabase
+        .from("markers")
+        .delete()
+        .eq(
+            "id",
+            markerId
+        );
+
+
+        if(deleteError)
+        {
+            console.error(
+                "Auto delete error:",
+                deleteError
+            );
+        }
+        else
+        {
+            console.log(
+                "Marker removed by community votes:",
+                markerId
+            );
+        }
+    }
+}
 
 
     await loadMarkers();
