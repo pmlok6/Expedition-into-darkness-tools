@@ -939,49 +939,73 @@ async function loadMarkers()
 // ===============================
 // User functions
 // ===============================
-
 async function getCurrentUser()
 {
     const {data,error}=await supabase
     .auth
     .getSession();
+
+
     if(error)
     {
-        console.error("Session error:",error);
+        console.error(
+            "Session error:",
+            error
+        );
+
         currentUser=null;
     }
     else
     {
         currentUser=
-        data.session?.user??null;
+            data.session?.user ?? null;
     }
-    console.log("Current user:",currentUser);
+
+
+    console.log(
+        "Current user:",
+        currentUser
+    );
+
+
     if(legend)
     {
         createLegend();
     }
 }
+
+
 function listenAuthChanges()
 {
     supabase.auth.onAuthStateChange(
     async(_,session)=>
     {
-        currentUser=session?.user??null;
+        currentUser=
+            session?.user ?? null;
+
 
         if(!currentUser)
+        {
             communityReview=false;
+        }
+
 
         createLegend();
+
 
         await loadMarkers();
     });
 }
 
+
+
 function openActionModal(title,content,callback)
 {
     actionTitle.textContent=title;
 
+
     actionContent.innerHTML=content;
+
 
     actionModal.classList.remove("hidden");
 
@@ -990,16 +1014,22 @@ function openActionModal(title,content,callback)
     {
         actionConfirm.disabled=true;
 
+
         try
         {
             await callback();
         }
         catch(error)
         {
-            console.error("Action error:",error);
+            console.error(
+                "Action error:",
+                error
+            );
         }
 
+
         actionConfirm.disabled=false;
+
 
         actionModal.classList.add("hidden");
     };
@@ -1010,6 +1040,9 @@ function openActionModal(title,content,callback)
         actionModal.classList.add("hidden");
     };
 }
+
+
+
 
 function openMarkerWizard()
 {
@@ -1021,63 +1054,71 @@ function openMarkerWizard()
 
     actionContent.innerHTML=
     `
-    <button class="category-button" data-category="access">
-        🚪 Access
-    </button>
+        <button class="category-button" data-category="access">
+            🚪 Access
+        </button>
 
-    <button class="category-button" data-category="interactable">
-        ⚙️ Interactable
-    </button>
+        <button class="category-button" data-category="interactable">
+            ⚙️ Interactable
+        </button>
 
-    <button class="category-button" data-category="loot">
-        📦 Loot
-    </button>
+        <button class="category-button" data-category="loot">
+            📦 Loot
+        </button>
 
-    <button class="category-button" data-category="creatures">
-        👹 Creatures
-    </button>
+        <button class="category-button" data-category="creatures">
+            👹 Creatures
+        </button>
     `;
 
 
     actionModal.classList.remove("hidden");
 
 
-    document
-    .querySelectorAll(".category-button")
-    .forEach(button=>
-    {
-        button.onclick=()=>
-{
-    selectedMarkerCategory =
-        button.dataset.category;
+    const buttons=
+        document.querySelectorAll(
+            ".category-button"
+        );
 
 
     console.log(
-        "Category selected:",
-        selectedMarkerCategory
+        "Category buttons:",
+        buttons.length
     );
 
 
-    actionTitle.textContent =
-        "Selected : " + selectedMarkerCategory;
+    buttons.forEach(button=>
+    {
+        button.onclick=()=>
+        {
+            console.log(
+                "CLICK CATEGORY:",
+                button.dataset.category
+            );
 
 
-    actionContent.innerHTML =
-    `
-    <p>
-        Category loaded
-    </p>
-    `;
-};
+            selectedMarkerCategory=
+                button.dataset.category;
+
+
+            showMarkerTypes(
+                selectedMarkerCategory
+            );
+        };
     });
 
 
-    actionCancel.onclick=()=>
-{
-    actionModal.classList.add("hidden");
 
-    pendingMarker=null;
-};
+    actionCancel.onclick=()=>
+    {
+        actionModal.classList.add("hidden");
+
+
+        pendingMarker=null;
+
+
+        selectedMarkerCategory=null;
+    };
 }
 // ===============================
 // Start
