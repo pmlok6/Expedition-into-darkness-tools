@@ -2,21 +2,45 @@
    GLOBAL
 =============================== */
 
+html,
 body{
+
     margin:0;
+
+    padding:0;
+
+    min-height:100%;
+
+}
+
+
+body{
+
     min-height:100vh;
+
     display:flex;
+
     flex-direction:column;
 
+
     background:#111;
+
     color:#eee;
+
     font-family:Arial,sans-serif;
+
 }
+
 
 
 main{
+
     flex:1;
+
+    display:block;
+
 }
+
 
 
 /* ===============================
@@ -24,16 +48,25 @@ main{
 =============================== */
 
 header{
+
     text-align:center;
+
     padding:25px;
+
     background:#1b1b1b;
+
 }
+
 
 
 .title-logo{
+
     width:300px;
+
     height:auto;
+
 }
+
 
 
 /* ===============================
@@ -41,10 +74,19 @@ header{
 =============================== */
 
 .container{
+
     max-width:1200px;
-    margin:auto;
+
+    width:100%;
+
+    margin:0 auto;
+
     padding:30px;
+
+    box-sizing:border-box;
+
 }
+
 
 
 /* ===============================
@@ -55,12 +97,12 @@ header{
 
     display:grid;
 
-    grid-template-columns:
-    repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
     gap:20px;
 
 }
+
 
 
 .card{
@@ -82,6 +124,7 @@ header{
 }
 
 
+
 .card:hover{
 
     transform:translateY(-5px);
@@ -91,11 +134,15 @@ header{
 }
 
 
+
 .card p{
 
     color:#aaa;
 
 }
+
+
+
 /* ===============================
    FOOTER
 =============================== */
@@ -112,6 +159,9 @@ header{
 
     align-items:center;
 
+    flex-shrink:0;
+
+
     background:#1b1b1b;
 
     border-top:1px solid #444;
@@ -119,6 +169,7 @@ header{
     box-sizing:border-box;
 
 }
+
 
 
 /* ===============================
@@ -138,6 +189,15 @@ header{
 }
 
 
+
+.footer-studio img:hover{
+
+    opacity:1;
+
+}
+
+
+
 /* ===============================
    CREDIT LINK
 =============================== */
@@ -151,11 +211,15 @@ header{
     font-size:14px;
 
 }
+
+
+
 /* ===============================
    RESPONSIVE
 =============================== */
 
 @media(max-width:900px){
+
 
     .cards{
 
@@ -163,16 +227,20 @@ header{
 
     }
 
+
 }
 
 
+
 @media(max-width:600px){
+
 
     .cards{
 
         grid-template-columns:1fr;
 
     }
+
 
 
     #site-footer{
@@ -184,5 +252,6 @@ header{
         text-align:center;
 
     }
+
 
 }
