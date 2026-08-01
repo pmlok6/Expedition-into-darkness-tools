@@ -28,7 +28,7 @@ function loadNavigation()
     location.pathname.includes("/leveling/")||
     location.pathname.includes("/calculators/")||
     location.pathname.includes("/antediluvian-interactive/")||
-    location.pathname.includes("/credits/")||
+    location.pathname.includes("/credits/")
     ?
     "../"
     :
@@ -97,7 +97,7 @@ function loadFooter()
     location.pathname.includes("/leveling/")||
     location.pathname.includes("/calculators/")||
     location.pathname.includes("/antediluvian-interactive/")||
-    location.pathname.includes("/credits/")||
+    location.pathname.includes("/credits/")
     ?
     "../"
     :
