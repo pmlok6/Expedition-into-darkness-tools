@@ -1,0 +1,68 @@
+/* ===============================
+   SOCIAL LINKS
+=============================== */
+
+
+.social-links{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+    max-width:500px;
+
+    margin:auto;
+
+}
+
+
+
+.social-links a{
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:15px 20px;
+
+    background:#202020;
+
+    border:1px solid #333;
+
+    border-radius:8px;
+
+    text-decoration:none;
+
+    color:white;
+
+}
+
+
+
+.social-links a:hover{
+
+    border-color:#777;
+
+}
+
+
+
+.social-links span{
+
+    font-size:18px;
+
+}
+
+
+
+.social-links small{
+
+    margin-top:5px;
+
+    color:#1e90ff;
+
+    font-size:14px;
+
+}
