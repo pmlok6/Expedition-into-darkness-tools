@@ -95,7 +95,9 @@ function loadFooter()
     location.pathname.includes("/maps/")||
     location.pathname.includes("/skills/")||
     location.pathname.includes("/leveling/")||
-    location.pathname.includes("/calculators/")
+    location.pathname.includes("/calculators/")||
+    location.pathname.includes("/antediluvian-interactive/")||
+    location.pathname.includes("/credits/")||
     ?
     "../"
     :
