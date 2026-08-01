@@ -69,3 +69,82 @@ header {
     color:#aaa;
 
 }
+
+/* ===============================
+   FOOTER
+=============================== */
+
+#site-footer
+{
+    position:relative;
+    width:100%;
+    margin-top:60px;
+    padding:20px 40px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:#1b1b1b;
+    border-top:1px solid #444;
+
+    box-sizing:border-box;
+}
+
+
+/* ===============================
+   STUDIO LOGO
+=============================== */
+
+.footer-studio img
+{
+    width:120px;
+    height:auto;
+
+    opacity:.8;
+
+    transition:.2s;
+}
+
+
+.footer-studio img:hover
+{
+    opacity:1;
+}
+
+
+/* ===============================
+   CREDITS LINK
+=============================== */
+
+.footer-credit a
+{
+    color:#ddd;
+    text-decoration:none;
+
+    font-size:16px;
+}
+
+
+.footer-credit a:hover
+{
+    color:white;
+    text-decoration:underline;
+}
+
+
+/* ===============================
+   MOBILE
+=============================== */
+
+@media(max-width:700px)
+{
+
+    #site-footer
+    {
+        flex-direction:column;
+        gap:20px;
+        text-align:center;
+    }
+
+}
