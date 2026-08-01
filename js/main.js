@@ -121,7 +121,7 @@ function loadFooter()
 
 <div class="footer-credit">
 
-    <a href="${root}credits.html">
+    <a href="${root}credits/credits.html">
         Credits
     </a>
 
