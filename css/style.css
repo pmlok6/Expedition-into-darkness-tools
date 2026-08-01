@@ -1,93 +1,69 @@
-/* ==========================================
+/* ===============================
    GLOBAL
-========================================== */
+=============================== */
 
-*
-{
-    box-sizing:border-box;
-}
-
-
-body
-{
+body{
     margin:0;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
 
     background:#111;
-
     color:#eee;
-
     font-family:Arial,sans-serif;
 }
 
 
+main{
+    flex:1;
+}
 
-/* ==========================================
+
+/* ===============================
    HEADER
-========================================== */
+=============================== */
 
-header
-{
+header{
     text-align:center;
-
     padding:25px;
-
     background:#1b1b1b;
 }
 
 
-.title-logo
-{
+.title-logo{
     width:300px;
-
-    max-width:90%;
-
     height:auto;
 }
 
 
-header p
-{
-    color:#aaa;
+/* ===============================
+   CONTAINER
+=============================== */
 
-    margin-top:10px;
-}
-
-
-
-/* ==========================================
-   MAIN CONTAINER
-========================================== */
-
-.container
-{
+.container{
     max-width:1200px;
-
     margin:auto;
-
     padding:30px;
 }
 
 
-
-/* ==========================================
+/* ===============================
    HOME CARDS
-========================================== */
+=============================== */
 
-.cards
-{
+.cards{
+
     display:grid;
 
     grid-template-columns:
     repeat(3,1fr);
 
     gap:20px;
+
 }
 
 
-
-.card
-{
-    display:block;
+.card{
 
     background:#202020;
 
@@ -97,57 +73,40 @@ header p
 
     padding:25px;
 
-
     text-decoration:none;
 
     color:white;
 
-
     transition:.2s;
+
 }
 
 
+.card:hover{
 
-.card:hover
-{
     transform:translateY(-5px);
 
     border-color:#777;
-}
-
-
-
-.card h2
-{
-    margin-top:0;
 
 }
 
 
+.card p{
 
-.card p
-{
     color:#aaa;
 
 }
 
 
-
-/* ==========================================
+/* ===============================
    FOOTER
-========================================== */
+=============================== */
 
-
-#site-footer
-{
-    position:relative;
+#site-footer{
 
     width:100%;
 
-    margin-top:60px;
-
     padding:20px 40px;
-
 
     display:flex;
 
@@ -155,89 +114,95 @@ header p
 
     align-items:center;
 
-
     background:#1b1b1b;
 
     border-top:1px solid #444;
+
+    box-sizing:border-box;
+
 }
 
 
+/* ===============================
+   STUDIO LOGO
+=============================== */
 
-.footer-studio img
-{
+.footer-studio img{
+
     width:120px;
 
     height:auto;
 
-
     opacity:.8;
 
     transition:.2s;
+
 }
 
 
+.footer-studio img:hover{
 
-.footer-studio img:hover
-{
     opacity:1;
+
 }
 
 
+/* ===============================
+   CREDIT LINK
+=============================== */
 
-.footer-credit a
-{
+.footer-credit a{
+
     color:#ddd;
 
     text-decoration:none;
 
     font-size:16px;
+
 }
 
 
+.footer-credit a:hover{
 
-.footer-credit a:hover
-{
     color:white;
 
     text-decoration:underline;
+
 }
 
 
-
-/* ==========================================
+/* ===============================
    RESPONSIVE
-========================================== */
+=============================== */
 
+@media(max-width:900px){
 
-@media(max-width:900px)
-{
+    .cards{
 
-    .cards
-    {
         grid-template-columns:repeat(2,1fr);
+
     }
 
 }
 
 
+@media(max-width:600px){
 
-@media(max-width:600px)
-{
+    .cards{
 
-    .cards
-    {
         grid-template-columns:1fr;
+
     }
 
 
+    #site-footer{
 
-    #site-footer
-    {
         flex-direction:column;
 
         gap:20px;
 
         text-align:center;
+
     }
 
 }
