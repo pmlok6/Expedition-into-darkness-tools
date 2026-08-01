@@ -108,7 +108,7 @@ function loadFooter()
 `
 <div class="footer-studio">
 
-    <a href="${root}studio.html">
+    <a href="${root}antediluvian-interactive/antediluvian-interactive.html">
 
         <img 
             src="${root}assets/antediluvian-logo.png"
