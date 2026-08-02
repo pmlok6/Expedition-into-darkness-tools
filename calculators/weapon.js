@@ -206,7 +206,6 @@ function buildBladeWeapon(box,weaponState)
 		"grip"
 	];
 
-
 	bladeParts.forEach(function(part)
 	{
 		createComponent(
@@ -229,8 +228,6 @@ function buildBladeWeapon(box,weaponState)
 		);
 	});
 }
-
-
 
 function buildBladeSlots(box,grip,state)
 {
@@ -385,12 +382,8 @@ function createComponent(box,label,items,callback)
 	row.appendChild(selector.wrapper);
 
 
-	const container =
-		box.querySelector(".weapon-components");
-
-
-	container.appendChild(row);
-
+	box.querySelector(".weapon-components")
+		.appendChild(row);
 
 
 	selector.select.onchange = function()
@@ -409,8 +402,6 @@ function createComponent(box,label,items,callback)
 		}
 	};
 }
-
-
 
 function createMaterial(row,item,state)
 {
