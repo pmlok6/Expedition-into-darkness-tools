@@ -247,52 +247,40 @@ function buildShaftSlots(box,shaft,state)
 	}
 
 
-	const components =
-		box.querySelector(".weapon-components");
+	box.querySelector(".weapon-materials").innerHTML = "";
 
 
-	if(components)
-	{
-		const dynamic =
-			components.querySelectorAll(".dynamic");
-
-
-		dynamic.forEach(function(element)
-		{
-			if(
-				element.querySelector("label") &&
-				element.querySelector("label").textContent !== "Shaft"
-			)
-			{
-				element.parentElement.remove();
-			}
-		});
-	}
-
-
-	const slotTags =
-	{
-		"Shaft Head":"spear_head",
-		"Spear Head":"spear_head"
-	};
-
+	const slotCount = {};
 
 
 	shaft.slots.forEach(function(slot)
 	{
-		const tag =
-			slotTags[slot]
-			||
-			slot.toLowerCase().replaceAll(" ","_");
+		if(!slotCount[slot])
+		{
+			slotCount[slot] = 0;
+		}
+
+
+		slotCount[slot]++;
+
+
+		const slotId = slot + "_" + slotCount[slot];
+
+
+		const items = Object.values(WEAPON_ITEMS)
+		.filter(function(item)
+		{
+			return item.attachment_slot === slot;
+		});
 
 
 		createComponent(
 			box,
 			slot,
-			getItems(tag),
+			items,
 			function(item,row)
 			{
-				state.components[slot] = item.guid;
+				state.components[slotId] = item.guid;
 
 
 				createMaterial(
