@@ -24,7 +24,6 @@ function createEmptyStats()
 	};
 }
 
-
 document.addEventListener("DOMContentLoaded",function()
 {
 	const root = document.getElementById("weapon-calculator");
@@ -57,8 +56,6 @@ document.addEventListener("DOMContentLoaded",function()
 		);
 	});
 });
-
-
 
 function buildCalculator(root,ITEMS,RECIPES)
 {
@@ -430,13 +427,18 @@ function createMaterial(box,item,state)
 		});
 
 	const selector =
-		createSelect("Material",materials);
+		createSelect(
+			"Material",
+			materials
+		);
 
 	selector.wrapper.classList.add(
 		"weapon-material-selector"
 	);
 
-	box.appendChild(selector.wrapper);
+	box.appendChild(
+		selector.wrapper
+	);
 
 	selector.select.onchange = function()
 	{
@@ -446,8 +448,6 @@ function createMaterial(box,item,state)
 		calculateWeapon(state);
 	};
 }
-
-
 
 function createSelect(label,options)
 {
@@ -673,34 +673,20 @@ function renderResult(state)
 		target =
 			panels[1]?.querySelector(".weapon-results");
 	}
-
-
 	if(!target)
 	{
 		return;
 	}
-
-
 	const s = state.stats;
-
-
-
 	const weaponTags = [];
-
 	if(s.damage_type)
 	{
 		weaponTags.push(...s.damage_type);
 	}
-
-
-
 	if(s.magical_properties)
 	{
 		weaponTags.push(s.magical_properties);
 	}
-
-
-
 	const info = weaponTags.length
 	?
 	`
@@ -827,7 +813,22 @@ function renderResult(state)
 	`;
 }
 
+function findMaterial(tag)
+{
+	return Object.values(WEAPON_ITEMS).find(function(item)
+	{
+		return item.tags && item.tags.includes(tag);
+	});
+}
 
+
+function findRecipe(name)
+{
+	return Object.values(WEAPON_RECIPES).find(function(recipe)
+	{
+		return recipe.name === name;
+	});
+}
 
 
 
