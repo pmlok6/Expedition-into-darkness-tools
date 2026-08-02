@@ -295,8 +295,7 @@ function createMaterial(box,item,state)
 			addStats(stats,item,material);
 		});
 		state.stats =stats;
-		renderResult(state);
-		updateComparison();
+		renderResult(state);	
 	}
 
 	function addStats(stats,item,material)
@@ -390,107 +389,107 @@ function createMaterial(box,item,state)
 		}
 	}
 
-	function renderResult(state)
+function renderResult(state)
+{
+	const panels = document.querySelectorAll(".weapon-result-box");
+	let target = null;
+
+	if(state === getState("left"))
 	{
-		const panels =document.querySelectorAll(".weapon-result-box");
-		let target = null;
-		if(state === getState("left"))
-		{
-			target =panels[0]?.querySelector(".weapon-results");
-		}
-		else
-		{
-			target =panels[1]?.querySelector(".weapon-results");
-		}
-		if(!target)
-		{
-			return;
-		}
-		const s =state.stats;
-		target.innerHTML = `<div class="weapon-card">
-			<div class="weapon-stat">
-				<span>Damage</span>
-				<b>	${s.damage.toFixed(1)}	</b>
-			</div>
-			<div class="weapon-stat">
-				<span>Base Damage</span>
-				<b>${s.base_damage.toFixed(1)}</b>
-			</div>
-			<div class="weapon-stat">
-				<span>Swinging Damage</span>
-				<b>${formatPercent(s.swinging_damage)}</b>
-			</div>
-			<div class="weapon-stat">
-				<span>Thrusting Damage</span>
-				<b>${formatPercent(s.thrusting_damage)}</b>
-			</div>
-			<div class="weapon-stat">
-				<span>Cleave</span>
-				<b>${formatPercent(s.cleave)}</b>
-			</div>
-			<div class="weapon-stat">
-				<span>Attack Speed</span>
-				<b>${formatPercent(s.attack_speed)}</b>
-			</div>
-			<div class="weapon-stat">
-				<span>Stamina Cost</span>
-				<b>${s.attack_stamina_cost.toFixed(1)}</b>
-			</div>
-			<div class="weapon-stat">
-				<span>Weight</span>
-				<b>${s.weight.toFixed(2)}</b>
-			</div>
-			<div class="weapon-stat">
-				<span>Inertia</span>
-				<b>${s.inertia.toFixed(2)}</b>
-			</div>
-			<div class="weapon-stat">
-				<span>magical properties</span>
-				<b>${s.magical_properties}</b>
-			</div>
-		</div>`;
+		target = panels[0]?.querySelector(".weapon-results");
+	}
+	else
+	{
+		target = panels[1]?.querySelector(".weapon-results");
 	}
 
-function updateComparison()
-{
-	const box =document.getElementById("weapon-comparison");
-	if(!box)
+	if(!target)
 	{
 		return;
 	}
-	const left =getState("left");
-	const right =getState("right");
-	if(!left ||!right ||Object.keys(left.stats).length === 0 ||Object.keys(right.stats).length === 0)
-	{
-		box.innerHTML ="<h3>Comparison</h3>";
-		return;
-	}
-	const stats =
-	[
-		["damage","Damage"],
-		["base_damage","Base Damage"],
-		["swinging_damage","Swinging Damage"],
-		["thrusting_damage","Thrusting Damage"],
-		["cleave","Cleave"],
-		["attack_speed","Attack Speed"],
-		["attack_stamina_cost","Stamina Cost"],
-		["weight","Weight"],
-		["inertia","Inertia"]
-	];
-	let html ="<h3>Comparison</h3>";
-	stats.forEach(function(stat)
-	{
-		const key =stat[0];
-		const name =stat[1];
-		const a =left.stats[key] || 0;
-		const b =right.stats[key] || 0;
-		html += `<div class="compare-row">
-			<span>${name}</span>
-			<span class="${compareClass(a,b,key)}">${formatValue(a)}</span>
-			<span class="${compareClass(b,a,key)}">${formatValue(b)}</span>
-		</div>`;
-	});
-	box.innerHTML =html;
+
+	const s = state.stats;
+
+	const otherState = state === getState("left")
+		? getState("right")
+		: getState("left");
+
+	const other = otherState.stats;
+
+	target.innerHTML = `
+	<div class="weapon-card">
+
+		<div class="weapon-stat">
+			<span>Damage</span>
+			<b class="${compareClass(s.damage, other.damage)}">
+				${s.damage.toFixed(1)}
+			</b>
+		</div>
+
+		<div class="weapon-stat">
+			<span>Base Damage</span>
+			<b class="${compareClass(s.base_damage, other.base_damage)}">
+				${s.base_damage.toFixed(1)}
+			</b>
+		</div>
+
+		<div class="weapon-stat">
+			<span>Swinging Damage</span>
+			<b class="${compareClass(s.swinging_damage, other.swinging_damage)}">
+				${formatPercent(s.swinging_damage)}
+			</b>
+		</div>
+
+		<div class="weapon-stat">
+			<span>Thrusting Damage</span>
+			<b class="${compareClass(s.thrusting_damage, other.thrusting_damage)}">
+				${formatPercent(s.thrusting_damage)}
+			</b>
+		</div>
+
+		<div class="weapon-stat">
+			<span>Cleave</span>
+			<b class="${compareClass(s.cleave, other.cleave)}">
+				${formatPercent(s.cleave)}
+			</b>
+		</div>
+
+		<div class="weapon-stat">
+			<span>Attack Speed</span>
+			<b class="${compareClass(s.attack_speed, other.attack_speed)}">
+				${formatPercent(s.attack_speed)}
+			</b>
+		</div>
+
+		<div class="weapon-stat">
+			<span>Stamina Cost</span>
+			<b class="${compareClass(other.attack_stamina_cost, s.attack_stamina_cost)}">
+				${s.attack_stamina_cost.toFixed(1)}
+			</b>
+		</div>
+
+		<div class="weapon-stat">
+			<span>Weight</span>
+			<b class="${compareClass(other.weight, s.weight)}">
+				${s.weight.toFixed(2)}
+			</b>
+		</div>
+
+		<div class="weapon-stat">
+			<span>Inertia</span>
+			<b class="${compareClass(other.inertia, s.inertia)}">
+				${s.inertia.toFixed(2)}
+			</b>
+		</div>
+
+		<div class="weapon-stat">
+			<span>Magical properties</span>
+			<b>
+				${s.magical_properties}
+			</b>
+		</div>
+
+	</div>`;
 }
 
 function compareClass(a,b,stat)
