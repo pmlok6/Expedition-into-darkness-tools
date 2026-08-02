@@ -403,42 +403,45 @@ function createComponent(box,label,items,callback)
 	};
 }
 
-function createMaterial(row,item,state)
+function createMaterial(box,item,state)
 {
-	if(!item.materials)
+	const recipe = findRecipe(item.name);
+
+	if(!recipe || !recipe.allowed_materials)
 	{
 		return;
 	}
 
+	const oldMaterial =
+		box.querySelector(".weapon-material-selector");
 
-	const materialBox =
-		row.closest(".weapon-box")
-		.querySelector(".weapon-materials");
+	if(oldMaterial)
+	{
+		oldMaterial.remove();
+	}
 
-
-	materialBox.innerHTML = "";
-
-
-	const selector = createSelect(
-		"Material",
-		item.materials.map(function(material)
+	const materials =
+		recipe.allowed_materials.map(function(material)
 		{
 			return {
 				id:material,
 				name:formatMaterialName(material)
 			};
-		})
+		});
+
+	const selector =
+		createSelect("Material",materials);
+
+	selector.wrapper.classList.add(
+		"weapon-material-selector"
 	);
 
-
-	materialBox.appendChild(selector.wrapper);
-
+	box.appendChild(selector.wrapper);
 
 	selector.select.onchange = function()
 	{
 		state.materials[item.guid] =
 			selector.select.value;
-
 
 		calculateWeapon(state);
 	};
@@ -683,8 +686,6 @@ function renderResult(state)
 
 
 	const weaponTags = [];
-
-
 
 	if(s.damage_type)
 	{
