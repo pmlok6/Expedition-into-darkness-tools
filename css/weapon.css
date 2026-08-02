@@ -1,6 +1,7 @@
 /* =====================================
    Weapon Calculator
    ===================================== */
+
 #weapon-calculator 
 {
     width:100%;
@@ -18,85 +19,93 @@
     box-sizing:border-box;
 }
 
+
 /* Header */
+
 .weapon-header 
 {
     text-align:center;
-
     margin-bottom:20px;
 }
 
+
 /* Deux armes */
-.weapon-main-container
-{
-	display:grid;
-
-	grid-template-columns:
-	repeat(2,minmax(350px,1fr));
-
-	gap:30px;
-}
 
 .weapon-container 
 {
-    display:flex;
+    display:grid;
 
-    gap:20px;
+    grid-template-columns:
+    repeat(2,minmax(350px,1fr));
 
-    justify-content:center;
+    gap:30px;
 }
+
+
+/* Colonnes */
 
 .weapon-column 
 {
-    flex:1;
-
     min-width:300px;
 }
+
+
+/* Composants */
 
 .weapon-components
 {
     display:flex;
+
     flex-direction:column;
+
     gap:15px;
 }
 
+
 .weapon-component-row
 {
-	display:flex;
+    display:flex;
 
-	align-items:center;
+    align-items:center;
 
-	gap:15px;
+    gap:15px;
 
-	margin-bottom:15px;
+    margin-bottom:15px;
 }
+
 
 .weapon-component-row .weapon-selector
 {
-	flex:1;
+    flex:1;
 }
+
+
 /* Cadres */
 
 .weapon-box
 {
-	border:2px solid #555;
+    border:2px solid #555;
 
-	border-radius:12px;
+    border-radius:12px;
 
-	padding:25px;
+    padding:25px;
 
-	background:#1b1b1b;
+    background:#1b1b1b;
 }
+
 
 .weapon-box h3
 {
-	font-size:1.5rem;
-	margin-bottom:20px;
+    font-size:1.5rem;
+
+    margin-bottom:20px;
 }
 
-/* Sélections */
-.weapon-selection-box select {
 
+/* Sélections */
+
+.weapon-selection-box select 
+{
     width:100%;
 
     margin-bottom:10px;
@@ -112,39 +121,49 @@
     border-radius:6px;
 }
 
+
 .weapon-selector
 {
-	flex:1;
+    flex:1;
 }
+
 
 .weapon-selector label
 {
-	display:block;
+    display:block;
 
-	font-size:1.1rem;
+    font-size:1.1rem;
 
-	margin-bottom:5px;
+    margin-bottom:5px;
 }
+
 
 .weapon-selector select
 {
-	width:100%;
+    width:100%;
 
-	padding:10px;
+    padding:10px;
 
-	font-size:1rem;
+    font-size:1rem;
 }
 
+
 /* Résultats */
+
 .weapon-result-box 
 {
     background:#161616;
 }
 
 
+.weapon-results
+{
+    width:100%;
+}
 
-.weapon-stat {
 
+.weapon-stat 
+{
     display:flex;
 
     justify-content:space-between;
@@ -152,32 +171,10 @@
     padding:6px;
 
     border-bottom:1px solid #333;
-
 }
 
-/* Comparaison */
-.weapon-comparison-box {
 
-    border:1px solid #777;
-
-    border-radius:10px;
-
-    padding:15px;
-
-    margin-top:20px;
-
-}
-
-.compare-row 
-{
-    display:grid;
-
-    grid-template-columns:1fr 120px 120px;
-
-    padding:6px;
-
-    border-bottom:1px solid #333;
-}
+/* Comparaison directe */
 
 .compare-better 
 {
@@ -186,6 +183,7 @@
     font-weight:bold;
 }
 
+
 .compare-equal 
 {
     color:#e5a832;
@@ -193,26 +191,31 @@
     font-weight:bold;
 }
 
+
 .compare-worse 
 {
     color:#e05252;
 
     font-weight:bold;
 }
-/*===================
-		responsive
-======================*/
+
+
+/* ===================
+        Responsive
+   =================== */
+
 @media(max-width:800px)
 {
-	.weapon-main-container
-	{
-		grid-template-columns:1fr;
-	}
+    .weapon-container
+    {
+        grid-template-columns:1fr;
+    }
 
 
-	.weapon-component-row
-	{
-		flex-direction:column;
-		align-items:stretch;
-	}
+    .weapon-component-row
+    {
+        flex-direction:column;
+
+        align-items:stretch;
+    }
 }
