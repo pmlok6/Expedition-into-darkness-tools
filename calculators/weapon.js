@@ -196,46 +196,49 @@ function buildBladeWeapon(box,state)
 	});
 }
 
-function buildShaftSlots(box,shaft,state)
+function buildShaftWeapon(box,weaponState)
 {
-	if(!shaft.slots)
-	{
-		return;
-	}
+	createComponent(
+		box,
+		"Shaft",
+		getItems("shaft"),
+		function(item)
+		{
+			weaponState.components = {};
+			weaponState.materials = {};
+
+			weaponState.components.shaft = item.guid;
 
 
-	box.querySelector(".weapon-materials").innerHTML = "";
+			const components =
+				box.querySelector(".weapon-components");
 
 
-	shaft.slots.forEach(function(slot)
-	{
-		const tag = slot
-			.toLowerCase()
-			.replaceAll(" ","_");
-
-
-		createComponent(
-			box,
-			slot,
-			getItems(tag),
-			function(item,row)
+			if(components)
 			{
-				state.components[slot] = item.guid;
-
-
-				createMaterial(
-					row,
-					item,
-					state
-				);
-
-
-				calculateWeapon(state);
+				components
+				.querySelectorAll(".dynamic")
+				.forEach(function(element)
+				{
+					if(
+						element.querySelector("label") &&
+						element.querySelector("label").textContent !== "Shaft"
+					)
+					{
+						element.parentElement.remove();
+					}
+				});
 			}
-		);
-	});
-}
 
+
+			buildShaftSlots(
+				box,
+				item,
+				weaponState
+			);
+		}
+	);
+}
 function buildShaftSlots(box,shaft,state)
 {
 	if(!shaft.slots)
