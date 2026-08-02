@@ -111,8 +111,6 @@ function buildCalculator(root,ITEMS,RECIPES)
 	);
 }
 
-
-
 function createWeaponPanel(panel,title,state)
 {
 	panel.innerHTML =
@@ -141,8 +139,6 @@ function createWeaponPanel(panel,title,state)
 	</div>
 	`;
 }
-
-
 
 function createWeaponType(box,state)
 {
