@@ -204,22 +204,14 @@ function buildShaftSlots(box,shaft,state)
 	}
 
 
-	const slotTags =
-	{
-		"Shaft Head":"spear_head",
-		"Spear Head":"spear_head"
-	};
-
-
 	box.querySelector(".weapon-materials").innerHTML = "";
 
 
 	shaft.slots.forEach(function(slot)
 	{
-		const tag =
-			slotTags[slot]
-			||
-			slot.toLowerCase().replaceAll(" ","_");
+		const tag = slot
+			.toLowerCase()
+			.replaceAll(" ","_");
 
 
 		createComponent(
@@ -230,17 +222,20 @@ function buildShaftSlots(box,shaft,state)
 			{
 				state.components[slot] = item.guid;
 
+
 				createMaterial(
 					row,
 					item,
 					state
 				);
 
+
 				calculateWeapon(state);
 			}
 		);
 	});
 }
+
 function buildShaftSlots(box,shaft,state)
 {
 	if(!shaft.slots)
@@ -701,12 +696,7 @@ function getItems(tag)
 	return Object.values(WEAPON_ITEMS)
 	.filter(function(item)
 	{
-		return item.tags &&
-		(
-			item.tags.includes(tag)
-			||
-			(tag === "spear_head" && item.tags.includes("shaft_head"))
-		);
+		return item.tags && item.tags.includes(tag);
 	})
 	.sort(function(a,b)
 	{
