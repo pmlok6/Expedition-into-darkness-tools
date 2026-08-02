@@ -239,23 +239,25 @@ function createMaterial(box,item,state)
         return;
     }
 
-    // Supprime l'ancien sélecteur de matériau de cette ligne
-    box.querySelectorAll(".weapon-selector.dynamic").forEach(function(node)
+    // Supprime uniquement l'ancien Material de cette ligne
+    const oldMaterial = box.querySelector(".weapon-material-selector");
+
+    if(oldMaterial)
     {
-        node.remove();
-    });
+        oldMaterial.remove();
+    }
 
     const materials = recipe.allowed_materials.map(function(material)
     {
-        return {
-            id: material,
-            name: formatMaterialName(material)
+        return{
+            id:material,
+            name:formatMaterialName(material)
         };
     });
 
-    const selector = createSelect("Material", materials);
+    const selector = createSelect("Material",materials);
 
-    selector.wrapper.classList.add("dynamic");
+    selector.wrapper.classList.add("weapon-material-selector");
 
     box.appendChild(selector.wrapper);
 
@@ -266,7 +268,6 @@ function createMaterial(box,item,state)
         calculateWeapon(state);
     };
 }
-
 	function calculateWeapon(state)
 	{
 		const stats =
