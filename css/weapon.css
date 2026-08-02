@@ -199,6 +199,35 @@
     font-weight:bold;
 }
 
+/* Weapon tags */
+
+.weapon-tags
+{
+	display:flex;
+
+	flex-wrap:wrap;
+
+	gap:8px;
+
+	margin-bottom:12px;
+}
+
+
+.weapon-tag
+{
+	padding:6px 12px;
+
+	border:1px solid #666;
+
+	border-radius:8px;
+
+	background:#222;
+
+	font-weight:bold;
+
+	font-size:0.9rem;
+}
+
 
 /* ===================
         Responsive
