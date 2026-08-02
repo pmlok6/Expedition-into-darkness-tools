@@ -196,33 +196,50 @@ function buildBladeWeapon(box,state)
 	});
 }
 
-function buildShaftWeapon(box,weaponState)
+function buildShaftSlots(box,shaft,state)
 {
-	createComponent(
-		box,
-		"Shaft",
-		getItems("shaft"),
-		function(item,row)
-		{
-			weaponState.components = {};
-			weaponState.materials = {};
-			weaponState.components.shaft = item.guid;
-			const components =box.querySelector(".weapon-components");
-			const materials =box.querySelector(".weapon-materials");
-			if(components)
+	if(!shaft.slots)
+	{
+		return;
+	}
+
+
+	const slotTags =
+	{
+		"Shaft Head":"spear_head",
+		"Spear Head":"spear_head"
+	};
+
+
+	box.querySelector(".weapon-materials").innerHTML = "";
+
+
+	shaft.slots.forEach(function(slot)
+	{
+		const tag =
+			slotTags[slot]
+			||
+			slot.toLowerCase().replaceAll(" ","_");
+
+
+		createComponent(
+			box,
+			slot,
+			getItems(tag),
+			function(item,row)
 			{
-				components.innerHTML = "";
+				state.components[slot] = item.guid;
+
+				createMaterial(
+					row,
+					item,
+					state
+				);
+
+				calculateWeapon(state);
 			}
-			if(materials)
-			{
-				materials.innerHTML = "";
-			}
-			createComponent(box,"Shaft",getItems("shaft"),
-			function(){}
-			);
-			buildShaftSlots(box,item,weaponState);
-		}
-	);
+		);
+	});
 }
 function buildShaftSlots(box,shaft,state)
 {
@@ -679,14 +696,17 @@ function findRecipe(name)
 	});
 }
 
-
-
 function getItems(tag)
 {
 	return Object.values(WEAPON_ITEMS)
 	.filter(function(item)
 	{
-		return item.tags && item.tags.includes(tag);
+		return item.tags &&
+		(
+			item.tags.includes(tag)
+			||
+			(tag === "spear_head" && item.tags.includes("shaft_head"))
+		);
 	})
 	.sort(function(a,b)
 	{
@@ -700,14 +720,10 @@ function getItems(tag)
 	});
 }
 
-
-
 function findItem(id)
 {
 	return WEAPON_ITEMS[id];
 }
-
-
 
 function clearDynamic(box)
 {
@@ -731,8 +747,6 @@ function clearDynamic(box)
 	}
 }
 
-
-
 function renderResult(state)
 {
 	const panels =
@@ -753,34 +767,17 @@ function renderResult(state)
 			panels[1]?.querySelector(".weapon-results");
 	}
 
-
-
 	if(!target)
 	{
 		return;
 	}
-
-
-
 	const s = state.stats;
-
-
-
 	const weaponTags = [];
-
-
-
 	if(s.damage_type.length)
 	{
 		weaponTags.push(...s.damage_type);
 	}
-
-
-
-	if(
-		s.magical_properties &&
-		s.magical_properties !== "none"
-	)
+	if(		s.magical_properties &&		s.magical_properties !== "none"	)
 	{
 		weaponTags.push(
 			s.magical_properties
