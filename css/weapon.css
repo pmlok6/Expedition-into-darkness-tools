@@ -59,8 +59,22 @@
 
     min-width:300px;
 }
+.weapon-column,
+#weapon-left,
+#weapon-right
+{
+	min-height:650px;
+}
 
+#weapon-left,
+#weapon-right
+{
+	display:flex;
 
+	flex-direction:column;
+
+	gap:20px;
+}
 /* Composants */
 
 .weapon-components
@@ -103,6 +117,10 @@
 	padding:25px;
 
 	background:#1b1b1b;
+
+	box-sizing:border-box;
+
+	height:auto;
 }
 
 
