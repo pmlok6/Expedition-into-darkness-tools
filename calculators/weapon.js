@@ -230,29 +230,42 @@ function buildShaftSlots(box,shaft,state)
 		};
 	}
 
-	function createMaterial(box,item,state)
-	{
-		const recipe =findRecipe(item.name);
-		if(!recipe ||!recipe.allowed_materials)
-		{
-			return;
-		}
-		const materials =recipe.allowed_materials.map(function(material)
-		{
-			return{
-				id:material, name:formatMaterialName(material)
-			};
-		});
-		const selector = createSelect("Material",materials);
-		selector.wrapper.classList.add("dynamic");
-		box.appendChild(selector.wrapper);
-		selector.select.onchange =
-		function()
-		{
-			state.materials[item.guid] =selector.select.value;
-			calculateWeapon(state);
-		};
-	}
+function createMaterial(box,item,state)
+{
+    const recipe = findRecipe(item.name);
+
+    if(!recipe || !recipe.allowed_materials)
+    {
+        return;
+    }
+
+    // Supprime l'ancien sélecteur de matériau de cette ligne
+    box.querySelectorAll(".weapon-selector.dynamic").forEach(function(node)
+    {
+        node.remove();
+    });
+
+    const materials = recipe.allowed_materials.map(function(material)
+    {
+        return {
+            id: material,
+            name: formatMaterialName(material)
+        };
+    });
+
+    const selector = createSelect("Material", materials);
+
+    selector.wrapper.classList.add("dynamic");
+
+    box.appendChild(selector.wrapper);
+
+    selector.select.onchange = function()
+    {
+        state.materials[item.guid] = selector.select.value;
+
+        calculateWeapon(state);
+    };
+}
 
 	function calculateWeapon(state)
 	{
