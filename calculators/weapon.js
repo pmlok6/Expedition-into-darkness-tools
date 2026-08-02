@@ -239,12 +239,22 @@ function buildShaftSlots(box,shaft,state)
 	}
 
 
+	const slotTags =
+	{
+		"Shaft Head":"spear_head",
+		"Spear Head":"spear_head"
+	};
+
+
+	box.querySelector(".weapon-materials").innerHTML = "";
+
+
 	shaft.slots.forEach(function(slot)
 	{
 		const tag =
-			slot
-			.toLowerCase()
-			.replaceAll(" ","_");
+			slotTags[slot]
+			||
+			slot.toLowerCase().replaceAll(" ","_");
 
 
 		createComponent(
@@ -255,11 +265,13 @@ function buildShaftSlots(box,shaft,state)
 			{
 				state.components[slot] = item.guid;
 
+
 				createMaterial(
 					row,
 					item,
 					state
 				);
+
 
 				calculateWeapon(state);
 			}
