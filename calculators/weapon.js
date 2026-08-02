@@ -116,9 +116,6 @@ function createWeaponPanel(panel,title)
 	</div>
 	`;
 }
-
-
-
 function createWeaponType(box,state)
 {
 	const selector =
@@ -135,11 +132,7 @@ function createWeaponType(box,state)
 				}
 			]
 		);
-
-
 	box.appendChild(selector.wrapper);
-
-
 	selector.select.onchange = function()
 	{
 		state.type = selector.select.value;
@@ -148,9 +141,7 @@ function createWeaponType(box,state)
 		state.materials = {};
 		state.stats = {};
 
-
-		clearDynamic(box);
-
+		clearDynamic(box.closest(".weapon-box"));
 
 		if(state.type === "blade")
 		{
@@ -159,7 +150,6 @@ function createWeaponType(box,state)
 				state
 			);
 		}
-
 
 		if(state.type === "shaft")
 		{
@@ -206,36 +196,62 @@ function buildBladeWeapon(box,state)
 	});
 }
 
-
-
-function buildShaftWeapon(box,state)
+function buildShaftWeapon(box,weaponState)
 {
 	createComponent(
 		box,
 		"Shaft",
 		getItems("shaft"),
-		function(item)
+		function(item,row)
 		{
-			state.components.shaft = item.guid;
-
-			buildShaftSlots(
-				box,
-				item,
-				state
+			weaponState.components = {};
+			weaponState.materials = {};
+			weaponState.components.shaft = item.guid;
+			const components =box.querySelector(".weapon-components");
+			const materials =box.querySelector(".weapon-materials");
+			if(components)
+			{
+				components.innerHTML = "";
+			}
+			if(materials)
+			{
+				materials.innerHTML = "";
+			}
+			createComponent(box,"Shaft",getItems("shaft"),
+			function(){}
 			);
-
-			calculateWeapon(state);
+			buildShaftSlots(box,item,weaponState);
 		}
 	);
 }
-
-
-
 function buildShaftSlots(box,shaft,state)
 {
 	if(!shaft.slots)
 	{
 		return;
+	}
+
+
+	const components =
+		box.querySelector(".weapon-components");
+
+
+	if(components)
+	{
+		const dynamic =
+			components.querySelectorAll(".dynamic");
+
+
+		dynamic.forEach(function(element)
+		{
+			if(
+				element.querySelector("label") &&
+				element.querySelector("label").textContent !== "Shaft"
+			)
+			{
+				element.parentElement.remove();
+			}
+		});
 	}
 
 
@@ -245,8 +261,6 @@ function buildShaftSlots(box,shaft,state)
 		"Spear Head":"spear_head"
 	};
 
-
-	box.querySelector(".weapon-materials").innerHTML = "";
 
 
 	shaft.slots.forEach(function(slot)
