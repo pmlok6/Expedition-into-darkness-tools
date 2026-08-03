@@ -2,256 +2,155 @@
    GLOBAL
 =============================== */
 
-html,
-body{
-
-    margin:0;
-
-    padding:0;
-
-    min-height:100%;
-
+html,body{
+	margin:0;
+	padding:0;
+	min-height:100%;
 }
 
-
 body{
-
-    min-height:100vh;
-
-    display:flex;
-
-    flex-direction:column;
-
-
-    background:#111;
-
-    color:#eee;
-
-    font-family:Arial,sans-serif;
-
+	min-height:100vh;
+	display:flex;
+	flex-direction:column;
+	background:#111;
+	color:#eee;
+	font-family:Arial,sans-serif;
 }
-
-
 
 main{
-
-    flex:1;
-
-    display:block;
-
+	flex:1;
+	display:block;
 }
-
-
 
 /* ===============================
    HEADER
 =============================== */
 
 header{
-
-    text-align:center;
-
-    padding:25px;
-
-    background:#1b1b1b;
-
+	text-align:center;
+	padding:25px;
+	background:#1b1b1b;
 }
-
-
 
 .title-logo{
-
-    width:300px;
-
-    height:auto;
-
+	width:300px;
+	height:auto;
 }
-
-
 
 /* ===============================
    CONTAINER
 =============================== */
 
 .container{
-
-    max-width:1200px;
-
-    width:100%;
-
-    margin:0 auto;
-
-    padding:30px;
-
-    box-sizing:border-box;
-
+	max-width:1200px;
+	width:100%;
+	margin:0 auto;
+	padding:30px;
+	box-sizing:border-box;
 }
-
-
 
 /* ===============================
    HOME CARDS
 =============================== */
 
 .cards{
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:20px;
-
+	display:grid;
+	grid-template-columns:repeat(3,1fr);
+	gap:20px;
 }
-
-
 
 .card{
-
-    background:#202020;
-
-    border:1px solid #333;
-
-    border-radius:10px;
-
-    padding:25px;
-
-    text-decoration:none;
-
-    color:white;
-
-    transition:.2s;
-
+	background:#202020;
+	border:1px solid #333;
+	border-radius:10px;
+	padding:25px;
+	text-decoration:none;
+	color:#fff;
+	transition:.2s;
 }
-
-
 
 .card:hover{
-
-    transform:translateY(-5px);
-
-    border-color:#777;
-
+	transform:translateY(-5px);
+	border-color:#777;
 }
-
-
 
 .card p{
-
-    color:#aaa;
-
+	color:#aaa;
 }
-
-
 
 /* ===============================
    FOOTER
 =============================== */
 
 #site-footer{
-
-    width:100%;
-
-    padding:4px 15px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    flex-shrink:0;
-
-
-    background:#1b1b1b;
-
-    border-top:1px solid #444;
-
-    box-sizing:border-box;
-
+	width:100%;
+	padding:8px 15px;
+	display:grid;
+	grid-template-columns:1fr auto 1fr;
+	align-items:center;
+	background:#1b1b1b;
+	border-top:1px solid #444;
+	box-sizing:border-box;
+	flex-shrink:0;
 }
 
-
-
-/* ===============================
-   STUDIO LOGO
-=============================== */
+.footer-studio{
+	justify-self:start;
+}
 
 .footer-studio img{
-
-    width:30px;
-
-    height:auto;
-
-    opacity:.8;
-
-    transition:.2s;
-
+	width:30px;
+	height:auto;
+	opacity:.8;
+	transition:.2s;
 }
-
-
 
 .footer-studio img:hover{
-
-    opacity:1;
-
+	opacity:1;
 }
 
+.footer-madeby{
+	justify-self:center;
+	font-size:14px;
+	color:#bbb;
+}
 
+.footer-madeby strong{
+	color:#fff;
+}
 
-/* ===============================
-   CREDIT LINK
-=============================== */
+.footer-credit{
+	justify-self:end;
+}
 
 .footer-credit a{
-
-    color:#ddd;
-
-    text-decoration:none;
-
-    font-size:14px;
-
+	color:#ddd;
+	text-decoration:none;
+	font-size:14px;
 }
-
-
 
 /* ===============================
    RESPONSIVE
 =============================== */
 
 @media(max-width:900px){
-
-
-    .cards{
-
-        grid-template-columns:repeat(2,1fr);
-
-    }
-
-
+	.cards{
+		grid-template-columns:repeat(2,1fr);
+	}
 }
 
-
-
 @media(max-width:600px){
-
-
-    .cards{
-
-        grid-template-columns:1fr;
-
-    }
-
-
-
-    #site-footer{
-
-        flex-direction:column;
-
-        gap:20px;
-
-        text-align:center;
-
-    }
-
-
+	.cards{
+		grid-template-columns:1fr;
+	}
+	#site-footer{
+		grid-template-columns:1fr;
+		gap:12px;
+		text-align:center;
+	}
+	.footer-studio,
+	.footer-madeby,
+	.footer-credit{
+		justify-self:center;
+	}
 }
