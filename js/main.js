@@ -85,45 +85,50 @@ function loadNavigation()
 
 function loadFooter()
 {
-    const footer=document.getElementById("site-footer");
+	const footer = document.getElementById("site-footer");
 
-    if(!footer)
-        return;
+	if(!footer)
+	{
+		return;
+	}
 
+	const root =
+		location.pathname.includes("/maps/") ||
+		location.pathname.includes("/skills/") ||
+		location.pathname.includes("/leveling/") ||
+		location.pathname.includes("/calculators/") ||
+		location.pathname.includes("/antediluvian-interactive/") ||
+		location.pathname.includes("/credits/")
+		?
+		"../"
+		:
+		"./";
 
-    const root=
-    location.pathname.includes("/maps/")||
-    location.pathname.includes("/skills/")||
-    location.pathname.includes("/leveling/")||
-    location.pathname.includes("/calculators/")||
-    location.pathname.includes("/antediluvian-interactive/")||
-    location.pathname.includes("/credits/")
-    ?
-    "../"
-    :
-    "./";
-
-
-    footer.innerHTML=
+	footer.innerHTML =
 `
 <div class="footer-studio">
 
-    <a href="${root}antediluvian-interactive/antediluvian-interactive.html">
+	<a href="${root}antediluvian-interactive/antediluvian-interactive.html">
 
-        <img 
-            src="${root}assets/antediluvian-logo.png"
-            alt="Antediluvian Interactive">
+		<img
+			src="${root}assets/antediluvian-logo.png"
+			alt="Antediluvian Interactive">
 
-    </a>
+	</a>
 
 </div>
 
+<div class="footer-madeby">
+
+	Fan made by <strong>pmlok</strong>
+
+</div>
 
 <div class="footer-credit">
 
-    <a href="${root}credits/credits.html">
-        Credits
-    </a>
+	<a href="${root}credits/credits.html">
+		Credits
+	</a>
 
 </div>
 `;
